@@ -34,7 +34,7 @@ class PageEloquentMapper
         // If paginated, then create a new pagination instance.
         $pages = new LengthAwarePaginator(
             $models ?? $response->models(),
-            $response->total(),
+            $models ? $models->count() : $response->total(),
             $perPage,
             $page,
             ['path' => Paginator::resolveCurrentPath()]
