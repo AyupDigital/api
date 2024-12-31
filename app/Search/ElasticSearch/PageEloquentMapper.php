@@ -25,6 +25,8 @@ class PageEloquentMapper
 
         $this->logMetrics($queryRequest, $response);
 
+        $models = null;
+
         if ($parentId) {
             $models = $response->models()->load('ancestors')->filter(function ($model) use ($parentId) {
                 return $model->ancestors->contains('id', $parentId);
