@@ -36,6 +36,12 @@ class PageResource extends JsonResource
                     'excerpt' => $this->parent->excerpt,
                     'order' => $this->parent->order,
                     'enabled' => $this->parent->enabled,
+                    'image' => $this->parent->image ? [
+                        'id' => $this->parent->image->id,
+                        'url' => $this->parent->image->url(),
+                        'mime_type' => $this->parent->image->mime_type,
+                        'alt_text' => $this->parent->image->altText,
+                    ] : null,
                     'page_type' => $this->parent->page_type,
                     'created_at' => $this->parent->created_at->format(CarbonImmutable::ISO8601),
                     'updated_at' => $this->parent->updated_at->format(CarbonImmutable::ISO8601),
