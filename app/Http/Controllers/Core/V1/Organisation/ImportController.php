@@ -92,11 +92,10 @@ class ImportController extends Controller
                     'name' => ['required', 'string', 'min:1', 'max:255'],
                     'description' => ['required', 'string', 'min:1', 'max:10000'],
                     'url' => ['nullable', 'url', 'max:255'],
-                    'email' => ['present', 'nullable', 'required_without:phone', 'email', 'max:255'],
+                    'email' => ['present', 'nullable', 'email', 'max:255'],
                     'phone' => [
                         'present',
                         'nullable',
-                        'required_without:email',
                         'string',
                         'min:1',
                         'max:255',
