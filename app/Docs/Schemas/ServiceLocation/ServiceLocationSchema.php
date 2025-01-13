@@ -40,7 +40,15 @@ class ServiceLocationSchema extends Schema
                     ->nullable(),
                 Schema::string('updated_at')
                     ->format(Schema::FORMAT_DATE_TIME)
-                    ->nullable()
+                    ->nullable(),
+                Schema::object('image')
+                    ->properties(
+                        Schema::string('id'),
+                        Schema::string('mime_type'),
+                        Schema::string('alt_text'),
+                        Schema::string('url')
+                    )
+                    ->nullable(),
             );
     }
 }
