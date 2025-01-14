@@ -51,7 +51,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['errorlog', 'bugsnag'],
+            'channels' => ['errorlog', 'daily'],
             'ignore_exceptions' => false,
         ],
 
@@ -119,10 +119,6 @@ return [
             'driver' => 'errorlog',
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
-        ],
-
-        'bugsnag' => [
-            'driver' => 'bugsnag',
         ],
 
         'null' => [

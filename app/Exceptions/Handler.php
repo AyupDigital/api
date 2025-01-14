@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use App\Geocode\AddressNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Sentry\Laravel\Integration;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -29,6 +31,10 @@ class Handler extends ExceptionHandler
                     'address_not_found' => [__('validation.custom.address.not_found', ['address' => $e->getMessage()])],
                 ],
             ], 422);
+        });
+
+        $this->reportable(function (Throwable $e) {
+            Integration::captureUnhandledException($e);
         });
     }
 }
