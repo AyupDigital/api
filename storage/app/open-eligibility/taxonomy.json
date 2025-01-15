@@ -1,13 +1,5 @@
 [
   {
-    "id": "53e5e214-f716-46ef-83e8-343104e8a64b",
-    "parent_id": "d71917b3-fd2a-417d-93bb-f1c536938408",
-    "name": "Human Services",
-    "order": 1,
-    "created_at": "2018-08-10 14:46:59",
-    "updated_at": "2018-08-10 14:46:59"
-  },
-  {
     "id": "008504f7-7185-4cdd-8987-c651611fa098",
     "parent_id": "70f4f76e-1ec6-4cfb-9043-efe15d80b359",
     "name": "Skills Assessment",
@@ -2398,14 +2390,6 @@
     "order": 6,
     "created_at": "2018-08-10 14:46:59",
     "updated_at": "2018-08-10 14:46:59"
-  },
-  {
-    "created_at": "2018-08-17 10:07:57",
-    "id": "ca3703a6-1328-4157-92a0-893edef9e632",
-    "name": "Human Situations",
-    "order": 2,
-    "parent_id": "d71917b3-fd2a-417d-93bb-f1c536938408",
-    "updated_at": "2018-08-17 10:07:57"
   },
   {
     "created_at": "2018-08-17 10:07:57",
