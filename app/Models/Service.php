@@ -83,6 +83,16 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
 
     const SCORE_EXCELLENT = 5;
 
+    const ATTENDING_TYPE_PHONE = 'phone';
+    const ATTENDING_TYPE_ONLINE = 'online';
+    const ATTENDING_TYPE_VENUE = 'venue';
+    const ATTENDING_TYPE_HOME = 'home';
+
+    const ATTENDING_ACCESS_REFERRAL = 'referral';
+    const ATTENDING_ACCESS_APPOINTMENT = 'appointment';
+    const ATTENDING_ACCESS_MEMBERSHIP = 'membership';
+    const ATTENDING_ACCESS_DROP_IN = 'drop_in';
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -90,6 +100,7 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
      */
     protected $casts = [
         'is_free' => 'boolean',
+        'national' => 'boolean',
         'show_referral_disclaimer' => 'boolean',
         'ends_at' => 'datetime',
         'last_modified_at' => 'datetime',
@@ -119,6 +130,9 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
             'description' => $this->makeSearchable($this->description),
             'wait_time' => $this->wait_time,
             'is_free' => $this->is_free,
+            'national' => $this->national,
+            'attending_type' => $this->attending_type,
+            'attending_access' => $this->attending_access,
             'status' => $this->status,
             'score' => $this->score,
             'organisation_name' => $this->makeSearchable($this->organisation->name),
@@ -208,6 +222,9 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
             ),
             'wait_time' => Arr::get($data, 'wait_time', $this->wait_time),
             'is_free' => Arr::get($data, 'is_free', $this->is_free),
+            'national' => Arr::get($data, 'national', $this->national),
+            'attending_type' => Arr::get($data, 'attending_type', $this->attending_type),
+            'attending_access' => Arr::get($data, 'attending_access', $this->attending_access),
             'fees_text' => Arr::get($data, 'fees_text', $this->fees_text),
             'fees_url' => Arr::get($data, 'fees_url', $this->fees_url),
             'testimonial' => Arr::get($data, 'testimonial', $this->testimonial),

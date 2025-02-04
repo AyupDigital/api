@@ -73,7 +73,7 @@ class CollectionCategoryController extends Controller
             // Create the collection record.
             $category = Collection::create([
                 'type' => Collection::TYPE_CATEGORY,
-                'slug' => $slugGenerator->generate($request->name, (new Collection())),
+                'slug' => $request->slug ?? $slugGenerator->generate($request->name, (new Collection())),
                 'name' => $request->name,
                 'meta' => [
                     'intro' => $request->intro,
@@ -140,13 +140,13 @@ class CollectionCategoryController extends Controller
 
             // Update the collection record.
             $collection->update([
-                'slug' => $slugGenerator->generate($request->name, $collection),
+                'slug' => $request->slug ?? $slugGenerator->generate($request->name, $collection),
                 'name' => $request->name,
                 'meta' => [
                     'intro' => $request->intro,
                     'image_file_id' => $request->has('image_file_id')
-                    ? $request->image_file_id
-                    : $collection->meta['image_file_id'] ?? null,
+                        ? $request->image_file_id
+                        : $collection->meta['image_file_id'] ?? null,
                     'sideboxes' => $sideboxes,
                 ],
                 'order' => $request->order,

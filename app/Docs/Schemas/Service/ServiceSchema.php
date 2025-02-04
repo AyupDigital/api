@@ -51,6 +51,23 @@ class ServiceSchema extends Schema
                     )
                     ->nullable(),
                 Schema::boolean('is_free'),
+                Schema::boolean('national'),
+                Schema::string('attending_type')
+                    ->enum(
+                        Service::ATTENDING_TYPE_PHONE,
+                        Service::ATTENDING_TYPE_ONLINE,
+                        Service::ATTENDING_TYPE_VENUE,
+                        Service::ATTENDING_TYPE_HOME
+                    )
+                    ->nullable(),
+                Schema::string('attending_access')
+                    ->enum(
+                        Service::ATTENDING_ACCESS_REFERRAL,
+                        Service::ATTENDING_ACCESS_APPOINTMENT,
+                        Service::ATTENDING_ACCESS_MEMBERSHIP,
+                        Service::ATTENDING_ACCESS_DROP_IN
+                    )
+                    ->nullable(),
                 Schema::string('fees_text')
                     ->nullable(),
                 Schema::string('fees_url')
