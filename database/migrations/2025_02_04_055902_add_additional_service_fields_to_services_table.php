@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('services', function (Blueprint $table) {
             $table->boolean('national')->nullable()->default(false)->after('fees_url');
-            $table->enum('attending_type', ['phone', 'online', 'venue', 'home'])->nullable()->default('venue')->after('national');
-            $table->enum('attending_access', ['referral', 'appointment', 'membership', 'drop_in'])->nullable()->default('drop_in')->after('attending_type');
+            $table->enum('attending_type', ['phone', 'online', 'venue', 'home'])->nullable()->after('national');
+            $table->enum('attending_access', ['referral', 'appointment', 'membership', 'drop_in'])->default('drop_in')->after('attending_type');
         });
     }
 
