@@ -39,7 +39,10 @@ class CollectionCategoryController extends Controller
             ->orderBy('order');
 
         $categoryQuery = QueryBuilder::for($baseQuery)
-            ->with('taxonomies');
+            ->with('taxonomies')->allowedIncludes([
+                'parent',
+                'children'
+            ]);
         if ($request->is('*/all')) {
             $categories = $categoryQuery->get();
         } else {
@@ -80,10 +83,12 @@ class CollectionCategoryController extends Controller
                     'image_file_id' => $request->image_file_id,
                     'sideboxes' => $sideboxes,
                 ],
+                'parent_id' => $request->parent_id,
                 'order' => $request->order,
                 'enabled' => $request->enabled,
                 'homepage' => $request->homepage,
             ]);
+            dd('here');
 
             if ($request->filled('image_file_id')) {
                 File::findOrFail($request->image_file_id)->assigned();
@@ -108,7 +113,8 @@ class CollectionCategoryController extends Controller
     public function show(ShowRequest $request, Collection $collection): CollectionCategoryResource
     {
         $baseQuery = Collection::query()
-            ->where('id', $collection->id);
+            ->where('id', $collection->id)
+            ->with(['children', 'parent']);
 
         $collection = QueryBuilder::for($baseQuery)
             ->firstOrFail();

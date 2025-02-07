@@ -61,6 +61,7 @@ class UpdateRequest extends FormRequest
                 ),
             ],
             'sideboxes' => ['present', 'array', 'max:3'],
+            'parent_id' => ['nullable', 'exists:collections,id'],
             'sideboxes.*' => ['array'],
             'sideboxes.*.title' => ['required_with:sideboxes.*', 'string'],
             'sideboxes.*.content' => ['required_with:sideboxes.*', 'string'],

@@ -123,6 +123,14 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
             }
         }
 
+        //TODO: Refactor this as it's duplicate calls but sadly I don't have bags of time with the Kiosk project.
+        $taxonomyIds = $this->serviceTaxonomies()
+            ->pluck('taxonomy_id')
+            ->toArray();
+        $collectionIds = CollectionTaxonomy::query()
+            ->whereIn('taxonomy_id', $taxonomyIds)
+            ->pluck('collection_id');
+
         return [
             'id' => $this->id,
             'name' => $this->makeSearchable($this->name),
@@ -137,7 +145,29 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
             'score' => $this->score,
             'organisation_name' => $this->makeSearchable($this->organisation->name),
             'taxonomy_categories' => $this->taxonomies()->pluck('name')->toArray(),
-            'collection_categories' => static::collections($this)->where('type', Collection::TYPE_CATEGORY)->pluck('name')->toArray(),
+            'collection_categories' => Collection::query()
+                ->whereIn('id', $collectionIds->toArray())
+                ->where('type', Collection::TYPE_CATEGORY)
+                ->with('children', 'parent')
+                ->get()
+                ->flatMap(function ($collection) use ($collectionIds) {
+                    $isDirectlyAssociated = $collectionIds->contains('id', $collection->id);
+
+                    $categories = collect([$collection->name]);
+
+                    if ($isDirectlyAssociated) {
+                        $categories = $categories->merge($collection->children->pluck('name'));
+                    }
+
+                    return $categories;
+                })
+                ->filter(function ($name) {
+                    return !empty($name);
+                })
+                ->unique()
+                ->values()
+                ->toArray(),
+
             'collection_personas' => static::collections($this)->where('type', Collection::TYPE_PERSONA)->pluck('name')->toArray(),
             'service_locations' => $this->serviceLocations()
                 ->with('location')

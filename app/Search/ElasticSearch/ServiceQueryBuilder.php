@@ -118,11 +118,17 @@ class ServiceQueryBuilder extends ElasticsearchQueryBuilder implements QueryBuil
     {
         $categoryNames = Collection::query()
             ->whereIn('slug', $categorySlugs)
-            ->pluck('name')
+            ->with('children')
+            ->get()
+            ->flatMap(function ($collection) {
+                return $collection->children->pluck('name')->prepend($collection->name);
+            })
+            ->unique()
             ->all();
 
         $this->addFilter('collection_categories', $categoryNames);
     }
+
 
     protected function applyPersonas(array $personaSlugs): void
     {

@@ -6,7 +6,7 @@ use App\Docs\Schemas\Taxonomy\Category\TaxonomyCategorySchema;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\BaseObject;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 
-class CollectionCategorySchema extends Schema
+class CollectionCategoryListItemSchema extends Schema
 {
     public static function create(string $objectId = null): BaseObject
     {
@@ -37,9 +37,6 @@ class CollectionCategorySchema extends Schema
                         Schema::string('url')
                     )
                     ->nullable(),
-                CollectionCategoryListItemSchema::create('parent'),
-                Schema::array('children')
-                    ->items(CollectionCategoryListItemSchema::create()),
                 Schema::array('category_taxonomies')
                     ->items(TaxonomyCategorySchema::create()),
                 Schema::string('created_at')
