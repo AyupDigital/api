@@ -83,12 +83,11 @@ class CollectionCategoryController extends Controller
                     'image_file_id' => $request->image_file_id,
                     'sideboxes' => $sideboxes,
                 ],
-                'parent_id' => $request->parent_id,
+                'parent_uuid' => $request->parent_uuid,
                 'order' => $request->order,
                 'enabled' => $request->enabled,
                 'homepage' => $request->homepage,
             ]);
-            dd('here');
 
             if ($request->filled('image_file_id')) {
                 File::findOrFail($request->image_file_id)->assigned();
@@ -155,6 +154,7 @@ class CollectionCategoryController extends Controller
                         : $collection->meta['image_file_id'] ?? null,
                     'sideboxes' => $sideboxes,
                 ],
+                'parent_uuid' => $request->parent_uuid,
                 'order' => $request->order,
                 'enabled' => $request->enabled,
                 'homepage' => $request->homepage,

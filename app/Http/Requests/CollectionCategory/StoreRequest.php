@@ -35,7 +35,7 @@ class StoreRequest extends FormRequest
             'order' => ['required', 'integer', 'min:1', 'max:' . (Collection::categories()->count() + 1)],
             'enabled' => ['required', 'boolean'],
             'homepage' => ['required', 'boolean'],
-            'parent_id' => ['nullable', 'exists:categories,id'],
+            'parent_uuid' => ['sometimes', 'nullable', 'exists:collections,id'],
             'sideboxes' => ['present', 'array', 'max:3'],
             'sideboxes.*' => ['array'],
             'sideboxes.*.title' => ['required_with:sideboxes.*', 'string'],

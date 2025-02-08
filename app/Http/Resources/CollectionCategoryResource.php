@@ -71,6 +71,7 @@ class CollectionCategoryResource extends JsonResource
                     ];
                 });
             }),
+            'parent_uuid' => $this->parent_uuid,
             'order' => $this->order,
             'enabled' => $this->enabled,
             'homepage' => $this->homepage,
