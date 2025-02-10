@@ -1,0 +1,39 @@
+{
+    "name": "ayupdigital/kiosk",
+    "description": "",
+    "authors": [
+        {
+            "name": "Jae Toole",
+            "email": "jae@ayup.agency"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Kiosk\\": "",
+            "Modules\\Kiosk\\App\\": "app/",
+            "Modules\\Kiosk\\Database\\Factories\\": "database/factories/",
+            "Modules\\Kiosk\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Kiosk\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "laravel/slack-notification-channel": "^3.4",
+        "barryvdh/laravel-dompdf": "^3.1"
+    }
+    ,
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    }
+}
