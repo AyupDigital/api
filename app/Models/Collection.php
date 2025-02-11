@@ -54,6 +54,18 @@ class Collection extends Model
     return $this;
   }
 
+  public function updateParent(?string $parentId = null): self
+  {
+    // If parent_id is null save as root node
+    if (is_null($parentId)) {
+      $this->saveAsRoot();
+    } elseif ($parentId && $parentId !== $this->parent_uuid) {
+      Collection::find($parentId)->appendNode($this);
+    }
+
+    return $this;
+  }
+
   public function syncCollectionTaxonomies(EloquentCollection $taxonomies): Collection
   {
     // Get the affected taxonomies if any

@@ -64,6 +64,7 @@ class CollectionCategoryController extends Controller
      */
     public function store(StoreRequest $request, UniqueSlugGenerator $slugGenerator)
     {
+        // Create the collection record.
         return DB::transaction(function () use ($request, $slugGenerator) {
             // Parse the sideboxes.
             $sideboxes = array_map(function (array $sidebox): array {
@@ -72,7 +73,6 @@ class CollectionCategoryController extends Controller
                     'content' => sanitize_markdown($sidebox['content']),
                 ];
             }, $request->sideboxes ?? []);
-
             // Create the collection record.
             $category = Collection::create([
                 'type' => Collection::TYPE_CATEGORY,
@@ -82,12 +82,14 @@ class CollectionCategoryController extends Controller
                     'intro' => $request->intro,
                     'image_file_id' => $request->image_file_id,
                     'sideboxes' => $sideboxes,
+
                 ],
-                'parent_uuid' => $request->parent_uuid,
                 'order' => $request->order,
                 'enabled' => $request->enabled,
                 'homepage' => $request->homepage,
             ]);
+
+            $category->updateParent($request->parent_uuid);
 
             if ($request->filled('image_file_id')) {
                 File::findOrFail($request->image_file_id)->assigned();
