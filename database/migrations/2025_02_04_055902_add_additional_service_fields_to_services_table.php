@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('services', function (Blueprint $table) {
-            $table->boolean('national')->nullable()->default(false)->after('fees_url');
-            $table->enum('attending_type', ['phone', 'online', 'venue', 'home'])->nullable()->after('national');
+            $table->boolean('national')->default(false)->after('fees_url');
+            $table->enum('attending_type', ['phone', 'online', 'venue', 'home'])->default('venue')->after('national');
             $table->enum('attending_access', ['referral', 'appointment', 'membership', 'drop_in'])->default('drop_in')->after('attending_type');
         });
     }
