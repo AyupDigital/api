@@ -22,5 +22,7 @@ Route::prefix('/kiosk/v1')
             Route::post('/notifications/sms', [\Modules\Kiosk\App\Http\Controllers\KioskNotification\SmsController::class, '__invoke']);
             Route::post('/notifications/email', [\Modules\Kiosk\App\Http\Controllers\KioskNotification\EmailController::class, '__invoke']);
             Route::post('/notifications/letter', [\Modules\Kiosk\App\Http\Controllers\KioskNotification\LetterController::class, '__invoke']);
+            Route::post('/notifications/print', [\Modules\Kiosk\App\Http\Controllers\KioskNotification\PrintController::class, '__invoke']);
+            Route::get('/notifications/print', [\Modules\Kiosk\App\Http\Controllers\KioskNotification\PrintController::class, '__invoke']);
         }
     );

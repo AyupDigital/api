@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('kiosk_notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->enum('type', ['sms', 'letter', 'email']);
+            $table->enum('type', ['sms', 'letter', 'email', 'print']);
             $table->json('service_ids');
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
