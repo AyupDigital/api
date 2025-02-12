@@ -77,7 +77,7 @@ class PrintController
         $pdf->loadView('kiosk::print', compact('services'));
         $output = $pdf->output();
 
-        $success = Http::withBasicAuth('Qcb_GNCkgB1SGFNylvSHqjOiMidHV0at6JvWtKPsyRI', '')->post(
+        $success = Http::withBasicAuth(config('kiosk.printnode.api_key'), '')->post(
             'https://api.printnode.com/printjobs',
             [
                 'printerId' => $request->input('printer_id'),

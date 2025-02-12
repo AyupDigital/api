@@ -15,4 +15,7 @@ return [
         'email_address_name' => 'Hounslow Connect Kiosk',
         'letter_return_id' => '712062'
     ],
+    'printnode' => [
+        'api_key' => env('PRINTNODE_API_KEY'),
+    ]
 ];
