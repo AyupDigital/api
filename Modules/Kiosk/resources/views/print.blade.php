@@ -100,7 +100,7 @@ $map = [
         {{ $location['location']['postcode'] }}
         @endif
         <br><br>
-        @if($location['formatted_opening_hours'])
+        @if(isset($location['formatted_opening_hours']))
             @foreach($location['formatted_opening_hours'] as $html)
                 {!! $html !!}
                 <br>
