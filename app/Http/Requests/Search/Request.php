@@ -48,7 +48,7 @@ class Request extends FormRequest
                 ]),
             ],
             'is_free' => [
-                'required_without_all:query,category,persona,wait_time,location,eligibilities',
+                'required_without_all:query,category,persona,wait_time,location,eligibilities,polygon',
                 'boolean',
             ],
             'order' => [

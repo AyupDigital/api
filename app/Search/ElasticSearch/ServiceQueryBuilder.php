@@ -73,6 +73,10 @@ class ServiceQueryBuilder extends ElasticsearchQueryBuilder implements QueryBuil
             $this->applyEligibilities($query->getEligibilities());
         }
 
+        if ($query->hasPolygon()) {
+            $this->applyPolygon($query->getPolygon());
+        }
+
         if ($query->hasLocation()) {
             $this->applyLocation($query->getLocation(), $query->getDistance());
         }
@@ -217,6 +221,24 @@ class ServiceQueryBuilder extends ElasticsearchQueryBuilder implements QueryBuil
                 $this->addMatch('service_eligibilities', $serviceEligibilityTypeAllName, $this->shouldPath, 0);
             }
         }
+    }
+
+    protected function applyPolygon(array $coordinates): void
+    {
+        $matches = Arr::get($this->esQuery, $this->mustPath);
+        $matches[] = [
+            'nested' => [
+                'path' => 'service_locations',
+                'query' => [
+                    'geo_polygon' => [
+                        'service_locations.location' => [
+                            'points' => $coordinates,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        Arr::set($this->esQuery, $this->mustPath, $matches);
     }
 
     protected function applyLocation(Coordinate $coordinate, ?int $distance): void

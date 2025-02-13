@@ -43,6 +43,11 @@ class SearchController extends Controller
             $criteria->setIsFree($request->input('is_free'));
         }
 
+        // If polygon was passed, then parse the polygon.
+        if ($request->has('polygon')) {
+            $criteria->setPolygon($request->input('polygon'));
+        }
+
         // If location was passed, then parse the location.
         if ($request->has('location')) {
             $criteria->setLocation(
