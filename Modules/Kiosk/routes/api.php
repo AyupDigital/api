@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('/kiosk/v1')
-    ->name('kiosk.v1')
     ->group(
         function () {
             Route::post('/events', [\Modules\Kiosk\App\Http\Controllers\KioskEventController::class, 'store']);

@@ -21,7 +21,7 @@ class PrintController
     {
         //TODO: Remove all the janky stuff modifying DOMPDF canvas... if you run into any sizing issues when printing, it's always... always the print driver.
         // Fetch Services
-        $baseUrl = config('kiosk.api_base_url');
+        $baseUrl = config('kiosk.apiBaseUrl');
         $services = Http::get($baseUrl . '/core/v1/services', ['filter[id]' => $request->input('service_ids'), 'include' => 'organisation'])->json()['data'];
 
         $locations = Http::get($baseUrl . '/core/v1/service-locations', ['filter[service_id]' => $request->input('service_ids'), 'include' => 'location'])->json()['data'];
