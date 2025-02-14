@@ -78,26 +78,26 @@ class PrintController
         $pdf->save(storage_path('app/print.pdf'));
         $output = $pdf->output();
 
-        // $success = Http::withBasicAuth(config('kiosk.printnode.api_key'), '')->post(
-        //     'https://api.printnode.com/printjobs',
-        //     [
-        //         'printerId' => $request->input('printer_id'),
-        //         // 'printerId' => 74092902,
-        //         'contentType' => 'pdf_base64',
-        //         'content' => base64_encode($output),
-        //     ]
-        // );
+        $success = Http::withBasicAuth(config('kiosk.printnode.api_key'), '')->post(
+            'https://api.printnode.com/printjobs',
+            [
+                'printerId' => $request->input('printer_id'),
+                // 'printerId' => 74092902,
+                'contentType' => 'pdf_base64',
+                'content' => base64_encode($output),
+            ]
+        );
 
-        // KioskNotification::query()
-        //     ->create([
-        //         'type' => 'print',
-        //         'service_ids' => $request->input('service_ids'),
-        //         'device_id' => $request->input('device_id'),
-        //         'data' => [
-        //             'printer_id' => $request->input('printer_id'),
-        //             'service_ids' => $request->input('service_ids'),
-        //         ],
-        //         'success' => $success->ok(),
-        //     ]);
+        KioskNotification::query()
+            ->create([
+                'type' => 'print',
+                'service_ids' => $request->input('service_ids'),
+                'device_id' => $request->input('device_id'),
+                'data' => [
+                    'printer_id' => $request->input('printer_id'),
+                    'service_ids' => $request->input('service_ids'),
+                ],
+                'success' => $success->ok(),
+            ]);
     }
 }
