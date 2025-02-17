@@ -42,41 +42,41 @@ class PrintController
         });
 
         $domPdf = new Dompdf();
-        $domPdf->setCanvas(CanvasFactory::get_instance($domPdf, [0, 0, 580, 5000], 'portrait'));
-        $domPdf->setPaper([0, 0, 580, 5000], 'portrait');
+        $domPdf->setCanvas(CanvasFactory::get_instance($domPdf, [0, 0, 226, 841], 'portrait'));
+        $domPdf->setPaper([0, 0, 226, 841], 'portrait');
         $initialPdf = new Pdf($domPdf, app('config'), app('files'), app('view'));
 
         $initialPdf->loadView('kiosk::print', compact('services'));
 
 
-        $bodyHeight = 0;
+        // $bodyHeight = 0;
 
-        $initialPdf->setCallbacks([
-            'myCallbacks' => [
-                'event' => 'end_frame',
-                'f' => function ($frame) use (&$bodyHeight) {
-                    $node = $frame->get_node();
-                    if (strtolower($node->nodeName) === "body") {
-                        $padding_box = $frame->get_padding_box();
-                        $bodyHeight += $padding_box['h'];
-                    }
-                }
-            ]
-        ]);
+        // $initialPdf->setCallbacks([
+        //     'myCallbacks' => [
+        //         'event' => 'end_frame',
+        //         'f' => function ($frame) use (&$bodyHeight) {
+        //             $node = $frame->get_node();
+        //             if (strtolower($node->nodeName) === "body") {
+        //                 $padding_box = $frame->get_padding_box();
+        //                 $bodyHeight += $padding_box['h'];
+        //             }
+        //         }
+        //     ]
+        // ]);
 
-        $initialPdf->render();
+        // $initialPdf->render();
 
-        unset($initialPdf);
-        unset($domPdf);
+        // unset($initialPdf);
+        // unset($domPdf);
 
-        $domPdf = new Dompdf();
-        $domPdf->setCanvas(CanvasFactory::get_instance($domPdf, [0, 0, 580, $bodyHeight + 120], 'portrait'));
-        $domPdf->setPaper([0, 0, 580, $bodyHeight + 80], 'portrait');
-        $pdf = new Pdf($domPdf, app('config'), app('files'), app('view'));
+        // $domPdf = new Dompdf();
+        // $domPdf->setCanvas(CanvasFactory::get_instance($domPdf, [0, 0, 580, $bodyHeight + 120], 'portrait'));
+        // $domPdf->setPaper([0, 0, 580, $bodyHeight + 80], 'portrait');
+        // $pdf = new Pdf($domPdf, app('config'), app('files'), app('view'));
 
-        $pdf->loadView('kiosk::print', compact('services'));
-        $pdf->save(storage_path('app/print.pdf'));
-        $output = $pdf->output();
+        // $pdf->loadView('kiosk::print', compact('services'));
+        $initialPdf->save(storage_path('app/print.pdf'));
+        $output = $initialPdf->output();
 
         $success = Http::withBasicAuth(config('kiosk.printnode.api_key'), '')->post(
             'https://api.printnode.com/printjobs',

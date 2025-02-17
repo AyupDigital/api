@@ -130,7 +130,13 @@ class ServiceQueryBuilder extends ElasticsearchQueryBuilder implements QueryBuil
             ->unique()
             ->all();
 
-        $this->addFilter('collection_categories', $categoryNames);
+        // Add each category name to the should clause
+        foreach ($categoryNames as $categoryName) {
+            $this->addShould('collection_categories', $categoryName);
+        }
+
+        // Set minimum_should_match to 1 to ensure at least one should clause matches
+        $this->addMinimumShouldMatch(1);
     }
 
 
@@ -285,14 +291,21 @@ class ServiceQueryBuilder extends ElasticsearchQueryBuilder implements QueryBuil
         return ['_score'];
     }
 
-    protected function addMinimumShouldMatch()
+    protected function addShould(string $field, $value): void
+    {
+        $should = Arr::get($this->esQuery, $this->shouldPath);
+        $should[] = [
+            'term' => [
+                $field => $value,
+            ],
+        ];
+        Arr::set($this->esQuery, $this->shouldPath, $should);
+    }
+
+    protected function addMinimumShouldMatch(int $count = 1): void
     {
         $bool = Arr::get($this->esQuery, 'function_score.query.bool');
-        if (empty($bool['minimum_should_match'])) {
-            $bool['minimum_should_match'] = 1;
-        } else {
-            $bool['minimum_should_match']++;
-        }
+        $bool['minimum_should_match'] = $count;
         Arr::set($this->esQuery, 'function_score.query.bool', $bool);
     }
 }

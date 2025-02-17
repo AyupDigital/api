@@ -12,7 +12,7 @@ $map = [
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 40px;
+            font-size: 11px;
             /* max-width: 600px; */
         }
 
@@ -26,7 +26,7 @@ $map = [
         h2 {
             padding: 0;
             margin: 0;
-            font-size: 45px;
+            font-size: 15px;
         }
     </style>
 </head>
