@@ -112,9 +112,6 @@ $map = [
         @endforeach
 
         <br>
-        <div style="width: 100%; text-align: center;">
-            <b>London Borough of Hounslow</b>
-        </div>
     </div>
 </body>
 

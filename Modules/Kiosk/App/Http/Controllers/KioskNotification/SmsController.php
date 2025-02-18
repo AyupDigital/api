@@ -11,52 +11,56 @@ use Modules\Kiosk\App\Services\ClickSendService;
 
 class SmsController
 {
-    public function __invoke(Request $request) {
-        // Validate phone number
-        $request->validate([
-            'phone_number' => 'required|string|min:10|max:15',
-            'service_ids' => 'required|array|min:1'
-        ]);
-        // Fetch Services
-        $services = Service::query()->whereIn('id', $request->input('service_ids'))->with('organisation')->get();
+  public function __invoke(Request $request)
+  {
+    // Validate phone number
+    $request->validate([
+      'phone_number' => 'required|string|min:10|max:15',
+      'service_ids' => 'required|array|min:1'
+    ]);
+    // Fetch Services
+    $services = Service::query()->whereIn('id', $request->input('service_ids'))->with('organisation')->get();
 
-        // Build & Send SMS
-        $message = "
-            Thanks for using the ". config('kisok.deploymentName', 'Kiosk') . " Here's your shortlisted services:\n
+    // Build & Send SMS
+    $message = "
+            Thanks for using the " . config('kisok.deploymentName', 'Kiosk') . " You will receive your shortlisted services in the following text messages:\n
         ";
-        foreach ($services as $key => $value) {
-            $message .= "\nService " . $key + 1 . " of {$services->count()}:\n";
-            $message .= "---\n";
-            $message .= "{$value->name} - provided by {$value->organisation->name}\n";
-            if ($value->contact_phone) {
-                $message .= "Phone: {$value->contact_phone}\n";
-            }
-            if ($value->contact_email) {
-                $message .= "Email: {$value->contact_email}\n";
-            }
-            if ($value->url) {
-                $message .= "Website: {$value->url}\n";
-            }
-            $message .= "More info: " . config('kiosk.frontendUrl') . "/service/{$value->slug}\n";
-        }
+    $smsService = new ClicksendService();
+    $isSuccessful = [];
+    $isSuccessful['intro'] = $smsService->sendSms($request->input('phone_number'), $message);
 
-        if (config('kiosk.survey')) {
-            $message .= "Share your feedback: " . config('kiosk.surveyUrl');
-        }
+    foreach ($services as $value) {
+      $message .= "{$value->name} - provided by {$value->organisation->name}\n";
+      if ($value->contact_phone) {
+        $message .= "Phone: {$value->contact_phone}\n";
+      }
+      if ($value->contact_email) {
+        $message .= "Email: {$value->contact_email}\n";
+      }
+      if ($value->url) {
+        $message .= "Website: {$value->url}\n";
+      }
+      $message .= "More info: " . config('kiosk.frontendUrl') . "/services/{$value->slug}\n";
 
-        $smsService = new ClickSendService();
-        $success = $smsService->sendSms($request->input('phone_number'), $message);
-
-        KioskNotification::query()
-            ->create([
-                'type' => 'sms',
-                'phone' => $request->input('phone_number'),
-                'service_ids' => $request->input('service_ids'),
-                'success' => $success,
-            ]);
-
-        // TODO: Handle Errors
-
-        return response(status: 201);
+      $isSuccessful[$value->id] = $smsService->sendSms($request->input('phone_number'), $message);
     }
+
+    if (config('kiosk.survey')) {
+      $message = "Share your feedback: " . config('kiosk.surveyUrl');
+      $isSuccessful['survey'] = $smsService->sendSms($request->input('phone_number'), $message);
+    }
+
+    KioskNotification::query()
+      ->create([
+        'type' => 'sms',
+        'phone' => $request->input('phone_number'),
+        'service_ids' => $request->input('service_ids'),
+        'success' => (collect($isSuccessful)->value(false) ? false : true),
+      ]);
+
+    // TODO: Handle Errors
+
+    return response(status: 201);
+  }
 }
+
