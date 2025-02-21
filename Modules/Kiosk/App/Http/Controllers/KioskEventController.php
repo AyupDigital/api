@@ -48,7 +48,7 @@ class KioskEventController
           'name' => $event['name'],
           'group' => $event['group'],
           'value' => $event['value'],
-          'logged_at' => $event['date_time']
+          'logged_at' => $event['dateTime']
         ]);
 
         if ($event['type'] === 'error') {
