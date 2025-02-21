@@ -30,7 +30,7 @@ class SmsController
     $isSuccessful['intro'] = $smsService->sendSms($request->input('phone_number'), $message);
 
     foreach ($services as $value) {
-      $message .= "{$value->name} - provided by {$value->organisation->name}\n";
+      $message = "{$value->name} - provided by {$value->organisation->name}\n";
       if ($value->contact_phone) {
         $message .= "Phone: {$value->contact_phone}\n";
       }
@@ -63,4 +63,3 @@ class SmsController
     return response(status: 201);
   }
 }
-
