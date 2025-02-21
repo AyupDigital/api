@@ -22,7 +22,7 @@ class KioskEventController
 
     $startEvent = $events->first();
     $lastEvent = $events->last();
-    $diffInSeconds = Carbon::parse($lastEvent['date_time'])->diffInSeconds(Carbon::parse($startEvent['date_time']));
+    $diffInSeconds = Carbon::parse($lastEvent['dateTime'])->diffInSeconds(Carbon::parse($startEvent['dateTime']));
     $isCompleted = $events->contains('type', '=', 'session_timeout') || $events->contains('type', '=', 'session_end');
     $hasDemographic = $events->contains('demographic', '=', 'demographic');
     $hasSharedShortlist = $events->contains('type', '=', 'notification');
@@ -31,8 +31,8 @@ class KioskEventController
 
     DB::transaction(function () use ($events, $startEvent, $lastEvent, $diffInSeconds, $isCompleted, $hasDemographic, $hasSharedShortlist, $hasFeedback, $deviceId) {
       $session = KioskSession::create([
-        'start_at' => $startEvent['date_time'],
-        'end_at' => $lastEvent['date_time'],
+        'start_at' => $startEvent['dateTime'],
+        'end_at' => $lastEvent['dateTime'],
         'duration' => $diffInSeconds,
         'status' => $isCompleted ? 'complete' : 'incomplete',
         'device_id' => $deviceId,
