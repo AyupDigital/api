@@ -70,8 +70,9 @@ $map = [
         <p style="word-wrap: break-word; max-width: 600px;"><b>Website:</b> {{$value['url']}}</p>
         <br>
         @endif
-        <br>
+
         @if(sizeof($value['locations']) > 0)
+        <br>
         <b>Where? </b>
         @endif
         @foreach($value['locations'] as $location)
