@@ -125,7 +125,7 @@ class ServiceQueryBuilder extends ElasticsearchQueryBuilder implements QueryBuil
       ->with('children')
       ->get()
       ->flatMap(function ($collection) {
-        return $collection->children->pluck('name')->prepend($collection->name);
+        return $collection->children->pluck('slug')->prepend($collection->slug);
       })
       ->unique()
       ->all();

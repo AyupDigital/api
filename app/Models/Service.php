@@ -153,16 +153,16 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
                 ->flatMap(function ($collection) use ($collectionIds) {
                     $isDirectlyAssociated = $collectionIds->contains('id', $collection->id);
 
-                    $categories = collect([$collection->name]);
+                    $categories = collect([$collection->slug]);
 
                     if ($isDirectlyAssociated) {
-                        $categories = $categories->merge($collection->children->pluck('name'));
+                        $categories = $categories->merge($collection->children->pluck('slug'));
                     }
 
                     return $categories;
                 })
-                ->filter(function ($name) {
-                    return !empty($name);
+                ->filter(function ($slug) {
+                    return !empty($slug);
                 })
                 ->unique()
                 ->values()
@@ -272,12 +272,12 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
             'logo_file_id' => Arr::get($data, 'logo_file_id', $this->logo_file_id),
             'score' => Arr::get($data, 'score', $this->score),
             'ends_at' => array_key_exists('ends_at', $data)
-            ? (
-                $data['ends_at'] === null
-                ? null
-                : Date::createFromFormat(CarbonImmutable::ISO8601, $data['ends_at'])
-            )
-            : $this->ends_at,
+                ? (
+                    $data['ends_at'] === null
+                    ? null
+                    : Date::createFromFormat(CarbonImmutable::ISO8601, $data['ends_at'])
+                )
+                : $this->ends_at,
             // This must always be updated regardless of the fields changed.
             'last_modified_at' => Date::now(),
             'eligibility_age_group_custom' => Arr::get($data, 'eligibility_types.custom.age_group', $this->eligibility_age_group_custom),
