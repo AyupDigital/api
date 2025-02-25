@@ -9,6 +9,7 @@ use App\Models\Service;
 use Barryvdh\DomPDF\PDF as Pdf;
 use Dompdf\CanvasFactory;
 use Dompdf\Dompdf;
+use Dompdf\FontMetrics;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Modules\Kiosk\App\Helpers\OpeningTimesHelper;
@@ -44,6 +45,7 @@ class PrintController
     $domPdf = new Dompdf();
     $domPdf->setCanvas(CanvasFactory::get_instance($domPdf, [0, 0, 226, 708], 'portrait'));
     $domPdf->setPaper([0, 0, 226, 708], 'portrait');
+
     $initialPdf = new Pdf($domPdf, app('config'), app('files'), app('view'));
 
     $initialPdf->loadView('kiosk::print', compact('services'));
@@ -76,28 +78,28 @@ class PrintController
 
     // $pdf->loadView('kiosk::print', compact('services'));
     $initialPdf->save(storage_path('app/print.pdf'));
-    $output = $initialPdf->output();
+    // $output = $initialPdf->output();
 
-    $success = Http::withBasicAuth(config('kiosk.printnode.api_key'), '')->post(
-      'https://api.printnode.com/printjobs',
-      [
-        'printerId' => $request->input('printer_id'),
-        // 'printerId' => 74092902,
-        'contentType' => 'pdf_base64',
-        'content' => base64_encode($output),
-      ]
-    );
+    // $success = Http::withBasicAuth(config('kiosk.printnode.api_key'), '')->post(
+    //   'https://api.printnode.com/printjobs',
+    //   [
+    //     'printerId' => $request->input('printer_id'),
+    //     // 'printerId' => 74092902,
+    //     'contentType' => 'pdf_base64',
+    //     'content' => base64_encode($output),
+    //   ]
+    // );
 
-    KioskNotification::query()
-      ->create([
-        'type' => 'print',
-        'service_ids' => $request->input('service_ids'),
-        'device_id' => $request->input('device_id'),
-        'data' => [
-          'printer_id' => $request->input('printer_id'),
-          'service_ids' => $request->input('service_ids'),
-        ],
-        'success' => $success->ok(),
-      ]);
+    // KioskNotification::query()
+    //   ->create([
+    //     'type' => 'print',
+    //     'service_ids' => $request->input('service_ids'),
+    //     'device_id' => $request->input('device_id'),
+    //     'data' => [
+    //       'printer_id' => $request->input('printer_id'),
+    //       'service_ids' => $request->input('service_ids'),
+    //     ],
+    //     'success' => $success->ok(),
+    //   ]);
   }
 }

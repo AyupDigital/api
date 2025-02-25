@@ -1,9 +1,9 @@
 @php
 $map = [
-    "referral" => "This service is only accessible if you have a referral",
-    "appointment" => "This service is only accessible by appointment",
-    "drop_in" => "Drop-in during opening hours",
-    "membership" => "This service is accessible if you have a membership",
+"referral" => "This service is only accessible if you have a referral",
+"appointment" => "This service is only accessible by appointment",
+"drop_in" => "Drop-in during opening hours",
+"membership" => "This service is accessible if you have a membership",
 ];
 @endphp
 <html>
@@ -12,7 +12,7 @@ $map = [
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 11px;
+            font-size: 15px;
             /* max-width: 600px; */
         }
 
@@ -23,10 +23,11 @@ $map = [
             /* top: 50%; */
             z-index: -2;
         }
+
         h2 {
             padding: 0;
             margin: 0;
-            font-size: 15px;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -40,7 +41,7 @@ $map = [
         <h2><b>{{ $value['name'] }}</b></h2>
 
         <b>Run by: </b>{{ $value['organisation']['name'] }}
-        <br>        <br>
+        <br> <br>
         {{ $value['intro'] }}
         <br><br>
         @if ($value['national'])
@@ -75,14 +76,14 @@ $map = [
         @endif
         @foreach($value['locations'] as $location)
         <br>
-        
+
         @if ($location['name'])
         <br>
         <u>{{ $location['name'] }}</u>
         @endif
         <br>
         @if(!$location['name'])<u> @endif {{ $location['location']['address_line_1'] }} @if(!$location['name'])</u> @endif
-        
+
         @if($location['location']['address_line_2'])
         <br>
         {{ $location['location']['address_line_2'] }}
@@ -101,15 +102,20 @@ $map = [
         @endif
         <br><br>
         @if(isset($location['formatted_opening_hours']))
-            @foreach($location['formatted_opening_hours'] as $html)
-                {!! $html !!}
-                <br>
-                @endforeach
+        @foreach($location['formatted_opening_hours'] as $html)
+        {!! $html !!}
+        <br>
+        @endforeach
         @endif
         @endforeach
         <br><br>
         <div class="line"></div>
+
+
         @endforeach
+        <div style="margin-top: 5px; text-align:center;">
+            <b>London Borough of Hounslow</b>
+        </div>
 
         <br>
     </div>
