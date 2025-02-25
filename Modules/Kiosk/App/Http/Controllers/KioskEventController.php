@@ -24,7 +24,7 @@ class KioskEventController
     $lastEvent = $events->last();
     $diffInSeconds = Carbon::parse($lastEvent['dateTime'])->diffInSeconds(Carbon::parse($startEvent['dateTime']));
     $isCompleted = $events->contains('type', '=', 'session_timeout') || $events->contains('type', '=', 'session_end');
-    $hasDemographic = $events->contains('demographic', '=', 'demographic');
+    $hasDemographic = $events->contains('type', '=', 'demographic');
     $hasSharedShortlist = $events->contains('type', '=', 'notification');
     $hasFeedback = $events->contains('type', '=', 'feedback');
     $deviceId = $request->get('device_id');
@@ -60,4 +60,3 @@ class KioskEventController
     return response(status: 201);
   }
 }
-
