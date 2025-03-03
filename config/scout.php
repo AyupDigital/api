@@ -43,7 +43,7 @@ return [
 
     'queue' => [
         'connection' => env('QUEUE_CONNECTION', 'sync'),
-        'queue' => 'search',
+        'queue' => env('REDIS_QUEUE', 'default'),
     ],
 
     /*

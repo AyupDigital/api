@@ -113,6 +113,23 @@ class UpdateRequest extends FormRequest
                 ]),
             ],
             'is_free' => ['boolean'],
+            'national' => ['boolean'],
+            'attending_type' => [
+                Rule::in([
+                    Service::ATTENDING_TYPE_PHONE,
+                    Service::ATTENDING_TYPE_ONLINE,
+                    Service::ATTENDING_TYPE_VENUE,
+                    Service::ATTENDING_TYPE_HOME,
+                ]),
+            ],
+            'attending_access' => [
+                Rule::in([
+                    Service::ATTENDING_ACCESS_REFERRAL,
+                    Service::ATTENDING_ACCESS_APPOINTMENT,
+                    Service::ATTENDING_ACCESS_MEMBERSHIP,
+                    Service::ATTENDING_ACCESS_DROP_IN,
+                ]),
+            ],
             'fees_text' => ['nullable', 'string', 'min:1', 'max:255'],
             'fees_url' => ['nullable', 'url', 'max:255'],
             'testimonial' => ['nullable', 'string', 'min:1', 'max:255'],

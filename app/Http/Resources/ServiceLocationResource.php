@@ -25,7 +25,12 @@ class ServiceLocationResource extends JsonResource
             'next_occurs' => $this->nextOccurs(),
             'created_at' => $this->created_at->format(CarbonImmutable::ISO8601),
             'updated_at' => $this->updated_at->format(CarbonImmutable::ISO8601),
-
+            'image' => $this->imageFile ? [
+                'id' => $this->imageFile->id,
+                'url' => $this->imageFile->url(),
+                'mime_type' => $this->imageFile->mime_type,
+                'alt_text' => $this->imageFile->altText,
+            ] : null,
             // Relationships.
             'location' => new LocationResource($this->whenLoaded('location')),
         ];

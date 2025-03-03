@@ -39,7 +39,10 @@ class CollectionCategoryController extends Controller
             ->orderBy('order');
 
         $categoryQuery = QueryBuilder::for($baseQuery)
-            ->with('taxonomies');
+            ->with('taxonomies')->allowedIncludes([
+                'parent',
+                'children'
+            ]);
         if ($request->is('*/all')) {
             $categories = $categoryQuery->get();
         } else {
@@ -61,6 +64,7 @@ class CollectionCategoryController extends Controller
      */
     public function store(StoreRequest $request, UniqueSlugGenerator $slugGenerator)
     {
+        // Create the collection record.
         return DB::transaction(function () use ($request, $slugGenerator) {
             // Parse the sideboxes.
             $sideboxes = array_map(function (array $sidebox): array {
@@ -69,21 +73,23 @@ class CollectionCategoryController extends Controller
                     'content' => sanitize_markdown($sidebox['content']),
                 ];
             }, $request->sideboxes ?? []);
-
             // Create the collection record.
             $category = Collection::create([
                 'type' => Collection::TYPE_CATEGORY,
-                'slug' => $slugGenerator->generate($request->name, (new Collection())),
+                'slug' => $request->slug ?? $slugGenerator->generate($request->name, (new Collection())),
                 'name' => $request->name,
                 'meta' => [
                     'intro' => $request->intro,
                     'image_file_id' => $request->image_file_id,
                     'sideboxes' => $sideboxes,
+
                 ],
                 'order' => $request->order,
                 'enabled' => $request->enabled,
                 'homepage' => $request->homepage,
             ]);
+
+            $category->updateParent($request->parent_uuid);
 
             if ($request->filled('image_file_id')) {
                 File::findOrFail($request->image_file_id)->assigned();
@@ -108,7 +114,8 @@ class CollectionCategoryController extends Controller
     public function show(ShowRequest $request, Collection $collection): CollectionCategoryResource
     {
         $baseQuery = Collection::query()
-            ->where('id', $collection->id);
+            ->where('id', $collection->id)
+            ->with(['children', 'parent']);
 
         $collection = QueryBuilder::for($baseQuery)
             ->firstOrFail();
@@ -140,15 +147,16 @@ class CollectionCategoryController extends Controller
 
             // Update the collection record.
             $collection->update([
-                'slug' => $slugGenerator->generate($request->name, $collection),
+                'slug' => $request->slug ?? $slugGenerator->generate($request->name, $collection),
                 'name' => $request->name,
                 'meta' => [
                     'intro' => $request->intro,
                     'image_file_id' => $request->has('image_file_id')
-                    ? $request->image_file_id
-                    : $collection->meta['image_file_id'] ?? null,
+                        ? $request->image_file_id
+                        : $collection->meta['image_file_id'] ?? null,
                     'sideboxes' => $sideboxes,
                 ],
+                'parent_uuid' => $request->parent_uuid,
                 'order' => $request->order,
                 'enabled' => $request->enabled,
                 'homepage' => $request->homepage,
