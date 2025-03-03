@@ -1,4 +1,4 @@
-name: Deploy to Hounslow Staging
+name: Deploy to Kingston Staging
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: Hounslow Staging
+    environment: Kingston Staging
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
