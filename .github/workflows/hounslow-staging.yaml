@@ -32,3 +32,4 @@ jobs:
           TRAVIS_COMMIT: ${{ github.sha }}
           ENVIRONMENT: staging
           ENV_SECRET_ID: ${{ secrets.ENV_SECRET_ID }}
+          REPO_URI: ${{ vars.REPO_URI }}
