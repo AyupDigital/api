@@ -96,6 +96,25 @@ class StoreRequest extends FormRequest
                 Service::WAIT_TIME_LONGER,
             ])],
             'is_free' => ['required', 'boolean'],
+            'national' => ['required', 'boolean'],
+            'attending_type' => [
+                'required',
+                Rule::in([
+                    Service::ATTENDING_TYPE_PHONE,
+                    Service::ATTENDING_TYPE_ONLINE,
+                    Service::ATTENDING_TYPE_VENUE,
+                    Service::ATTENDING_TYPE_HOME,
+                ]),
+            ],
+            'attending_access' => [
+                'required',
+                Rule::in([
+                    Service::ATTENDING_ACCESS_REFERRAL,
+                    Service::ATTENDING_ACCESS_APPOINTMENT,
+                    Service::ATTENDING_ACCESS_MEMBERSHIP,
+                    Service::ATTENDING_ACCESS_DROP_IN,
+                ]),
+            ],
             'fees_text' => ['present', 'nullable', 'string', 'min:1', 'max:255'],
             'fees_url' => ['present', 'nullable', 'url', 'max:255'],
             'testimonial' => ['present', 'nullable', 'string', 'min:1', 'max:255'],

@@ -37,6 +37,9 @@ class CollectionCategorySchema extends Schema
                         Schema::string('url')
                     )
                     ->nullable(),
+                CollectionCategoryListItemSchema::create('parent'),
+                Schema::array('children')
+                    ->items(CollectionCategoryListItemSchema::create()),
                 Schema::array('category_taxonomies')
                     ->items(TaxonomyCategorySchema::create()),
                 Schema::string('created_at')
