@@ -14,4 +14,4 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run envoyer deploy
-        run: curl ${{ secrets.ENVOYER_DEPLOY_URL }} -d "branch=develop" -d "
+        run: curl ${{ secrets.ENVOYER_DEPLOY_URL }} -d "branch=develop"
