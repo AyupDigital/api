@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace App\Search;
 
@@ -72,6 +72,11 @@ class SearchCriteriaQuery
      * @var string[]|null
      */
     protected $eligibilities;
+
+    /**
+     * @var float[]|null
+     */
+    protected $polygon;
 
     /**
      * @var Coordinate|null
@@ -278,6 +283,21 @@ class SearchCriteriaQuery
     public function setEndsBefore(?string $endsBefore): void
     {
         $this->endsBefore = $endsBefore;
+    }
+
+    public function hasPolygon(): bool
+    {
+        return $this->polygon !== null;
+    }
+
+    public function getPolygon(): ?array
+    {
+        return $this->polygon;
+    }
+
+    public function setPolygon(?array $polygon): void
+    {
+        $this->polygon = $polygon;
     }
 
     public function hasLocation(): bool

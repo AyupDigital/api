@@ -1,0 +1,17 @@
+name: Deploy to Bexley Staging
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: Bexley Staging
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run envoyer deploy
+        run: curl ${{ secrets.ENVOYER_DEPLOY_URL }} -d "branch=develop"
