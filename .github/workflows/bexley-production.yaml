@@ -1,0 +1,17 @@
+name: Deploy to Bexley Production
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: Bexley Production
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run envoyer deploy
+        run: curl ${{ secrets.ENVOYER_DEPLOY_URL }} -d "branch=master"
