@@ -1,9 +1,7 @@
 name: Deploy to Seacroft Production
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
 
 jobs:
   deploy:
