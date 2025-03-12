@@ -11,7 +11,7 @@ class DestroyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if ($this->user()->isSuperAdmin()) {
+        if ($this->user()->isServiceAdmin($this->service_location->service)) {
             return true;
         }
 
