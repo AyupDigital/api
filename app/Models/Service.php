@@ -83,6 +83,16 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
 
     const SCORE_EXCELLENT = 5;
 
+    const ATTENDING_TYPE_PHONE = 'phone';
+    const ATTENDING_TYPE_ONLINE = 'online';
+    const ATTENDING_TYPE_VENUE = 'venue';
+    const ATTENDING_TYPE_HOME = 'home';
+
+    const ATTENDING_ACCESS_REFERRAL = 'referral';
+    const ATTENDING_ACCESS_APPOINTMENT = 'appointment';
+    const ATTENDING_ACCESS_MEMBERSHIP = 'membership';
+    const ATTENDING_ACCESS_DROP_IN = 'drop_in';
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -90,6 +100,7 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
      */
     protected $casts = [
         'is_free' => 'boolean',
+        'national' => 'boolean',
         'show_referral_disclaimer' => 'boolean',
         'ends_at' => 'datetime',
         'last_modified_at' => 'datetime',
@@ -112,6 +123,14 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
             }
         }
 
+        //TODO: Refactor this as it's duplicate calls but sadly I don't have bags of time with the Kiosk project.
+        $taxonomyIds = $this->serviceTaxonomies()
+            ->pluck('taxonomy_id')
+            ->toArray();
+        $collectionIds = CollectionTaxonomy::query()
+            ->whereIn('taxonomy_id', $taxonomyIds)
+            ->pluck('collection_id');
+
         return [
             'id' => $this->id,
             'name' => $this->makeSearchable($this->name),
@@ -119,11 +138,36 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
             'description' => $this->makeSearchable($this->description),
             'wait_time' => $this->wait_time,
             'is_free' => $this->is_free,
+            'national' => $this->national,
+            'attending_type' => $this->attending_type,
+            'attending_access' => $this->attending_access,
             'status' => $this->status,
             'score' => $this->score,
             'organisation_name' => $this->makeSearchable($this->organisation->name),
             'taxonomy_categories' => $this->taxonomies()->pluck('name')->toArray(),
-            'collection_categories' => static::collections($this)->where('type', Collection::TYPE_CATEGORY)->pluck('name')->toArray(),
+            'collection_categories' => Collection::query()
+                ->whereIn('id', $collectionIds->toArray())
+                ->where('type', Collection::TYPE_CATEGORY)
+                ->with('children', 'parent')
+                ->get()
+                ->flatMap(function ($collection) use ($collectionIds) {
+                    $isDirectlyAssociated = $collectionIds->contains('id', $collection->id);
+
+                    $categories = collect([$collection->slug]);
+
+                    if ($isDirectlyAssociated) {
+                        $categories = $categories->merge($collection->children->pluck('slug'));
+                    }
+
+                    return $categories;
+                })
+                ->filter(function ($slug) {
+                    return !empty($slug);
+                })
+                ->unique()
+                ->values()
+                ->toArray(),
+
             'collection_personas' => static::collections($this)->where('type', Collection::TYPE_PERSONA)->pluck('name')->toArray(),
             'service_locations' => $this->serviceLocations()
                 ->with('location')
@@ -208,6 +252,9 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
             ),
             'wait_time' => Arr::get($data, 'wait_time', $this->wait_time),
             'is_free' => Arr::get($data, 'is_free', $this->is_free),
+            'national' => Arr::get($data, 'national', $this->national),
+            'attending_type' => Arr::get($data, 'attending_type', $this->attending_type),
+            'attending_access' => Arr::get($data, 'attending_access', $this->attending_access),
             'fees_text' => Arr::get($data, 'fees_text', $this->fees_text),
             'fees_url' => Arr::get($data, 'fees_url', $this->fees_url),
             'testimonial' => Arr::get($data, 'testimonial', $this->testimonial),
@@ -225,12 +272,12 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
             'logo_file_id' => Arr::get($data, 'logo_file_id', $this->logo_file_id),
             'score' => Arr::get($data, 'score', $this->score),
             'ends_at' => array_key_exists('ends_at', $data)
-            ? (
-                $data['ends_at'] === null
-                ? null
-                : Date::createFromFormat(CarbonImmutable::ISO8601, $data['ends_at'])
-            )
-            : $this->ends_at,
+                ? (
+                    $data['ends_at'] === null
+                    ? null
+                    : Date::createFromFormat(CarbonImmutable::ISO8601, $data['ends_at'])
+                )
+                : $this->ends_at,
             // This must always be updated regardless of the fields changed.
             'last_modified_at' => Date::now(),
             'eligibility_age_group_custom' => Arr::get($data, 'eligibility_types.custom.age_group', $this->eligibility_age_group_custom),

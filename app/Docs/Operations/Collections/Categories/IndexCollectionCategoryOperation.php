@@ -3,6 +3,7 @@
 namespace App\Docs\Operations\Collections\Categories;
 
 use App\Docs\Parameters\FilterIdParameter;
+use App\Docs\Parameters\IncludeParameter;
 use App\Docs\Parameters\PageParameter;
 use App\Docs\Parameters\PerPageParameter;
 use App\Docs\Schemas\Collection\Category\CollectionCategorySchema;
@@ -37,7 +38,8 @@ EOT
             ->parameters(
                 PageParameter::create(),
                 PerPageParameter::create(),
-                FilterIdParameter::create()
+                FilterIdParameter::create(),
+                IncludeParameter::create(null, ['parent', 'children'])
             )
             ->responses(
                 Response::ok()->content(

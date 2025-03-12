@@ -1,0 +1,30 @@
+name: Deploy to Sutton Staging
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: Sutton Staging
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v1
+
+      - name: Run deploy script
+        run: .travis/deploy.sh
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-west-2
+          TRAVIS_BUILD_DIR: ${{ github.workspace }}
+          TRAVIS_COMMIT: ${{ github.sha }}
+          ENVIRONMENT: staging
+          ENV_SECRET_ID: ${{ secrets.ENV_SECRET_ID }}
+          REPO_URI: ${{ vars.REPO_URI }}
+          CLUSTER: ${{ vars.CLUSTER }}
