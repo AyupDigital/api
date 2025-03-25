@@ -89,6 +89,14 @@ class ServiceLocation extends Model implements AppliesUpdateRequests
         $dates = collect([]);
         foreach ($this->regularOpeningHours as $regularOpeningHour) {
             $nextOpenDate = $regularOpeningHour->nextOpenDate();
+            
+            if ($nextOpenDate->isToday()) {
+                $endTime = Time::create($regularOpeningHour->closes_at->toString());
+                if (Time::now()->between($endTime, Time::create('23:59:59'))) {
+                    $nextOpenDate = $regularOpeningHour->nextOpenDate(Date::tomorrow());
+                }
+            }
+
             $holidayOpeningHour = $this->holidayOpeningHours()
                 ->where('starts_at', '<=', $nextOpenDate)
                 ->where('ends_at', '>=', $nextOpenDate)
