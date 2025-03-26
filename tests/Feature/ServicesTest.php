@@ -65,7 +65,6 @@ class ServicesTest extends TestCase
             'referral_email',
             'referral_url',
             'ends_at',
-            'show_referral_disclaimer',
             'referral_button_text',
             'eligibility_age_group_custom',
             'eligibility_disability_custom',
@@ -151,7 +150,6 @@ class ServicesTest extends TestCase
             'contact_name' => $service->contact_name,
             'contact_phone' => $service->contact_phone,
             'contact_email' => $service->contact_email,
-            'show_referral_disclaimer' => $service->show_referral_disclaimer,
             'referral_method' => $service->referral_method,
             'referral_button_text' => $service->referral_button_text,
             'referral_email' => $service->referral_email,
@@ -470,7 +468,6 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -573,7 +570,6 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -674,7 +670,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -783,7 +779,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -857,7 +853,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => null,
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -922,7 +918,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1000,7 +996,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1065,7 +1061,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1136,7 +1132,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1201,7 +1197,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1274,7 +1270,7 @@ class ServicesTest extends TestCase
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
             'cqc_location_id' => $this->faker->numerify('#-#########'),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1360,7 +1356,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => 'Tel 01234 567890',
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1428,7 +1424,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1514,7 +1510,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1651,7 +1647,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1760,7 +1756,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
+            
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -1834,7 +1830,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
+            
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -1883,7 +1879,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
+            
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -1950,7 +1946,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2016,7 +2012,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2093,7 +2089,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
+            
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -2159,7 +2155,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2226,7 +2222,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2304,7 +2300,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2389,7 +2385,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2460,7 +2456,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2585,7 +2581,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2677,7 +2673,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2796,7 +2792,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2873,7 +2869,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2963,7 +2959,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -3085,7 +3081,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -3162,7 +3158,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -3260,7 +3256,6 @@ class ServicesTest extends TestCase
             'contact_name' => $service->contact_name,
             'contact_phone' => $service->contact_phone,
             'contact_email' => $service->contact_email,
-            'show_referral_disclaimer' => $service->show_referral_disclaimer,
             'referral_method' => $service->referral_method,
             'referral_button_text' => $service->referral_button_text,
             'referral_email' => $service->referral_email,
@@ -3358,7 +3353,6 @@ class ServicesTest extends TestCase
             'contact_name' => $service->contact_name,
             'contact_phone' => $service->contact_phone,
             'contact_email' => $service->contact_email,
-            'show_referral_disclaimer' => $service->show_referral_disclaimer,
             'referral_method' => $service->referral_method,
             'referral_button_text' => $service->referral_button_text,
             'referral_email' => $service->referral_email,
@@ -3712,7 +3706,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -3785,7 +3779,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => null,
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -3858,7 +3852,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -3935,7 +3929,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => $service->referral_method,
             'referral_button_text' => $service->referral_button_text,
             'referral_email' => $service->referral_email,
@@ -4019,7 +4013,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => 'Tel 01234 567890',
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => $service->referral_method,
             'referral_button_text' => $service->referral_button_text,
             'referral_email' => $service->referral_email,
@@ -4061,72 +4055,6 @@ class ServicesTest extends TestCase
     /**
      * @test
      */
-    public function global_admin_cannot_update_show_referral_disclaimer_for_one(): void
-    {
-        $user = User::factory()->create()->makeGlobalAdmin();
-        $service = Service::factory()->create([
-            'slug' => 'test-service',
-            'status' => Service::STATUS_ACTIVE,
-        ]);
-        $taxonomy = Taxonomy::factory()->create();
-        $service->syncTaxonomyRelationships(new Collection([$taxonomy]));
-
-        Passport::actingAs($user);
-
-        $payload = [
-            'slug' => 'test-service',
-            'name' => 'Test Service',
-            'type' => Service::TYPE_SERVICE,
-            'status' => Service::STATUS_ACTIVE,
-            'intro' => 'This is a test intro',
-            'description' => 'Lorem ipsum',
-            'wait_time' => null,
-            'is_free' => true,
-            'fees_text' => null,
-            'fees_url' => null,
-            'testimonial' => null,
-            'video_embed' => null,
-            'url' => $this->faker->url(),
-            'contact_name' => $this->faker->name(),
-            'contact_phone' => random_uk_phone(),
-            'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
-            'referral_method' => $service->referral_method,
-            'referral_button_text' => $service->referral_button_text,
-            'referral_email' => $service->referral_email,
-            'referral_url' => $service->referral_url,
-            'cqc_location_id' => $service->cqc_location_id,
-            'useful_infos' => [
-                [
-                    'title' => 'Did you know?',
-                    'description' => 'Lorem ipsum',
-                    'order' => 1,
-                ],
-            ],
-            'offerings' => [
-                [
-                    'offering' => 'Weekly club',
-                    'order' => 1,
-                ],
-            ],
-            'social_medias' => [
-                [
-                    'type' => SocialMedia::TYPE_INSTAGRAM,
-                    'url' => 'https://www.instagram.com/ayupdigital',
-                ],
-            ],
-            'category_taxonomies' => [
-                $taxonomy->id,
-            ],
-        ];
-        $response = $this->json('PUT', "/core/v1/services/{$service->id}", $payload);
-
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-    }
-
-    /**
-     * @test
-     */
     public function audit_created_when_updated(): void
     {
         $this->fakeEvents();
@@ -4158,7 +4086,6 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => $service->show_referral_disclaimer,
             'referral_method' => $service->referral_method,
             'referral_button_text' => $service->referral_button_text,
             'referral_email' => $service->referral_email,
@@ -4229,7 +4156,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
+            
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -4298,7 +4225,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
+            
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -4369,7 +4296,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -4431,7 +4358,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
+            
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -4487,7 +4414,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
+            
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -4580,7 +4507,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
+            
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -4636,7 +4563,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
+            
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -4741,7 +4668,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => $service->referral_method,
             'referral_button_text' => $service->referral_button_text,
             'referral_email' => $service->referral_email,
@@ -4823,7 +4750,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => true,
+            
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -4876,7 +4803,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -4932,7 +4859,6 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => $service->show_referral_disclaimer,
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -5265,7 +5191,6 @@ class ServicesTest extends TestCase
             'contact_name' => $service->contact_name,
             'contact_phone' => $service->contact_phone,
             'contact_email' => $service->contact_email,
-            'show_referral_disclaimer' => $service->show_referral_disclaimer,
             'referral_method' => $service->referral_method,
             'referral_button_text' => $service->referral_button_text,
             'referral_email' => $service->referral_email,
@@ -5685,7 +5610,6 @@ class ServicesTest extends TestCase
                 'contact_name' => $service->contact_name,
                 'contact_phone' => $service->contact_phone,
                 'contact_email' => $service->contact_email,
-                'show_referral_disclaimer' => $service->show_referral_disclaimer,
                 'referral_method' => $service->referral_method,
                 'referral_button_text' => $service->referral_button_text,
                 'referral_email' => $service->referral_email,
@@ -6032,7 +5956,6 @@ class ServicesTest extends TestCase
                     'contact_name',
                     'contact_phone',
                     'contact_email',
-                    'show_referral_disclaimer',
                     'referral_method',
                     'referral_button_text',
                     'referral_email',
@@ -6267,7 +6190,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -7087,7 +7010,6 @@ class ServicesTest extends TestCase
             'referral_button_text' => $faker->word(),
             'referral_email' => $faker->email(),
             'referral_url' => $faker->url(),
-            'show_referral_disclaimer' => '0',
         ]);
 
         $this->createServiceSpreadsheets($services);
@@ -7108,7 +7030,6 @@ class ServicesTest extends TestCase
             'referral_button_text' => $faker->word(),
             'referral_email' => $faker->email(),
             'referral_url' => $faker->url(),
-            'show_referral_disclaimer' => '0',
         ]);
 
         $this->createServiceSpreadsheets($services);

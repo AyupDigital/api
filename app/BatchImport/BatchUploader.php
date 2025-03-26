@@ -254,7 +254,6 @@ class BatchUploader
                 'contact_name' => $serviceArray['Contact Name'],
                 'contact_phone' => $serviceArray['Contact Phone'],
                 'contact_email' => $serviceArray['Contact Email'],
-                'show_referral_disclaimer' => $serviceArray['Show Referral Disclaimer*'] == 'yes',
                 'referral_method' => $serviceArray['Referral Method*'] ?: Service::REFERRAL_METHOD_NONE,
                 'referral_button_text' => !$isNone ? 'Make referral' : null,
                 'referral_email' => $isInternal ? $serviceArray['Referral Email'] : null,

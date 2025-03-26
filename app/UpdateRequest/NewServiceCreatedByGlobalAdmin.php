@@ -62,7 +62,6 @@ class NewServiceCreatedByGlobalAdmin implements AppliesUpdateRequests
             'contact_name' => $data->get('contact_name'),
             'contact_phone' => $data->get('contact_phone'),
             'contact_email' => $data->get('contact_email'),
-            'show_referral_disclaimer' => $data->get('show_referral_disclaimer'),
             'referral_method' => $data->get('referral_method'),
             'referral_button_text' => $data->get('referral_button_text'),
             'referral_email' => $data->get('referral_email'),

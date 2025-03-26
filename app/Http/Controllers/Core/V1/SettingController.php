@@ -43,10 +43,6 @@ class SettingController extends Controller
                                 'twitter_handle' => $request->input('cms.frontend.global.twitter_handle') ?? "",
                             ],
                             'home' => [
-                                'search_title' => $request->input('cms.frontend.home.search_title'),
-                                'categories_title' => $request->input('cms.frontend.home.categories_title'),
-                                'personas_title' => $request->input('cms.frontend.home.personas_title'),
-                                'personas_content' => sanitize_markdown($request->input('cms.frontend.home.personas_content')),
                                 'banners' => array_map(function ($banner) {
                                     $banner['content'] = sanitize_markdown($banner['content']);
 

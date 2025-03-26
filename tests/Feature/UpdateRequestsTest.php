@@ -1025,7 +1025,6 @@ class UpdateRequestsTest extends TestCase
                 'contact_name' => $service->contact_name,
                 'contact_phone' => $service->contact_phone,
                 'contact_email' => $service->contact_email,
-                'show_referral_disclaimer' => $service->show_referral_disclaimer,
                 'referral_method' => $service->referral_method,
                 'referral_button_text' => $service->referral_button_text,
                 'referral_email' => $service->referral_email,
@@ -1099,7 +1098,7 @@ class UpdateRequestsTest extends TestCase
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
             'cqc_location_id' => $this->faker->numerify('#-#########'),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1211,7 +1210,7 @@ class UpdateRequestsTest extends TestCase
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
             'cqc_location_id' => $this->faker->numerify('#-#########'),
-            'show_referral_disclaimer' => false,
+            
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,

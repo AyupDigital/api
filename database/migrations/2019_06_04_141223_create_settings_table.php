@@ -29,10 +29,6 @@ return new class() extends Migration {
                         'twitter_handle' => 'Twitter handle',
                     ],
                     'home' => [
-                        'search_title' => 'Search title',
-                        'categories_title' => 'Categories title',
-                        'personas_title' => 'Personas title',
-                        'personas_content' => 'Personas content',
                     ],
                     'terms_and_conditions' => [
                         'title' => 'Title',

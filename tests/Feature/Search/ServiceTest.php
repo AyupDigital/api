@@ -68,7 +68,6 @@ class ServiceTest extends TestCase implements UsesElasticsearch
                     'contact_name',
                     'contact_phone',
                     'contact_email',
-                    'show_referral_disclaimer',
                     'referral_method',
                     'referral_button_text',
                     'referral_email',

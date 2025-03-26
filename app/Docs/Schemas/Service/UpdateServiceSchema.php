@@ -30,7 +30,6 @@ class UpdateServiceSchema extends Schema
                 'testimonial',
                 'video_embed',
                 'contact_name',
-                'show_referral_disclaimer',
                 'referral_method',
                 'referral_button_text',
                 'referral_email',
@@ -91,7 +90,6 @@ class UpdateServiceSchema extends Schema
                 Schema::string('contact_phone'),
                 Schema::string('contact_email'),
                 Schema::string('cqc_location_id'),
-                Schema::boolean('show_referral_disclaimer'),
                 Schema::string('referral_method')
                     ->enum(
                         Service::REFERRAL_METHOD_INTERNAL,

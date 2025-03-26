@@ -101,7 +101,6 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
     protected $casts = [
         'is_free' => 'boolean',
         'national' => 'boolean',
-        'show_referral_disclaimer' => 'boolean',
         'ends_at' => 'datetime',
         'last_modified_at' => 'datetime',
         'created_at' => 'datetime',
@@ -264,7 +263,6 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
             'contact_phone' => Arr::get($data, 'contact_phone', $this->contact_phone),
             'contact_email' => Arr::get($data, 'contact_email', $this->contact_email),
             'cqc_location_id' => config('flags.cqc_location') ? Arr::get($data, 'cqc_location_id', $this->cqc_location_id) : null,
-            'show_referral_disclaimer' => Arr::get($data, 'show_referral_disclaimer', $this->show_referral_disclaimer),
             'referral_method' => Arr::get($data, 'referral_method', $this->referral_method),
             'referral_button_text' => Arr::get($data, 'referral_button_text', $this->referral_button_text),
             'referral_email' => Arr::get($data, 'referral_email', $this->referral_email),
@@ -412,7 +410,6 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
                 'referral_button_text' => null,
                 'referral_email' => null,
                 'referral_url' => null,
-                'show_referral_disclaimer' => false,
             ]);
         }
 

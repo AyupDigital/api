@@ -131,18 +131,6 @@ class StoreRequest extends FormRequest
             ],
             'contact_email' => ['present', 'nullable', 'email', 'max:255'],
             'cqc_location_id' => ['present_if_flagged', 'nullable', 'string', 'regex:/^\d\-\d+$/'],
-            'show_referral_disclaimer' => [
-                'required',
-                'boolean',
-                new UserHasRole(
-                    $this->user('api'),
-                    new UserRole([
-                        'user_id' => $this->user('api')->id,
-                        'role_id' => Role::superAdmin()->id,
-                    ]),
-                    ($this->referral_method === Service::REFERRAL_METHOD_NONE) ? false : true
-                ),
-            ],
             'referral_method' => [
                 'required',
                 Rule::in([
