@@ -41,6 +41,11 @@ class SettingSchema extends Schema
             Schema::string('content')->format('markdown')
         );
 
+        $cookiePolicy = Schema::object('cookie_policy')->properties(
+            Schema::string('title'),
+            Schema::string('content')->format('markdown')
+        );
+
         $accessibilityStatement = Schema::object('accessibility_statement')->properties(
             Schema::string('title'),
             Schema::string('content')->format('markdown')
@@ -86,6 +91,7 @@ class SettingSchema extends Schema
                                 $home,
                                 $termsAndConditions,
                                 $privacyPolicy,
+                                $cookiePolicy,
                                 $accessibilityStatement,
                                 $about,
                                 $contact,

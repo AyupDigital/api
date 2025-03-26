@@ -66,6 +66,16 @@ class UpdateSettingSchema extends Schema
                 Schema::string('content')->format('markdown')
             );
 
+        $cookiePolicy = Schema::object('cookie_policy')
+            ->required(
+                'title',
+                'content'
+            )
+            ->properties(
+                Schema::string('title'),
+                Schema::string('content')->format('markdown')
+            );
+
         $accessibilityStatement = Schema::object('accessibility_statement')
             ->required(
                 'title',
@@ -148,6 +158,7 @@ class UpdateSettingSchema extends Schema
                                 'home',
                                 'terms_and_conditions',
                                 'privacy_policy',
+                                'cookie_policy',
                                 'accessibility_statement',
                                 'about',
                                 'contact',
@@ -160,6 +171,7 @@ class UpdateSettingSchema extends Schema
                                 $home,
                                 $termsAndConditions,
                                 $privacyPolicy,
+                                $cookiePolicy,
                                 $accessibilityStatement,
                                 $about,
                                 $contact,

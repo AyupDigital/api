@@ -55,6 +55,10 @@ class SettingsTest extends TestCase
                         'title' => 'data/cms/frontend/privacy_policy/title',
                         'content' => 'data/cms/frontend/privacy_policy/content',
                     ],
+                    'cookie_policy' => [
+                        'title' => 'data/cms/frontend/cookie_policy/title',
+                        'content' => 'data/cms/frontend/cookie_policy/content',
+                    ],
                     'accessibility_statement' => [
                         'title' => 'data/cms/frontend/accessibility_statement/title',
                         'content' => 'data/cms/frontend/accessibility_statement/content',
@@ -109,6 +113,10 @@ class SettingsTest extends TestCase
                             ],
                         ],
                         'terms_and_conditions' => [
+                            'title',
+                            'content',
+                        ],
+                        'cookie_policy' => [
                             'title',
                             'content',
                         ],
@@ -174,6 +182,10 @@ class SettingsTest extends TestCase
                         'terms_and_conditions' => [
                             'title' => 'data/cms/frontend/terms_and_conditions/title',
                             'content' => 'data/cms/frontend/terms_and_conditions/content',
+                        ],
+                        'cookie_policy' => [
+                            'title' => 'data/cms/frontend/cookie_policy/title',
+                            'content' => 'data/cms/frontend/cookie_policy/content',
                         ],
                         'privacy_policy' => [
                             'title' => 'data/cms/frontend/privacy_policy/title',
@@ -261,6 +273,10 @@ class SettingsTest extends TestCase
                             'content' => 'Content',
                         ],
                         'privacy_policy' => [
+                            'title' => 'Title',
+                            'content' => 'Content',
+                        ],
+                        'cookie_policy' => [
                             'title' => 'Title',
                             'content' => 'Content',
                         ],

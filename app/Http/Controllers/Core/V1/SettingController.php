@@ -57,6 +57,10 @@ class SettingController extends Controller
                                 'title' => $request->input('cms.frontend.privacy_policy.title'),
                                 'content' => sanitize_markdown($request->input('cms.frontend.privacy_policy.content')),
                             ],
+                            'cookie_policy' => [
+                                'title' => $request->input('cms.frontend.cookie_policy.title'),
+                                'content' => sanitize_markdown($request->input('cms.frontend.cookie_policy.content')),
+                            ],
                             'accessibility_statement' => [
                                 'title' => $request->input('cms.frontend.accessibility_statement.title'),
                                 'content' => sanitize_markdown($request->input('cms.frontend.accessibility_statement.content')),
