@@ -37,10 +37,6 @@ class UpdateRequest extends FormRequest
             'cms.frontend.global.twitter_handle' => ['nullable', 'string'],
 
             'cms.frontend.home' => ['required', 'array'],
-            'cms.frontend.home.search_title' => ['required', 'string'],
-            'cms.frontend.home.categories_title' => ['required', 'string'],
-            'cms.frontend.home.personas_title' => ['required', 'string'],
-            'cms.frontend.home.personas_content' => ['required', 'string'],
             'cms.frontend.home.banners' => ['nullable', 'array'],
             'cms.frontend.home.banners.*' => ['nullable', 'array'],
             'cms.frontend.home.banners.*.title' => [

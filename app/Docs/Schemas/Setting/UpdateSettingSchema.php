@@ -28,17 +28,7 @@ class UpdateSettingSchema extends Schema
             );
 
         $home = Schema::object('home')
-            ->required(
-                'search_title',
-                'categories_title',
-                'personas_title',
-                'personas_content'
-            )
             ->properties(
-                Schema::string('search_title'),
-                Schema::string('categories_title'),
-                Schema::string('personas_title'),
-                Schema::string('personas_content')->format('markdown'),
                 Schema::array('banners')->items(
                     Schema::object()
                         ->required(

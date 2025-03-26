@@ -19,10 +19,6 @@ class SettingSchema extends Schema
         );
 
         $home = Schema::object('home')->properties(
-            Schema::string('search_title'),
-            Schema::string('categories_title'),
-            Schema::string('personas_title'),
-            Schema::string('personas_content')->format('markdown'),
             Schema::array('banners')
                 ->items(
                     Schema::object()

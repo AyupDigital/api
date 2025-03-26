@@ -145,17 +145,6 @@ class UpdateRequest extends FormRequest
             ],
             'contact_email' => ['nullable', 'email', 'max:255'],
             'cqc_location_id' => ['nullable', 'string', 'regex:/^\d\-\d+$/'],
-            'show_referral_disclaimer' => [
-                'boolean',
-                new UserHasRole(
-                    $this->user('api'),
-                    new UserRole([
-                        'user_id' => $this->user('api')->id,
-                        'role_id' => Role::superAdmin()->id,
-                    ]),
-                    $this->showReferralDisclaimerOriginalValue()
-                ),
-            ],
             'referral_method' => [
                 Rule::in([
                     Service::REFERRAL_METHOD_INTERNAL,
@@ -397,25 +386,9 @@ class UpdateRequest extends FormRequest
         ];
     }
 
-    protected function showReferralDisclaimerOriginalValue(): bool
+    protected function showReferralDisclaimerOriginalValue(): bool //TODO: Deprecate this method.
     {
-        // If the new referral method is none, then always require false.
-        if ($this->referral_method === Service::REFERRAL_METHOD_NONE) {
-            return false;
-        }
-
-        /*
-         * If the original referral method was not none, and the referral disclaimer was hidden,
-         * then continue hiding the disclaimer.
-         */
-        if (
-            $this->service->referral_method !== Service::REFERRAL_METHOD_NONE
-            && $this->service->show_referral_disclaimer === false
-        ) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
     /**

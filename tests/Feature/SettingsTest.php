@@ -38,10 +38,6 @@ class SettingsTest extends TestCase
                         'twitter_handle' => 'data/cms/frontend/global/twitter_handle',
                     ],
                     'home' => [
-                        'search_title' => 'data/cms/frontend/home/search_title',
-                        'categories_title' => 'data/cms/frontend/home/categories_title',
-                        'personas_title' => 'data/cms/frontend/home/personas_title',
-                        'personas_content' => 'data/cms/frontend/home/personas_content',
                         'banners' => [
                             [
                                 'title' => 'data/cms/frontend/home/banners/title',
@@ -103,10 +99,6 @@ class SettingsTest extends TestCase
                             'twitter_handle',
                         ],
                         'home' => [
-                            'search_title',
-                            'categories_title',
-                            'personas_title',
-                            'personas_content',
                             'banners' => [
                                 [
                                     'title',
@@ -170,10 +162,6 @@ class SettingsTest extends TestCase
                             'twitter_handle' => 'data/cms/frontend/global/twitter_handle',
                         ],
                         'home' => [
-                            'search_title' => 'data/cms/frontend/home/search_title',
-                            'categories_title' => 'data/cms/frontend/home/categories_title',
-                            'personas_title' => 'data/cms/frontend/home/personas_title',
-                            'personas_content' => 'data/cms/frontend/home/personas_content',
                             'banners' => [
                                 [
                                     'title' => 'data/cms/frontend/home/banners/title',
@@ -259,10 +247,6 @@ class SettingsTest extends TestCase
                             'twitter_handle' => 'Twitter handle',
                         ],
                         'home' => [
-                            'search_title' => 'Search title',
-                            'categories_title' => 'Categories title',
-                            'personas_title' => 'Personas title',
-                            'personas_content' => 'Personas content',
                             'banners' => [
                                 [
                                     'title' => null,

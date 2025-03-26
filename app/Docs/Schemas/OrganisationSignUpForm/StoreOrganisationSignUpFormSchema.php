@@ -63,7 +63,6 @@ class StoreOrganisationSignUpFormSchema extends Schema
                                 return !in_array($required, [
                                     'organisation_id',
                                     'status',
-                                    'show_referral_disclaimer',
                                     'referral_method',
                                     'referral_button_text',
                                     'referral_email',
@@ -81,7 +80,6 @@ class StoreOrganisationSignUpFormSchema extends Schema
                                 return !in_array($property->objectId, [
                                     'organisation_id',
                                     'status',
-                                    'show_referral_disclaimer',
                                     'referral_method',
                                     'referral_button_text',
                                     'referral_email',

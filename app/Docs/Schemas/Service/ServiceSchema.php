@@ -83,7 +83,6 @@ class ServiceSchema extends Schema
                 Schema::string('contact_email'),
                 Schema::string('cqc_location_id')
                     ->nullable(),
-                Schema::boolean('show_referral_disclaimer'),
                 Schema::string('referral_method')
                     ->enum(
                         Service::REFERRAL_METHOD_INTERNAL,
