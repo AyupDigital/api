@@ -46,6 +46,10 @@ class DateSanity implements ValidationRule
         if (!$this->end->greaterThanOrEqualTo($this->start)) {
             $fail($this->message());
         }
+
+        if ($this->end->greaterThanOrEqualTo(Carbon::create(2038))) {
+            $fail('The end date and time must be before the year 2038');
+        }
     }
 
     /**
