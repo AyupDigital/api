@@ -119,28 +119,24 @@ class UpdateRequest extends FormRequest
                 'string',
                 'min:1',
                 'max:255',
-                'required_with:booking_summary,booking_url,booking_cta',
             ],
             'booking_summary' => [
                 'nullable',
                 'string',
                 'min:1',
                 'max:255',
-                'required_with:booking_title,booking_url,booking_cta',
             ],
             'booking_url' => [
                 'nullable',
                 'url',
                 'min:1',
                 'max:255',
-                'required_with:booking_summary,booking_title,booking_cta',
             ],
             'booking_cta' => [
                 'nullable',
                 'string',
                 'min:1',
                 'max:255',
-                'required_with:booking_summary,booking_url,booking_title',
             ],
             'homepage' => [
                 'boolean',
