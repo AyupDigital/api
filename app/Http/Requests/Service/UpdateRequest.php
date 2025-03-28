@@ -16,6 +16,7 @@ use App\Rules\FileIsPendingAssignment;
 use App\Rules\InOrder;
 use App\Rules\MarkdownMaxLength;
 use App\Rules\MarkdownMinLength;
+use App\Rules\MaxDateSupported;
 use App\Rules\NullableIf;
 use App\Rules\RootTaxonomyIs;
 use App\Rules\Slug;
@@ -220,7 +221,7 @@ class UpdateRequest extends FormRequest
                     $this->service->referral_url
                 ),
             ],
-            'ends_at' => ['nullable', 'date_format:' . CarbonImmutable::ISO8601],
+            'ends_at' => ['nullable', 'date_format:' . CarbonImmutable::ISO8601, new MaxDateSupported($this->input('ends_at'))],
             'useful_infos' => ['array'],
             'useful_infos.*' => ['array'],
             'useful_infos.*.title' => ['required_with:useful_infos.*', 'string', 'min:1', 'max:255'],
