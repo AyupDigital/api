@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Service;
 
+use App\Models\Organisation;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class DestroyRequest extends FormRequest
 {
@@ -11,7 +13,8 @@ class DestroyRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if ($this->user()->isSuperAdmin()) {
+        $service = $this->route('service');
+        if ($this->user()->isOrganisationAdmin($service->organisation)) {
             return true;
         }
 
