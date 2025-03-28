@@ -15,8 +15,11 @@ class MaxDateSupported implements ValidationRule
     /**
      * Create a new rule instance.
      */
-    public function __construct(string $date, ?string $time = null)
+    public function __construct(?string $date = null, ?string $time = null)
     {
+        if (!$date) {
+            $this->date = Carbon::now();
+        }
         $this->date = Carbon::parse($date);
         $this->date->setTimeFromTimeString($time ?? '00:00:00');
     }
