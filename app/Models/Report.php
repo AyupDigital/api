@@ -12,6 +12,7 @@ use Generator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class Report extends Model
@@ -361,7 +362,6 @@ class Report extends Model
 
         $data = $this->getSearchHistoriesExportResults($startsAt, $endsAt)->map(function ($row) {
             $coordinate = null;
-
             if ($row->distance) {
                 $distance = json_decode($row->distance);
                 $location = $distance->{'service_locations.location'} ?? $distance->{'event_location.location'};
