@@ -19,9 +19,6 @@ Hi :NAME,
 An account has been created for you using this email address. You can log in to the :APP_NAME  admin portal at:
 :APP_ADMIN_URL
 
-Permissions:
-:PERMISSIONS
-
 If you have any questions, you can email us at :CONTACT_EMAIL
 
 Many thanks,

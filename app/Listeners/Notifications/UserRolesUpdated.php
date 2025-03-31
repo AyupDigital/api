@@ -58,6 +58,11 @@ class UserRolesUpdated
             ->map($humanReadableRole)
             ->implode(', ');
 
+        if ($revokedRoles === $addedRoles) {
+            // If there has been no change to the users permissions, then we don't need to trigger the email.
+            return;
+        }
+
         $event->user->sendEmail(new NotifyUserEmail($event->user->email, [
             'NAME' => $event->user->first_name,
             'OLD_PERMISSIONS' => $revokedRoles,
