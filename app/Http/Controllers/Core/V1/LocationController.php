@@ -47,6 +47,7 @@ class LocationController extends Controller
                 'postcode',
                 'country',
             ])
+            ->allowedIncludes(['pendingUpdateRequests'])
             ->allowedSorts([
                 'address_line_1',
                 'address_line_2',

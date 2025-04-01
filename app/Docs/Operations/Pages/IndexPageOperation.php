@@ -48,7 +48,7 @@ class IndexPageOperation extends Operation
                             Page::PAGE_TYPE_LANDING
                         )),
                 SortParameter::create(null, ['title'], 'title'),
-                IncludeParameter::create(null, ['parent', 'children', 'landingPageAncestors'])
+                IncludeParameter::create(null, ['parent', 'children', 'landingPageAncestors', 'pendingUpdateRequests'])
             )
             ->responses(
                 Response::ok()->content(

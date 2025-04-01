@@ -4,6 +4,7 @@ namespace App\Docs\Operations\Organisations;
 
 use App\Docs\Parameters\FilterIdParameter;
 use App\Docs\Parameters\FilterParameter;
+use App\Docs\Parameters\IncludeParameter;
 use App\Docs\Parameters\PageParameter;
 use App\Docs\Parameters\PerPageParameter;
 use App\Docs\Parameters\SortParameter;
@@ -39,6 +40,7 @@ class IndexOrganisationOperation extends Operation
                 FilterParameter::create(null, 'has_permission')
                     ->description('Filter organisations to only ones they have permissions for')
                     ->schema(Schema::boolean()),
+                IncludeParameter::create(null, ['pendingUpdateRequests']),
                 SortParameter::create(null, ['name'], 'name')
             )
             ->responses(

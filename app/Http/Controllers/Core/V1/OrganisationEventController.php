@@ -59,7 +59,7 @@ class OrganisationEventController extends Controller
                 AllowedFilter::scope('collections', 'inCollections'),
                 AllowedFilter::custom('has_permission', new HasPermissionFilter()),
             ])
-            ->allowedIncludes(['organisation'])
+            ->allowedIncludes(['organisation', 'pendingUpdateRequests'])
             ->allowedSorts([
                 'start_date',
                 '-start_date',

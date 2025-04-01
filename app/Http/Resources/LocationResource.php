@@ -37,6 +37,7 @@ class LocationResource extends JsonResource
             'has_accessible_toilet' => $this->has_accessible_toilet,
             'created_at' => $this->created_at->format(CarbonImmutable::ISO8601),
             'updated_at' => $this->updated_at->format(CarbonImmutable::ISO8601),
+            'pending_update_requests' => UpdateRequestResource::collection($this->whenLoaded('pendingUpdateRequests'))
         ];
     }
 }
