@@ -128,15 +128,18 @@ class OpenApi extends BaseOpenApi implements Responsable
             ->tags(
                 Tags\AuditsTag::create(),
                 Tags\CollectionCategoriesTag::create(),
+                Tags\CollectionOrganisationEventsTag::create(),
                 Tags\CollectionPersonasTag::create(),
+                
                 Tags\FilesTag::create(),
-                Tags\PagesTag::create(),
                 Tags\LocationsTag::create(),
                 Tags\NotificationsTag::create(),
-                Tags\OrganisationSignUpFormsTag::create(),
+                
                 Tags\OrganisationsTag::create(),
-                Tags\PageFeedbacksTag::create(),
+                Tags\OrganisationEventsTag::create(),
+                Tags\OrganisationSignUpFormsTag::create(),
                 Tags\PagesTag::create(),
+                Tags\PageFeedbacksTag::create(),
                 Tags\ReferralsTag::create(),
                 Tags\ReportSchedulesTag::create(),
                 Tags\ReportsTag::create(),
@@ -146,10 +149,13 @@ class OpenApi extends BaseOpenApi implements Responsable
                 Tags\ServicesTag::create(),
                 Tags\SettingsTag::create(),
                 Tags\StatusUpdatesTag::create(),
+                
+                Tags\TagsTag::create(),
                 Tags\TaxonomyCategoriesTag::create(),
                 Tags\TaxonomyOrganisationsTag::create(),
+                Tags\TaxonomyServiceEligibilitiesTag::create(),
                 Tags\UpdateRequestsTag::create(),
-                Tags\UsersTag::create()
+                Tags\UsersTag::create(),
             );
     }
 
