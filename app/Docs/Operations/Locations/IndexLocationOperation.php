@@ -4,6 +4,7 @@ namespace App\Docs\Operations\Locations;
 
 use App\Docs\Parameters\FilterIdParameter;
 use App\Docs\Parameters\FilterParameter;
+use App\Docs\Parameters\IncludeParameter;
 use App\Docs\Parameters\PageParameter;
 use App\Docs\Parameters\PerPageParameter;
 use App\Docs\Parameters\SortParameter;
@@ -54,6 +55,7 @@ class IndexLocationOperation extends Operation
                 FilterParameter::create(null, 'country')
                     ->description('Filter by country')
                     ->schema(Schema::string()),
+                IncludeParameter::create(null, ['pendingUpdateRequests']),
                 SortParameter::create(null, [
                     'address_line_1',
                     'address_line_2',

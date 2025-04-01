@@ -63,7 +63,7 @@ class ServiceController extends Controller
                 AllowedFilter::exact('tags.slug'),
                 AllowedFilter::custom('has_permission', new HasPermissionFilter()),
             ])
-            ->allowedIncludes(['organisation'])
+            ->allowedIncludes(['organisation', 'pendingUpdateRequests'])
             ->allowedSorts([
                 'name',
                 AllowedSort::custom('organisation_name', new OrganisationNameSort()),

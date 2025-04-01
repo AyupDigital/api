@@ -85,7 +85,7 @@ EOT
                     ->schema(
                         Schema::boolean()
                     ),
-                IncludeParameter::create(null, ['organisation'])
+                IncludeParameter::create(null, ['organisation', 'pendingUpdateRequests'])
             )
             ->responses(
                 Response::ok()->content(

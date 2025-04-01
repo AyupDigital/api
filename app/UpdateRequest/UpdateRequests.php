@@ -11,4 +11,9 @@ trait UpdateRequests
     {
         return $this->morphMany(UpdateRequest::class, 'updateable');
     }
+
+    public function pendingUpdateRequests(): MorphMany
+    {
+        return $this->updateRequests()->whereNull('approved_at')->whereNull('deleted_at');
+    }
 }

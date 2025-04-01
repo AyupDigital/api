@@ -51,7 +51,8 @@ class PageController extends Controller
                 'children',
                 'ancestors',
                 AllowedInclude::relationship('landingPageAncestors', 'landingPageAncestors'),
-                AllowedInclude::relationship('topicPageAncestors', 'topicPageAncestors')
+                AllowedInclude::relationship('topicPageAncestors', 'topicPageAncestors'),
+                'pendingUpdateRequests'
             ])
             ->allowedFilters([
                 AllowedFilter::scope('landing_page', 'pageDescendants'),

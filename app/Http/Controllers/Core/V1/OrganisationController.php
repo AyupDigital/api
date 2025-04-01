@@ -44,6 +44,7 @@ class OrganisationController extends Controller
                 'name',
                 AllowedFilter::custom('has_permission', new HasPermissionFilter()),
             ])
+            ->allowedIncludes(['pendingUpdateRequests'])
             ->allowedSorts('name')
             ->defaultSort('name')
             ->paginate(per_page($request->per_page));
