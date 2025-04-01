@@ -11,6 +11,12 @@ use App\Http\Requests\UpdateRequest\IndexRequest;
 use App\Http\Requests\UpdateRequest\ShowRequest;
 use App\Http\Resources\UpdateRequestResource;
 use App\Http\Responses\ResourceDeleted;
+use App\Models\Location;
+use App\Models\Organisation;
+use App\Models\OrganisationEvent;
+use App\Models\Page;
+use App\Models\Service;
+use App\Models\ServiceLocation;
 use App\Models\UpdateRequest;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
@@ -68,10 +74,43 @@ class UpdateRequestController extends Controller
         $baseQuery = UpdateRequest::query()
             ->select('*')
             ->withEntry()
-            ->where('id', $updateRequest->id);
+            ->where('id', $updateRequest->id)
+            ->with('updateable');
 
         $updateRequest = QueryBuilder::for($baseQuery)
             ->firstOrFail();
+
+        $canView = false;
+
+        if ($updateRequest->updateable instanceof Service) {
+            $canView = $request->user()->isServiceAdmin($updateRequest->updateable);
+        }
+
+        if ($updateRequest->updateable instanceof ServiceLocation) {
+            $updateRequest->updatable->load('service');
+            $canView = $request->user()->isServiceAdmin($updateRequest->updatable->service);
+        }
+
+        if ($updateRequest->updateable instanceof Organisation) {
+            $canView = $request->user()->isOrganisationAdmin();
+        }
+
+        if ($updateRequest->updateable instanceof Location) {
+            $canView = $request->user()->isServiceAdmin();
+        }
+
+        if ($updateRequest->updateable instanceof OrganisationEvent) {
+            $updateRequest->updateable->load('organisation');
+            $canView = $request->user()->isOrganisationAdmin($updateRequest->updatable->organisation);
+        }
+
+        if ($updateRequest->updateable instanceof Page) {
+            $canView = $request->user()->isContentAdmin();
+        }
+
+        if (!$canView) {
+            return abort(401);
+        }
 
         event(EndpointHit::onRead($request, "Viewed update request [{$updateRequest->id}]", $updateRequest));
 
