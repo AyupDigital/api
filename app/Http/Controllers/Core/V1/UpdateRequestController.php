@@ -18,6 +18,7 @@ use App\Models\Page;
 use App\Models\Service;
 use App\Models\ServiceLocation;
 use App\Models\UpdateRequest;
+use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -74,37 +75,46 @@ class UpdateRequestController extends Controller
         $baseQuery = UpdateRequest::query()
             ->select('*')
             ->withEntry()
-            ->where('id', $updateRequest->id)
-            ->with('updateable');
+            ->where('id', $updateRequest->id);
 
         $updateRequest = QueryBuilder::for($baseQuery)
             ->firstOrFail();
 
         $canView = false;
+        try {
+            $updateRequest->load('updatable');
+            $updatable = $request->updateable;
+        } catch (Exception $e) {
+            if ($request->user()->isGlobalAdmin()) {
+                event(EndpointHit::onRead($request, "Viewed update request [{$updateRequest->id}]", $updateRequest));
 
-        if ($updateRequest->updateable instanceof Service) {
-            $canView = $request->user()->isServiceAdmin($updateRequest->updateable);
+            return new UpdateRequestResource($updateRequest);
+            }
         }
 
-        if ($updateRequest->updateable instanceof ServiceLocation) {
+        if ($updatable instanceof Service) {
+            $canView = $request->user()->isServiceAdmin($updatable);
+        }
+
+        if ($updatable instanceof ServiceLocation) {
             $updateRequest->updatable->load('service');
             $canView = $request->user()->isServiceAdmin($updateRequest->updatable->service);
         }
 
-        if ($updateRequest->updateable instanceof Organisation) {
+        if ($updatable instanceof Organisation) {
             $canView = $request->user()->isOrganisationAdmin();
         }
 
-        if ($updateRequest->updateable instanceof Location) {
+        if ($updatable instanceof Location) {
             $canView = $request->user()->isServiceAdmin();
         }
 
-        if ($updateRequest->updateable instanceof OrganisationEvent) {
-            $updateRequest->updateable->load('organisation');
+        if ($updatable instanceof OrganisationEvent) {
+            $updatable->load('organisation');
             $canView = $request->user()->isOrganisationAdmin($updateRequest->updatable->organisation);
         }
 
-        if ($updateRequest->updateable instanceof Page) {
+        if ($updatable instanceof Page) {
             $canView = $request->user()->isContentAdmin();
         }
 
