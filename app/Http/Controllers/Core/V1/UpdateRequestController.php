@@ -111,7 +111,7 @@ class UpdateRequestController extends Controller
 
         if ($updatable instanceof OrganisationEvent) {
             $updatable->load('organisation');
-            $canView = $request->user()->isOrganisationAdmin($updateRequest->updatable->organisation);
+            $canView = $request->user()->isOrganisationAdmin($updatable->organisation);
         }
 
         if ($updatable instanceof Page) {
