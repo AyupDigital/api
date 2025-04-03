@@ -81,6 +81,13 @@ class UpdateRequestController extends Controller
             ->firstOrFail();
 
         $canView = false;
+
+        if (!$updateRequest->updatable_id) {
+            event(EndpointHit::onRead($request, "Viewed update request [{$updateRequest->id}]", $updateRequest));
+
+            return new UpdateRequestResource($updateRequest); 
+        }
+
         try {
             $updateRequest->load('updateable');
             $updatable = $updateRequest->updateable;
@@ -117,6 +124,8 @@ class UpdateRequestController extends Controller
         if ($updatable instanceof Page) {
             $canView = $request->user()->isContentAdmin();
         }
+
+        if ()
 
         if (!$canView) {
             dd('here');
