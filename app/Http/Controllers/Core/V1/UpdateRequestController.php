@@ -83,9 +83,11 @@ class UpdateRequestController extends Controller
         $canView = false;
 
         if (!$updateRequest->updatable_id) {
-            event(EndpointHit::onRead($request, "Viewed update request [{$updateRequest->id}]", $updateRequest));
+            if ($request->user()->isGlobalAdmin()) {
+                event(EndpointHit::onRead($request, "Viewed update request [{$updateRequest->id}]", $updateRequest));
 
-            return new UpdateRequestResource($updateRequest); 
+                return new UpdateRequestResource($updateRequest); 
+            }
         }
 
         try {
