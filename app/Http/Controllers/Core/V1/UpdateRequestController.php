@@ -82,8 +82,8 @@ class UpdateRequestController extends Controller
 
         $canView = false;
         try {
-            $updateRequest->load('updatable');
-            $updatable = $request->updateable;
+            $updateRequest->load('updateable');
+            $updatable = $updateRequest->updateable;
         } catch (Exception $e) {
             if ($request->user()->isGlobalAdmin()) {
                 event(EndpointHit::onRead($request, "Viewed update request [{$updateRequest->id}]", $updateRequest));
@@ -93,7 +93,7 @@ class UpdateRequestController extends Controller
         }
 
         if ($updatable instanceof Service) {
-            $canView = $request->user()->isServiceAdmin($updatable);
+            $canView = $request->user()->isServiceAdmin($updatable->service);
         }
 
         if ($updatable instanceof ServiceLocation) {
@@ -119,6 +119,7 @@ class UpdateRequestController extends Controller
         }
 
         if (!$canView) {
+            dd('here');
             return abort(401);
         }
 
