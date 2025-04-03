@@ -38,8 +38,7 @@ class OrganisationEventController extends Controller
     public function index(IndexRequest $request): AnonymousResourceCollection
     {
         $baseQuery = OrganisationEvent::query();
-
-        if (!$request->user() && !$request->has('filter[ends_after]')) {
+        if (!$request->user() && !$request->get('filter')['ends_after']) {
             $baseQuery->endsAfter((new DateTime('now'))->format('Y-m-d'));
         }
 
