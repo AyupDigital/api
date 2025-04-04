@@ -57,16 +57,16 @@ class ServiceController extends Controller
                 AllowedFilter::exact('id'),
                 AllowedFilter::exact('organisation_id'),
                 'name',
-                AllowedFilter::custom('organisation_name', new OrganisationNameFilter()),
+                AllowedFilter::custom('organisation_name', new OrganisationNameFilter),
                 AllowedFilter::exact('status'),
                 AllowedFilter::exact('referral_method'),
                 AllowedFilter::exact('tags.slug'),
-                AllowedFilter::custom('has_permission', new HasPermissionFilter()),
+                AllowedFilter::custom('has_permission', new HasPermissionFilter),
             ])
             ->allowedIncludes(['organisation', 'pendingUpdateRequests'])
             ->allowedSorts([
                 'name',
-                AllowedSort::custom('organisation_name', new OrganisationNameSort()),
+                AllowedSort::custom('organisation_name', new OrganisationNameSort),
                 'status',
                 'referral_method',
                 'score',

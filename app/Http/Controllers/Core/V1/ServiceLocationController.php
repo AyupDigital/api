@@ -145,8 +145,8 @@ class ServiceLocationController extends Controller
             // Initialise the data array.
             $data = array_filter_missing([
                 'name' => $request->missingValue('name'),
-                'regular_opening_hours' => $request->has('regular_opening_hours') ? [] : new MissingValue(),
-                'holiday_opening_hours' => $request->has('holiday_opening_hours') ? [] : new MissingValue(),
+                'regular_opening_hours' => $request->has('regular_opening_hours') ? [] : new MissingValue,
+                'holiday_opening_hours' => $request->has('holiday_opening_hours') ? [] : new MissingValue,
                 'image_file_id' => $request->missingValue('image_file_id'),
             ]);
 

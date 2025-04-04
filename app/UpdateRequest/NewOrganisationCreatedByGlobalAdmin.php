@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Validator as ValidatorFacade;
 
 class NewOrganisationCreatedByGlobalAdmin implements AppliesUpdateRequests
 {
-    use ResizesImages;
     use HasUniqueSlug;
+    use ResizesImages;
 
     /**
      * Check if the update request is valid.
@@ -27,7 +27,7 @@ class NewOrganisationCreatedByGlobalAdmin implements AppliesUpdateRequests
     public function validateUpdateRequest(UpdateRequest $updateRequest): Validator
     {
         $user = Auth::user();
-        $rules = (new StoreRequest())
+        $rules = (new StoreRequest)
             ->merge($updateRequest->data)
             ->setUserResolver(function () use ($updateRequest) {
                 return $updateRequest->user;
@@ -52,7 +52,7 @@ class NewOrganisationCreatedByGlobalAdmin implements AppliesUpdateRequests
         $data = collect($updateRequest->data);
 
         $organisation = Organisation::create([
-            'slug' => $this->uniqueSlug($data->get('slug', $data->get('name')), (new Organisation())),
+            'slug' => $this->uniqueSlug($data->get('slug', $data->get('name')), (new Organisation)),
             'name' => $data->get('name'),
             'description' => sanitize_markdown(
                 $data->get('description')
@@ -63,7 +63,7 @@ class NewOrganisationCreatedByGlobalAdmin implements AppliesUpdateRequests
             'logo_file_id' => $data->get('logo_file_id'),
         ]);
 
-        if ($data->has('logo_file_id') && !empty($data->get('logo_file_id'))) {
+        if ($data->has('logo_file_id') && ! empty($data->get('logo_file_id'))) {
             $this->resizeImageFile($data->get('logo_file_id'));
         }
 
@@ -77,7 +77,7 @@ class NewOrganisationCreatedByGlobalAdmin implements AppliesUpdateRequests
             }
         }
 
-        if ($data->has('category_taxonomies') && !empty($data->get('category_taxonomies'))) {
+        if ($data->has('category_taxonomies') && ! empty($data->get('category_taxonomies'))) {
             // Create the category taxonomy records.
             $taxonomies = Taxonomy::whereIn('id', $data->get('category_taxonomies'))->get();
             $organisation->syncTaxonomyRelationships($taxonomies);

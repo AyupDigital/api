@@ -11,7 +11,7 @@ class HighestRoleFilter implements Filter
 {
     public function __invoke(Builder $query, $value, string $property): Builder
     {
-        $sql = (new User())->getHighestRoleOrderSql();
+        $sql = (new User)->getHighestRoleOrderSql();
 
         $subQuery = <<<EOT
 SELECT `user_roles`.`role_id`

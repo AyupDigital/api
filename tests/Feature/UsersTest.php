@@ -2589,7 +2589,7 @@ class UsersTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/users/{$subject->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertSoftDeleted((new User())->getTable(), ['id' => $subject->id]);
+        $this->assertSoftDeleted((new User)->getTable(), ['id' => $subject->id]);
     }
 
     /**
@@ -2663,7 +2663,7 @@ class UsersTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/users/{$subject->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertSoftDeleted((new User())->getTable(), ['id' => $subject->id]);
+        $this->assertSoftDeleted((new User)->getTable(), ['id' => $subject->id]);
     }
 
     /**
@@ -2752,7 +2752,7 @@ class UsersTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/users/{$subject->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertSoftDeleted((new User())->getTable(), ['id' => $subject->id]);
+        $this->assertSoftDeleted((new User)->getTable(), ['id' => $subject->id]);
     }
 
     /**
@@ -2882,7 +2882,7 @@ class UsersTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/users/{$subject->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertSoftDeleted((new User())->getTable(), ['id' => $subject->id]);
+        $this->assertSoftDeleted((new User)->getTable(), ['id' => $subject->id]);
     }
 
     /**
@@ -2982,7 +2982,7 @@ class UsersTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/users/{$subject->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertSoftDeleted((new User())->getTable(), ['id' => $subject->id]);
+        $this->assertSoftDeleted((new User)->getTable(), ['id' => $subject->id]);
     }
 
     /**
@@ -3082,7 +3082,7 @@ class UsersTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/users/{$subject->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertSoftDeleted((new User())->getTable(), ['id' => $subject->id]);
+        $this->assertSoftDeleted((new User)->getTable(), ['id' => $subject->id]);
     }
 
     /**

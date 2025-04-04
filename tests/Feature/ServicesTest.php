@@ -2,35 +2,35 @@
 
 namespace Tests\Feature;
 
-use Carbon\Carbon;
-use App\Models\Tag;
-use Tests\TestCase;
-use App\Models\File;
-use App\Models\Role;
-use App\Models\User;
-use App\Models\Audit;
-use App\Models\Service;
-use App\Models\Taxonomy;
-use App\Models\UserRole;
 use App\Events\EndpointHit;
+use App\Models\Audit;
+use App\Models\File;
+use App\Models\HolidayOpeningHour;
+use App\Models\Organisation;
+use App\Models\RegularOpeningHour;
+use App\Models\Role;
+use App\Models\Service;
+use App\Models\ServiceLocation;
+use App\Models\ServiceRefreshToken;
+use App\Models\ServiceTaxonomy;
 use App\Models\SocialMedia;
+use App\Models\Tag;
+use App\Models\Taxonomy;
+use App\Models\UpdateRequest;
+use App\Models\User;
+use App\Models\UserRole;
+use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 use Faker\Factory as Faker;
-use Illuminate\Support\Arr;
-use App\Models\Organisation;
-use App\Models\UpdateRequest;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
-use Laravel\Passport\Passport;
-use App\Models\ServiceLocation;
-use App\Models\ServiceTaxonomy;
 use Illuminate\Http\UploadedFile;
-use App\Models\HolidayOpeningHour;
-use App\Models\RegularOpeningHour;
-use App\Models\ServiceRefreshToken;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\Collection;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class ServicesTest extends TestCase
 {
@@ -39,7 +39,7 @@ class ServicesTest extends TestCase
      *
      * @return null
      **/
-    public function createServiceSpreadsheets(\Illuminate\Support\Collection $services, array $serviceEligibilities = null)
+    public function createServiceSpreadsheets(\Illuminate\Support\Collection $services, ?array $serviceEligibilities = null)
     {
         $faker = Faker::create('en_GB');
 
@@ -82,7 +82,7 @@ class ServicesTest extends TestCase
             $serviceAttributes = $service->getAttributes();
             $serviceAttributes['id'] = $service->id ?: uuid();
 
-            if (is_array($serviceEligibilities) && !empty($serviceEligibilities[$serviceAttributes['id']])) {
+            if (is_array($serviceEligibilities) && ! empty($serviceEligibilities[$serviceAttributes['id']])) {
                 $serviceAttributes['eligibility_taxonomies'] = implode(',', $serviceEligibilities[$serviceAttributes['id']]);
             }
 
@@ -509,7 +509,7 @@ class ServicesTest extends TestCase
 
         $superAdminUser = User::factory()->create()->makeSuperAdmin();
 
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'user_id' => $user->id,
             'updateable_type' => UpdateRequest::NEW_TYPE_SERVICE_ORG_ADMIN,
             'updateable_id' => null,
@@ -549,7 +549,7 @@ class ServicesTest extends TestCase
         $organisation = Organisation::factory()->create();
         $user = User::factory()->create()->makeOrganisationAdmin($organisation);
 
-        //Given an organisation admin is logged in
+        // Given an organisation admin is logged in
         Passport::actingAs($user);
 
         $payload = [
@@ -575,7 +575,7 @@ class ServicesTest extends TestCase
             'referral_email' => null,
             'referral_url' => null,
             'cqc_location_id' => $this->faker->numerify('#-#########'),
-            'ends_at' => Carbon::now()->addMonths(6)->toDateString() . 'T00:00:00+0000',
+            'ends_at' => Carbon::now()->addMonths(6)->toDateString().'T00:00:00+0000',
             'useful_infos' => [
                 [
                     'title' => 'Did you know?',
@@ -605,7 +605,7 @@ class ServicesTest extends TestCase
             ],
         ];
 
-        //When they create a service
+        // When they create a service
         $response = $this->json('POST', '/core/v1/services', $payload);
 
         $response->assertStatus(Response::HTTP_OK);
@@ -613,7 +613,7 @@ class ServicesTest extends TestCase
 
         $responseData = json_decode($response->getContent());
 
-        //Then an update request should be created for the new service
+        // Then an update request should be created for the new service
         $updateRequest = UpdateRequest::query()
             ->where('updateable_type', UpdateRequest::NEW_TYPE_SERVICE_ORG_ADMIN)
             ->where('updateable_id', null)
@@ -637,7 +637,7 @@ class ServicesTest extends TestCase
         $updateRequestResponseData = json_decode($updateRequestCheckResponse->getContent(), true);
 
         $this->assertEquals($updateRequestResponseData['data'], $payload);
-        //And the service should not yet be created
+        // And the service should not yet be created
         $this->assertEmpty(Service::all());
     }
 
@@ -649,7 +649,7 @@ class ServicesTest extends TestCase
         $organisation = Organisation::factory()->create();
         $user = User::factory()->create()->makeGlobalAdmin();
 
-        //Given an organisation admin is logged in
+        // Given an organisation admin is logged in
         Passport::actingAs($user);
 
         $payload = [
@@ -670,13 +670,13 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
             'referral_url' => null,
             'cqc_location_id' => $this->faker->numerify('#-#########'),
-            'ends_at' => Carbon::now()->addMonths(6)->toDateString() . 'T00:00:00+0000',
+            'ends_at' => Carbon::now()->addMonths(6)->toDateString().'T00:00:00+0000',
             'useful_infos' => [
                 [
                     'title' => 'Did you know?',
@@ -706,12 +706,12 @@ class ServicesTest extends TestCase
             ],
         ];
 
-        //When they create a service
+        // When they create a service
         $response = $this->json('POST', '/core/v1/services', $payload);
 
         $response->assertStatus(Response::HTTP_OK);
 
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'user_id' => $user->id,
             'updateable_type' => UpdateRequest::NEW_TYPE_SERVICE_GLOBAL_ADMIN,
             'updateable_id' => null,
@@ -721,7 +721,7 @@ class ServicesTest extends TestCase
 
         $responseData = json_decode($response->getContent());
 
-        //Then an update request should be created for the new service
+        // Then an update request should be created for the new service
         $updateRequest = UpdateRequest::query()
             ->where('updateable_type', UpdateRequest::NEW_TYPE_SERVICE_GLOBAL_ADMIN)
             ->where('updateable_id', null)
@@ -746,7 +746,7 @@ class ServicesTest extends TestCase
 
         $this->assertEquals($updateRequestResponseData['data'], $payload);
 
-        //And the service should not yet be created
+        // And the service should not yet be created
         $this->assertEmpty(Service::all());
     }
 
@@ -758,7 +758,7 @@ class ServicesTest extends TestCase
         $organisation = Organisation::factory()->create();
         $user = User::factory()->create()->makeSuperAdmin();
 
-        //Given that a global admin is logged in
+        // Given that a global admin is logged in
         Passport::actingAs($user);
 
         $payload = [
@@ -779,13 +779,13 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
             'referral_url' => null,
             'cqc_location_id' => $this->faker->numerify('#-#########'),
-            'ends_at' => Carbon::now()->addMonths(6)->toDateString() . 'T00:00:00+0000',
+            'ends_at' => Carbon::now()->addMonths(6)->toDateString().'T00:00:00+0000',
             'useful_infos' => [
                 [
                     'title' => 'Did you know?',
@@ -811,7 +811,7 @@ class ServicesTest extends TestCase
             'category_taxonomies' => [Taxonomy::category()->children()->firstOrFail()->id],
         ];
 
-        //When they create a service
+        // When they create a service
         $response = $this->json('POST', '/core/v1/services', $payload);
 
         $response->assertStatus(Response::HTTP_CREATED);
@@ -819,7 +819,7 @@ class ServicesTest extends TestCase
         $responseData = json_decode($response->getContent())->data;
 
         // The service is created
-        $this->assertDatabaseHas((new Service())->getTable(), ['id' => $responseData->id]);
+        $this->assertDatabaseHas((new Service)->getTable(), ['id' => $responseData->id]);
 
         // And no update request was created
         $this->assertEmpty(UpdateRequest::all());
@@ -853,7 +853,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => null,
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -918,7 +918,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -996,7 +996,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1061,7 +1061,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1132,7 +1132,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1197,7 +1197,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1236,7 +1236,7 @@ class ServicesTest extends TestCase
     /**
      * @test
      */
-    public function createServiceWithSlugClashAsOrganisationAdmin200()
+    public function create_service_with_slug_clash_as_organisation_admin200()
     {
         $now = Date::now();
         Date::setTestNow($now);
@@ -1270,7 +1270,7 @@ class ServicesTest extends TestCase
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
             'cqc_location_id' => $this->faker->numerify('#-#########'),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1296,7 +1296,7 @@ class ServicesTest extends TestCase
             'category_taxonomies' => [],
         ];
 
-        //When they create a service
+        // When they create a service
         $response = $this->json('POST', '/core/v1/services', $payload);
 
         $response->assertStatus(Response::HTTP_OK);
@@ -1356,7 +1356,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => 'Tel 01234 567890',
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1424,7 +1424,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1510,7 +1510,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1647,7 +1647,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1756,7 +1756,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -1830,7 +1830,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -1879,7 +1879,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -1946,7 +1946,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2012,7 +2012,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2089,7 +2089,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -2155,7 +2155,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2222,7 +2222,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2300,7 +2300,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2385,7 +2385,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2435,7 +2435,7 @@ class ServicesTest extends TestCase
         $taxonomy = Taxonomy::factory()->create();
         $user = User::factory()->create()->makeSuperAdmin();
 
-        //Given that a super admin is logged in
+        // Given that a super admin is logged in
         Passport::actingAs($user);
 
         $payload = [
@@ -2456,7 +2456,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2491,7 +2491,7 @@ class ServicesTest extends TestCase
             'slug' => 'test-service',
         ]);
 
-        $this->assertDatabaseHas((new Service())->getTable(), [
+        $this->assertDatabaseHas((new Service)->getTable(), [
             'organisation_id' => $organisation1->id,
             'slug' => 'test-service',
         ]);
@@ -2507,7 +2507,7 @@ class ServicesTest extends TestCase
             'slug' => 'test-service-1',
         ]);
 
-        $this->assertDatabaseHas((new Service())->getTable(), [
+        $this->assertDatabaseHas((new Service)->getTable(), [
             'organisation_id' => $organisation2->id,
             'slug' => 'test-service-1',
         ]);
@@ -2524,7 +2524,7 @@ class ServicesTest extends TestCase
             'slug' => 'test-service-2',
         ]);
 
-        $this->assertDatabaseHas((new Service())->getTable(), [
+        $this->assertDatabaseHas((new Service)->getTable(), [
             'organisation_id' => $organisation3->id,
             'slug' => 'test-service-2',
         ]);
@@ -2545,7 +2545,7 @@ class ServicesTest extends TestCase
             'slug' => 'demo-service',
         ]);
 
-        $this->assertDatabaseHas((new Service())->getTable(), [
+        $this->assertDatabaseHas((new Service)->getTable(), [
             'organisation_id' => $organisation4->id,
             'slug' => 'demo-service',
         ]);
@@ -2560,7 +2560,7 @@ class ServicesTest extends TestCase
         $organisation = Organisation::factory()->create();
         $orgAdmin = User::factory()->create()->makeOrganisationAdmin($organisation);
 
-        //Given an organisation admin is logged in
+        // Given an organisation admin is logged in
         Passport::actingAs($orgAdmin);
 
         $payload = [
@@ -2581,7 +2581,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2607,7 +2607,7 @@ class ServicesTest extends TestCase
             'category_taxonomies' => [],
         ];
 
-        //When they create a service
+        // When they create a service
         $response = $this->json('POST', '/core/v1/services', $payload);
 
         $response->assertStatus(Response::HTTP_OK);
@@ -2652,7 +2652,7 @@ class ServicesTest extends TestCase
         $globalAdmin2 = User::factory()->create()->makeGlobalAdmin();
         $organisation = Organisation::factory()->create();
 
-        //Given an global admin is logged in
+        // Given an global admin is logged in
         Passport::actingAs($globalAdmin1);
 
         $payload = [
@@ -2673,7 +2673,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2701,7 +2701,7 @@ class ServicesTest extends TestCase
             ],
         ];
 
-        //When they create a service
+        // When they create a service
         $response = $this->json('POST', '/core/v1/services', $payload);
 
         $response->assertStatus(Response::HTTP_OK);
@@ -2792,7 +2792,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2869,7 +2869,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -2959,7 +2959,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -3081,7 +3081,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -3133,7 +3133,7 @@ class ServicesTest extends TestCase
     /**
      * @test
      */
-    public function CreateServiceWithSocialMediasAsGlobalAdmin200(): void
+    public function create_service_with_social_medias_as_global_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $user = User::factory()->create()->makeGlobalAdmin();
@@ -3158,7 +3158,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -3706,7 +3706,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -3779,7 +3779,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => null,
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -3852,7 +3852,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => null,
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -3929,7 +3929,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => $service->referral_method,
             'referral_button_text' => $service->referral_button_text,
             'referral_email' => $service->referral_email,
@@ -4013,7 +4013,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => 'Tel 01234 567890',
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => $service->referral_method,
             'referral_button_text' => $service->referral_button_text,
             'referral_email' => $service->referral_email,
@@ -4156,7 +4156,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -4225,7 +4225,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -4296,7 +4296,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -4358,7 +4358,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -4414,7 +4414,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -4507,7 +4507,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -4563,7 +4563,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => $this->faker->safeEmail(),
@@ -4590,7 +4590,7 @@ class ServicesTest extends TestCase
     /**
      * @test
      */
-    public function updateServiceWithSlugClashAsGlobalAdmin200()
+    public function update_service_with_slug_clash_as_global_admin200()
     {
         $now = Date::now();
         Date::setTestNow($now);
@@ -4668,7 +4668,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => $service->referral_method,
             'referral_button_text' => $service->referral_button_text,
             'referral_email' => $service->referral_email,
@@ -4750,7 +4750,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_INTERNAL,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -4803,7 +4803,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -4955,7 +4955,7 @@ class ServicesTest extends TestCase
         $service = $service->fresh()->load('serviceEligibilities');
 
         foreach ($payload['eligibility_types']['custom'] as $customFieldName => $customFieldValue) {
-            $this->assertEquals($customFieldValue, $service->{'eligibility_' . $customFieldName . '_custom'});
+            $this->assertEquals($customFieldValue, $service->{'eligibility_'.$customFieldName.'_custom'});
         }
     }
 
@@ -5009,7 +5009,7 @@ class ServicesTest extends TestCase
         }
 
         foreach ($payload['eligibility_types']['custom'] as $customFieldName => $customFieldValue) {
-            $this->assertEquals($customFieldValue, $service->{'eligibility_' . $customFieldName . '_custom'});
+            $this->assertEquals($customFieldValue, $service->{'eligibility_'.$customFieldName.'_custom'});
         }
     }
 
@@ -5127,7 +5127,7 @@ class ServicesTest extends TestCase
     /**
      * @test
      */
-    public function UpdateSocialMediasAsServiceAdmin200(): void
+    public function update_social_medias_as_service_admin200(): void
     {
         $service = Service::factory()->create([
             'slug' => 'test-service',
@@ -5579,7 +5579,7 @@ class ServicesTest extends TestCase
     /**
      * @test
      */
-    public function UpdateSocialMediasFieldAsSuperAdmin200(): void
+    public function update_social_medias_field_as_super_admin200(): void
     {
         $now = Date::now();
         Date::setTestNow($now);
@@ -5757,7 +5757,7 @@ class ServicesTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/services/{$service->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Service())->getTable(), ['id' => $service->id]);
+        $this->assertDatabaseMissing((new Service)->getTable(), ['id' => $service->id]);
     }
 
     /**
@@ -5776,7 +5776,7 @@ class ServicesTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/services/{$service->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Service())->getTable(), ['id' => $service->id]);
+        $this->assertDatabaseMissing((new Service)->getTable(), ['id' => $service->id]);
     }
 
     /*
@@ -6190,7 +6190,7 @@ class ServicesTest extends TestCase
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -6231,7 +6231,7 @@ class ServicesTest extends TestCase
 
         Passport::actingAs(User::factory()->create()->makeSuperAdmin());
 
-        //And the organisation event should not yet be created
+        // And the organisation event should not yet be created
         $this->assertEmpty(Service::all());
 
         // Get the event image for the update request
@@ -6257,7 +6257,7 @@ class ServicesTest extends TestCase
 
         $this->assertDatabaseHas('services', $payload);
 
-        $response = $this->json('GET', "/core/v1/services/test-service");
+        $response = $this->json('GET', '/core/v1/services/test-service');
 
         $response->assertJsonFragment([
             'image' => [
@@ -6312,7 +6312,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6337,7 +6337,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6364,7 +6364,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6393,7 +6393,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6421,7 +6421,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6445,7 +6445,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6469,7 +6469,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6493,7 +6493,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6517,28 +6517,28 @@ class ServicesTest extends TestCase
         $service1 = Service::where('name', $services->get(0)->name)->first();
         $service2 = Service::where('name', $services->get(1)->name)->first();
 
-        $this->assertDatabaseHas((new UserRole())->getTable(), [
+        $this->assertDatabaseHas((new UserRole)->getTable(), [
             'user_id' => $user->id,
             'role_id' => Role::serviceWorker()->id,
             'service_id' => $service1->id,
             'organisation_id' => $service1->organisation_id,
         ]);
 
-        $this->assertDatabaseHas((new UserRole())->getTable(), [
+        $this->assertDatabaseHas((new UserRole)->getTable(), [
             'user_id' => $user->id,
             'role_id' => Role::serviceWorker()->id,
             'service_id' => $service2->id,
             'organisation_id' => $service2->organisation_id,
         ]);
 
-        $this->assertDatabaseHas((new UserRole())->getTable(), [
+        $this->assertDatabaseHas((new UserRole)->getTable(), [
             'user_id' => $user->id,
             'role_id' => Role::serviceAdmin()->id,
             'service_id' => $service1->id,
             'organisation_id' => $service1->organisation_id,
         ]);
 
-        $this->assertDatabaseHas((new UserRole())->getTable(), [
+        $this->assertDatabaseHas((new UserRole)->getTable(), [
             'user_id' => $user->id,
             'role_id' => Role::serviceAdmin()->id,
             'service_id' => $service2->id,
@@ -6562,7 +6562,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6584,28 +6584,28 @@ class ServicesTest extends TestCase
         $service1 = Service::where('name', $services->get(0)->name)->first();
         $service2 = Service::where('name', $services->get(1)->name)->first();
 
-        $this->assertDatabaseHas((new UserRole())->getTable(), [
+        $this->assertDatabaseHas((new UserRole)->getTable(), [
             'user_id' => $user->id,
             'role_id' => Role::serviceWorker()->id,
             'service_id' => $service1->id,
             'organisation_id' => $service1->organisation_id,
         ]);
 
-        $this->assertDatabaseHas((new UserRole())->getTable(), [
+        $this->assertDatabaseHas((new UserRole)->getTable(), [
             'user_id' => $user->id,
             'role_id' => Role::serviceWorker()->id,
             'service_id' => $service2->id,
             'organisation_id' => $service2->organisation_id,
         ]);
 
-        $this->assertDatabaseHas((new UserRole())->getTable(), [
+        $this->assertDatabaseHas((new UserRole)->getTable(), [
             'user_id' => $user->id,
             'role_id' => Role::serviceAdmin()->id,
             'service_id' => $service1->id,
             'organisation_id' => $service1->organisation_id,
         ]);
 
-        $this->assertDatabaseHas((new UserRole())->getTable(), [
+        $this->assertDatabaseHas((new UserRole)->getTable(), [
             'user_id' => $user->id,
             'role_id' => Role::serviceAdmin()->id,
             'service_id' => $service2->id,
@@ -6649,7 +6649,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6668,7 +6668,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/octet-stream;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/octet-stream;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6687,7 +6687,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
+            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6732,7 +6732,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6782,7 +6782,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
+            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6823,7 +6823,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets(collect([$service]));
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6845,7 +6845,7 @@ class ServicesTest extends TestCase
         ]);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
+            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6895,7 +6895,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $response = $this->json('POST', '/core/v1/services/import', [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -6960,7 +6960,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $response = $this->json('POST', '/core/v1/services/import', [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -7017,7 +7017,7 @@ class ServicesTest extends TestCase
         Passport::actingAs($superAdminUser);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7035,7 +7035,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
+            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7069,7 +7069,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets(collect([$service]), [$serviceId => $serviceEligibilityTaxonomyIds->all()]);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7114,7 +7114,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets(collect([$service]), [$serviceId => $invalidServiceEligibilityTaxonomyIds]);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7144,7 +7144,7 @@ class ServicesTest extends TestCase
 
         $categoryTaxonomyIds = [];
         foreach (Taxonomy::category()->children as $taxonomyCategory) {
-            if (!$taxonomyCategory->children->isEmpty()) {
+            if (! $taxonomyCategory->children->isEmpty()) {
                 $categoryTaxonomyIds[] = $taxonomyCategory->children->first()->id;
             }
         }
@@ -7152,7 +7152,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets(collect([$service]), [$serviceId => $categoryTaxonomyIds]);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7207,7 +7207,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7227,7 +7227,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
+            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7263,7 +7263,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7283,7 +7283,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
+            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);

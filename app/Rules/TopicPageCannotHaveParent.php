@@ -17,8 +17,8 @@ class TopicPageCannotHaveParent implements ValidationRule
     /**
      * Create a new rule instance.
      *
-     * @param Page $page
-     * @param mixed $parentId
+     * @param  Page  $page
+     * @param  mixed  $parentId
      */
     public function __construct($parentId)
     {
@@ -28,12 +28,12 @@ class TopicPageCannotHaveParent implements ValidationRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param mixed $value
-     * @param mixed $fail
+     * @param  mixed  $value
+     * @param  mixed  $fail
      */
     public function validate(string $attribute, $value, $fail): void
     {
-        if ($value === Page::PAGE_TYPE_TOPIC && !is_null($this->parentId)) {
+        if ($value === Page::PAGE_TYPE_TOPIC && ! is_null($this->parentId)) {
             $fail($this->message());
         }
     }
@@ -43,6 +43,6 @@ class TopicPageCannotHaveParent implements ValidationRule
      */
     public function message(): string
     {
-        return 'Cannot set :attribute to ' . Page::PAGE_TYPE_TOPIC . ' when the page has a parent';
+        return 'Cannot set :attribute to '.Page::PAGE_TYPE_TOPIC.' when the page has a parent';
     }
 }

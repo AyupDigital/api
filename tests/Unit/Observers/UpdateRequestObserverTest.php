@@ -2,12 +2,12 @@
 
 namespace Tests\Unit\Observers;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Service;
 use App\Models\Organisation;
+use App\Models\Service;
 use App\Models\UpdateRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Queue;
+use Tests\TestCase;
 
 class UpdateRequestObserverTest extends TestCase
 {

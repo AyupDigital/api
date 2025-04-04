@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
-return new class() extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -20,7 +21,7 @@ return new class() extends Migration {
         $nowDateTimeString = Carbon::now()->toDateTimeString();
 
         // Create LGA Standards Taxonomy as child of Category
-        DB::table((new Taxonomy())->getTable())->insert(
+        DB::table((new Taxonomy)->getTable())->insert(
             [
                 'id' => $openActiveTaxonomyId,
                 'parent_id' => $categoryId,
@@ -34,7 +35,7 @@ return new class() extends Migration {
 
         $openActiveData = json_decode(Storage::disk('local')->get('/open-active/activity-list.jsonld'), true);
 
-        $openActiveImporter = new OpenActiveTaxonomyImporter();
+        $openActiveImporter = new OpenActiveTaxonomyImporter;
 
         $openActiveCategory = $openActiveImporter->getOpenActiveCategory();
 
@@ -52,7 +53,7 @@ return new class() extends Migration {
     {
         Schema::disableForeignKeyConstraints();
 
-        $taxonomyTable = (new Taxonomy())->getTable();
+        $taxonomyTable = (new Taxonomy)->getTable();
         $categoryId = Taxonomy::category()->id;
         $openActiveId = DB::table($taxonomyTable)
             ->where('parent_id', $categoryId)
@@ -61,10 +62,10 @@ return new class() extends Migration {
 
         $openActiveTaxonomyIds = $this->getDescendantTaxonomyIds([$openActiveId]);
 
-        DB::table((new ServiceTaxonomy())->getTable())
+        DB::table((new ServiceTaxonomy)->getTable())
             ->whereIn('taxonomy_id', $openActiveTaxonomyIds)
             ->delete();
-        DB::table((new ServiceTaxonomy())->getTable())
+        DB::table((new ServiceTaxonomy)->getTable())
             ->where('taxonomy_id', $openActiveId)
             ->delete();
         DB::table($taxonomyTable)
@@ -82,13 +83,13 @@ return new class() extends Migration {
     /**
      * Get all Open Active Taxonomy IDs.
      *
-     * @param array $rootId
-     * @param array $taxonomyIds
-     * @param mixed $rootIds
+     * @param  array  $rootId
+     * @param  array  $taxonomyIds
+     * @param  mixed  $rootIds
      */
     public function getDescendantTaxonomyIds($rootIds, $taxonomyIds = []): array
     {
-        $childIds = DB::table((new Taxonomy())->getTable())->whereIn('parent_id', $rootIds)->pluck('id');
+        $childIds = DB::table((new Taxonomy)->getTable())->whereIn('parent_id', $rootIds)->pluck('id');
 
         $taxonomyIds = $childIds->concat($taxonomyIds)->unique()->values()->all();
 

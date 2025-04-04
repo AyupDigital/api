@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseModel extends Model
 {
-  use HasUuids;
-  protected $keyIsUuid = true;
-}
+    use HasUuids;
 
+    protected $keyIsUuid = true;
+}

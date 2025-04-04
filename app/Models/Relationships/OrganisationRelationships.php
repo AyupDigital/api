@@ -30,7 +30,7 @@ trait OrganisationRelationships
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, (new UserRole())->getTable())->withTrashed();
+        return $this->belongsToMany(User::class, (new UserRole)->getTable())->withTrashed();
     }
 
     public function services(): HasMany
@@ -45,7 +45,7 @@ trait OrganisationRelationships
 
     public function nonAdminUsers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, (new UserRole())->getTable())
+        return $this->belongsToMany(User::class, (new UserRole)->getTable())
             ->withTrashed()
             ->whereDoesntHave('userRoles', function (Builder $query) {
                 $query->whereIn('user_roles.role_id', [Role::superAdmin()->id, Role::globalAdmin()->id]);
@@ -59,6 +59,6 @@ trait OrganisationRelationships
 
     public function taxonomies(): BelongsToMany
     {
-        return $this->belongsToMany(Taxonomy::class, (new OrganisationTaxonomy())->getTable());
+        return $this->belongsToMany(Taxonomy::class, (new OrganisationTaxonomy)->getTable());
     }
 }

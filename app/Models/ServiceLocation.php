@@ -36,11 +36,11 @@ class ServiceLocation extends Model implements AppliesUpdateRequests
 
         // If holiday opening hours found, then return them.
         if ($hasHolidayHoursOpenNow !== null) {
-            return (bool)$hasHolidayHoursOpenNow;
+            return (bool) $hasHolidayHoursOpenNow;
         }
 
         // If no holiday hours found, then resort to regular opening hours.
-        return (bool)$this->hasRegularHoursOpenNow();
+        return (bool) $this->hasRegularHoursOpenNow();
     }
 
     /**
@@ -89,7 +89,7 @@ class ServiceLocation extends Model implements AppliesUpdateRequests
         $dates = collect([]);
         foreach ($this->regularOpeningHours as $regularOpeningHour) {
             $nextOpenDate = $regularOpeningHour->nextOpenDate();
-            
+
             if ($nextOpenDate->isToday()) {
                 $endTime = Time::create($regularOpeningHour->closes_at->toString());
                 if (Time::now()->between($endTime, Time::create('23:59:59'))) {
@@ -133,7 +133,7 @@ class ServiceLocation extends Model implements AppliesUpdateRequests
      */
     public function validateUpdateRequest(UpdateRequest $updateRequest): Validator
     {
-        $rules = (new Request())->rules();
+        $rules = (new Request)->rules();
 
         // Remove the pending assignment rule since the file is now uploaded.
         $rules['image_file_id'] = [
@@ -219,10 +219,11 @@ class ServiceLocation extends Model implements AppliesUpdateRequests
     }
 
     /**
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
      * @return File|Response|\Illuminate\Contracts\Support\Responsable
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
      */
-    public static function placeholderImage(int $maxDimension = null)
+    public static function placeholderImage(?int $maxDimension = null)
     {
         if ($maxDimension !== null) {
             return File::resizedPlaceholder($maxDimension, File::META_PLACEHOLDER_FOR_SERVICE_LOCATION);

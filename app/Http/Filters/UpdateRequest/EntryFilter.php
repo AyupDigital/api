@@ -11,7 +11,7 @@ class EntryFilter implements Filter
 {
     public function __invoke(Builder $query, $value, string $property): Builder
     {
-        $sql = (new UpdateRequest())->getEntrySql();
+        $sql = (new UpdateRequest)->getEntrySql();
 
         // Don't treat comma's as an array separator.
         $value = implode(',', Arr::wrap($value));

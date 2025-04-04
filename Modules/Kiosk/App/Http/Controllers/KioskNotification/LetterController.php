@@ -30,10 +30,10 @@ class LetterController
 
         $output = $pdf->output();
 
-        $service = new ClickSendService();
+        $service = new ClickSendService;
         $fileUrl = $service->storeUpload($output);
 
-        if (!$fileUrl) {
+        if (! $fileUrl) {
             // TODO: throw big error.
             return response('Issue with file upload', 500);
         }
@@ -42,7 +42,7 @@ class LetterController
             url: $fileUrl,
             addressName: $request->input('name'),
             addressLine1: $request->input('address_line_1'),
-            addressLine2: $request->input('address_line_2') ?? "",
+            addressLine2: $request->input('address_line_2') ?? '',
             postcode: $request->input('postcode'),
             city: $request->input('city'),
         );
@@ -53,7 +53,7 @@ class LetterController
                 'address' => [
                     'name' => $request->input('name'),
                     'line1' => $request->input('address_line_1'),
-                    'line2' => $request->input('address_line_2') ?? "",
+                    'line2' => $request->input('address_line_2') ?? '',
                     'postcode' => $request->input('postcode'),
                     'city' => $request->input('city'),
                 ],

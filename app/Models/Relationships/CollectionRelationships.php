@@ -17,7 +17,7 @@ trait CollectionRelationships
 
     public function taxonomies(): BelongsToMany
     {
-        return $this->belongsToMany(Taxonomy::class, (new CollectionTaxonomy())->getTable());
+        return $this->belongsToMany(Taxonomy::class, (new CollectionTaxonomy)->getTable());
     }
 
     public function pages(): BelongsToMany

@@ -64,7 +64,7 @@ class UpdateRequest extends FormRequest
                 'string',
                 'min:1',
                 'max:255',
-                new Slug(),
+                new Slug,
                 new UserHasRole(
                     $this->user('api'),
                     new UserRole([
@@ -101,7 +101,7 @@ class UpdateRequest extends FormRequest
             'description' => [
                 'string',
                 new MarkdownMinLength(1),
-                new MarkdownMaxLength(config('local.service_description_max_chars'), 'Description tab - The long description must be ' . config('local.service_description_max_chars') . ' characters or fewer.'),
+                new MarkdownMaxLength(config('local.service_description_max_chars'), 'Description tab - The long description must be '.config('local.service_description_max_chars').' characters or fewer.'),
             ],
             'wait_time' => [
                 'nullable',
@@ -134,7 +134,7 @@ class UpdateRequest extends FormRequest
             'fees_text' => ['nullable', 'string', 'min:1', 'max:255'],
             'fees_url' => ['nullable', 'url', 'max:255'],
             'testimonial' => ['nullable', 'string', 'min:1', 'max:255'],
-            'video_embed' => ['nullable', 'string', 'url', 'max:255', new VideoEmbed()],
+            'video_embed' => ['nullable', 'string', 'url', 'max:255', new VideoEmbed],
             'url' => ['nullable', 'url', 'max:255'],
             'contact_name' => ['nullable', 'string', 'min:1', 'max:255'],
             'contact_phone' => [
@@ -221,7 +221,7 @@ class UpdateRequest extends FormRequest
                     $this->service->referral_url
                 ),
             ],
-            'ends_at' => ['nullable', 'date_format:' . CarbonImmutable::ISO8601, new MaxDateSupported($this->input('ends_at'))],
+            'ends_at' => ['nullable', 'date_format:'.CarbonImmutable::ISO8601, new MaxDateSupported($this->input('ends_at'))],
             'useful_infos' => ['array'],
             'useful_infos.*' => ['array'],
             'useful_infos.*.title' => ['required_with:useful_infos.*', 'string', 'min:1', 'max:255'],
@@ -265,7 +265,7 @@ class UpdateRequest extends FormRequest
             ],
             'social_medias.*.url' => ['required_with:social_medias.*', 'url', 'max:255'],
 
-            'gallery_items' => ['array', 'max:' . config('local.max_gallery_images')],
+            'gallery_items' => ['array', 'max:'.config('local.max_gallery_images')],
             'gallery_items.*' => ['array'],
             'gallery_items.*.file_id' => [
                 'required_with:gallery_items.*',
@@ -291,7 +291,7 @@ class UpdateRequest extends FormRequest
                 ),
             ],
             'tags.*' => ['array'],
-            'tags.*.slug' => ['required_with:tags.*', 'string', 'min:1', 'max:255', new Slug()],
+            'tags.*.slug' => ['required_with:tags.*', 'string', 'min:1', 'max:255', new Slug],
             'tags.*.label' => ['required_with:tags.*', 'string', 'min:1', 'max:255'],
 
             'category_taxonomies' => $this->categoryTaxonomiesRules(),
@@ -321,7 +321,7 @@ class UpdateRequest extends FormRequest
                 'nullable',
                 'exists:files,id',
                 new FileIsMimeType(File::MIME_TYPE_PNG, File::MIME_TYPE_SVG, File::MIME_TYPE_JPG, File::MIME_TYPE_JPEG),
-                new FileIsPendingAssignment(),
+                new FileIsPendingAssignment,
             ],
             'score' => [
                 'nullable',
@@ -336,14 +336,14 @@ class UpdateRequest extends FormRequest
                 ),
                 function ($attribute, $value, $fail) {
                     if ($this->service->score !== $value &&
-                        !in_array($value, [
+                        ! in_array($value, [
                             Service::SCORE_POOR,
                             Service::SCORE_BELOW_AVERAGE,
                             Service::SCORE_AVERAGE,
                             Service::SCORE_ABOVE_AVERAGE,
                             Service::SCORE_EXCELLENT,
                         ])) {
-                        $fail($attribute . ' should be between 1 and 5');
+                        $fail($attribute.' should be between 1 and 5');
                     }
                 },
             ],
@@ -387,7 +387,7 @@ class UpdateRequest extends FormRequest
         ];
     }
 
-    protected function showReferralDisclaimerOriginalValue(): bool //TODO: Deprecate this method.
+    protected function showReferralDisclaimerOriginalValue(): bool // TODO: Deprecate this method.
     {
         return false;
     }

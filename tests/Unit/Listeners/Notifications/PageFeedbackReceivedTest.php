@@ -26,7 +26,7 @@ class PageFeedbackReceivedTest extends TestCase
         ]);
 
         $event = EndpointHit::onCreate($request, "Created page feedback [{$pageFeedback->id}]", $pageFeedback);
-        $listener = new PageFeedbackReceived();
+        $listener = new PageFeedbackReceived;
         $listener->handle($event);
 
         Queue::assertPushedOn(config('queue.queues.notifications', 'default'), NotifyGlobalAdminEmail::class);

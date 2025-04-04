@@ -2,24 +2,24 @@
 
 namespace Tests\Feature;
 
-use Carbon\Carbon;
-use Tests\TestCase;
-use App\Models\File;
-use App\Models\User;
-use App\Models\Audit;
-use App\Models\Service;
-use App\Models\Location;
 use App\Events\EndpointHit;
-use Carbon\CarbonImmutable;
-use App\Models\UpdateRequest;
-use Illuminate\Http\Response;
-use Laravel\Passport\Passport;
-use App\Models\ServiceLocation;
+use App\Models\Audit;
+use App\Models\File;
 use App\Models\HolidayOpeningHour;
+use App\Models\Location;
 use App\Models\RegularOpeningHour;
+use App\Models\Service;
+use App\Models\ServiceLocation;
+use App\Models\UpdateRequest;
+use App\Models\User;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class ServiceLocationsTest extends TestCase
 {
@@ -427,7 +427,7 @@ class ServiceLocationsTest extends TestCase
     /**
      * @test
      */
-    public function getServiceLocationWithWeeklyFrequencyNextOccursAsGuest(): void
+    public function get_service_location_with_weekly_frequency_next_occurs_as_guest(): void
     {
         $location = Location::factory()->create();
         $service = Service::factory()->create();
@@ -477,7 +477,7 @@ class ServiceLocationsTest extends TestCase
     /**
      * @test
      */
-    public function getServiceLocationWithMonthlyFrequencyNextOccursAsGuest(): void
+    public function get_service_location_with_monthly_frequency_next_occurs_as_guest(): void
     {
         $location = Location::factory()->create();
         $service = Service::factory()->create();
@@ -524,7 +524,7 @@ class ServiceLocationsTest extends TestCase
     /**
      * @test
      */
-    public function getServiceLocationWithFortnightlyFrequencyNextOccursAsGuest(): void
+    public function get_service_location_with_fortnightly_frequency_next_occurs_as_guest(): void
     {
         $location = Location::factory()->create();
         $service = Service::factory()->create();
@@ -571,7 +571,7 @@ class ServiceLocationsTest extends TestCase
     /**
      * @test
      */
-    public function getServiceLocationWithNthOccurringFrequencyNextOccursAsGuest(): void
+    public function get_service_location_with_nth_occurring_frequency_next_occurs_as_guest(): void
     {
         $location = Location::factory()->create();
         $service = Service::factory()->create();
@@ -905,7 +905,7 @@ class ServiceLocationsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/service-locations/{$serviceLocation->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new ServiceLocation())->getTable(), ['id' => $serviceLocation->id]);
+        $this->assertDatabaseMissing((new ServiceLocation)->getTable(), ['id' => $serviceLocation->id]);
     }
 
     public function test_audit_created_when_deleted(): void
@@ -970,7 +970,7 @@ class ServiceLocationsTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,' . base64_encode($image),
+            'file' => 'data:image/png;base64,'.base64_encode($image),
         ]);
 
         $response = $this->json('POST', '/core/v1/service-locations', [
@@ -1055,7 +1055,7 @@ class ServiceLocationsTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonFragment(['data' => $payload]);
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'user_id' => $user->id,
             'updateable_type' => UpdateRequest::EXISTING_TYPE_SERVICE_LOCATION,
             'updateable_id' => $serviceLocation->id,

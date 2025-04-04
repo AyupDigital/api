@@ -32,7 +32,7 @@ class StoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'min:1', 'max:255'],
             'intro' => ['required', 'string', 'min:1', 'max:500'],
-            'order' => ['required', 'integer', 'min:1', 'max:' . (Collection::organisationEvents()->count() + 1)],
+            'order' => ['required', 'integer', 'min:1', 'max:'.(Collection::organisationEvents()->count() + 1)],
             'enabled' => ['required', 'boolean'],
             'sideboxes' => ['present', 'array', 'max:3'],
             'sideboxes.*' => ['array'],
@@ -43,7 +43,7 @@ class StoreRequest extends FormRequest
             'image_file_id' => [
                 'exists:files,id',
                 new FileIsMimeType(File::MIME_TYPE_PNG, File::MIME_TYPE_JPG, File::MIME_TYPE_JPEG, File::MIME_TYPE_SVG),
-                new FileIsPendingAssignment(),
+                new FileIsPendingAssignment,
             ],
         ];
     }

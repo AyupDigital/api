@@ -15,7 +15,7 @@ class FileFactory extends Factory
     public function definition(): array
     {
         return [
-            'filename' => Str::random() . '.dat',
+            'filename' => Str::random().'.dat',
             'mime_type' => 'text/plain',
             'is_private' => false,
             'meta' => ['alt_text' => $this->faker->sentence],
@@ -34,9 +34,9 @@ class FileFactory extends Factory
     {
         return $this->afterCreating(function (File $file) {
             $image = Storage::disk('local')->get('/test-data/image.png');
-            $file->uploadBase64EncodedFile('data:image/png;base64,' . base64_encode($image));
+            $file->uploadBase64EncodedFile('data:image/png;base64,'.base64_encode($image));
         })->state([
-            'filename' => Str::random() . '.png',
+            'filename' => Str::random().'.png',
             'mime_type' => 'image/png',
         ]);
     }
@@ -45,9 +45,9 @@ class FileFactory extends Factory
     {
         return $this->afterCreating(function (File $file) {
             $image = Storage::disk('local')->get('/test-data/image.jpg');
-            $file->uploadBase64EncodedFile('data:image/jpeg;base64,' . base64_encode($image));
+            $file->uploadBase64EncodedFile('data:image/jpeg;base64,'.base64_encode($image));
         })->state([
-            'filename' => Str::random() . '.jpg',
+            'filename' => Str::random().'.jpg',
             'mime_type' => 'image/jpeg',
         ]);
     }
@@ -56,9 +56,9 @@ class FileFactory extends Factory
     {
         return $this->afterCreating(function (File $file) {
             $image = Storage::disk('local')->get('/test-data/image.svg');
-            $file->uploadBase64EncodedFile('data:image/svg+xml;base64,' . base64_encode($image));
+            $file->uploadBase64EncodedFile('data:image/svg+xml;base64,'.base64_encode($image));
         })->state([
-            'filename' => Str::random() . '.svg',
+            'filename' => Str::random().'.svg',
             'mime_type' => 'image/svg+xml',
         ]);
     }

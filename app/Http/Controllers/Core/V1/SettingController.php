@@ -24,7 +24,7 @@ class SettingController extends Controller
     {
         event(EndpointHit::onRead($request, 'Viewed all settings'));
 
-        return new Setting();
+        return new Setting;
     }
 
     public function update(UpdateRequest $request): Setting
@@ -39,8 +39,8 @@ class SettingController extends Controller
                                 'footer_content' => sanitize_markdown($request->input('cms.frontend.global.footer_content')),
                                 'contact_phone' => $request->input('cms.frontend.global.contact_phone'),
                                 'contact_email' => $request->input('cms.frontend.global.contact_email'),
-                                'facebook_handle' => $request->input('cms.frontend.global.facebook_handle') ?? "",
-                                'twitter_handle' => $request->input('cms.frontend.global.twitter_handle') ?? "",
+                                'facebook_handle' => $request->input('cms.frontend.global.facebook_handle') ?? '',
+                                'twitter_handle' => $request->input('cms.frontend.global.twitter_handle') ?? '',
                             ],
                             'home' => [
                                 'banners' => array_map(function ($banner) {
@@ -112,7 +112,7 @@ class SettingController extends Controller
 
             event(EndpointHit::onUpdate($request, 'Updated settings'));
 
-            return new Setting();
+            return new Setting;
         });
     }
 }

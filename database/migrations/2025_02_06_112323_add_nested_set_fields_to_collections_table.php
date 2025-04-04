@@ -6,25 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-  /**
-   * Run the migrations.
-   */
-  public function up(): void
-  {
-    Schema::table('collections', function (Blueprint $table) {
-      $table->uuid('parent_uuid')->after('order')->nullable();
-      $table->nestedSet();
-    });
-  }
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('collections', function (Blueprint $table) {
+            $table->uuid('parent_uuid')->after('order')->nullable();
+            $table->nestedSet();
+        });
+    }
 
-  /**
-   * Reverse the migrations.
-   */
-  public function down(): void
-  {
-    Schema::table('collections', function (Blueprint $table) {
-      $table->dropColumn('parent_uuid');
-      $table->dropNestedSet();
-    });
-  }
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('collections', function (Blueprint $table) {
+            $table->dropColumn('parent_uuid');
+            $table->dropNestedSet();
+        });
+    }
 };

@@ -51,8 +51,8 @@ class UpdateRequestController extends Controller
                 AllowedFilter::scope('service_location_id'),
                 AllowedFilter::scope('location_id'),
                 AllowedFilter::scope('organisation_id'),
-                AllowedFilter::custom('entry', new EntryFilter()),
-                AllowedFilter::custom('type', new TypeFilter()),
+                AllowedFilter::custom('entry', new EntryFilter),
+                AllowedFilter::custom('type', new TypeFilter),
             ])
             ->allowedIncludes(['user'])
             ->allowedSorts([
@@ -82,11 +82,11 @@ class UpdateRequestController extends Controller
 
         $canView = false;
 
-        if (!$updateRequest->updatable_id) {
+        if (! $updateRequest->updatable_id) {
             if ($request->user()->isGlobalAdmin()) {
                 event(EndpointHit::onRead($request, "Viewed update request [{$updateRequest->id}]", $updateRequest));
 
-                return new UpdateRequestResource($updateRequest); 
+                return new UpdateRequestResource($updateRequest);
             }
         }
 
@@ -97,7 +97,7 @@ class UpdateRequestController extends Controller
             if ($request->user()->isGlobalAdmin()) {
                 event(EndpointHit::onRead($request, "Viewed update request [{$updateRequest->id}]", $updateRequest));
 
-            return new UpdateRequestResource($updateRequest);
+                return new UpdateRequestResource($updateRequest);
             }
         }
 
@@ -127,8 +127,7 @@ class UpdateRequestController extends Controller
             $canView = $request->user()->isContentAdmin();
         }
 
-
-        if (!$canView) {
+        if (! $canView) {
             return abort(401);
         }
 

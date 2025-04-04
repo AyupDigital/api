@@ -14,8 +14,9 @@ class LogoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @return \Illuminate\Http\Response
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function __invoke(ShowRequest $request, Organisation $organisation)
     {

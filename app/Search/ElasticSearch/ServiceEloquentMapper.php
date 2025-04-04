@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace App\Search\ElasticSearch;
 
@@ -19,7 +19,7 @@ use Illuminate\Pagination\Paginator;
 
 class ServiceEloquentMapper implements EloquentMapper
 {
-    public function paginate(SearchRequestBuilder $esQuery, int $page = null, int $perPage = null): AnonymousResourceCollection
+    public function paginate(SearchRequestBuilder $esQuery, ?int $page = null, ?int $perPage = null): AnonymousResourceCollection
     {
         $page = page($page);
         $perPage = per_page($perPage);

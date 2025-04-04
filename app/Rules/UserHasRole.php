@@ -28,7 +28,7 @@ class UserHasRole implements ValidationRule
     /**
      * Create a new rule instance.
      *
-     * @param mixed $originalValue
+     * @param  mixed  $originalValue
      */
     public function __construct(User $user, UserRole $userRole, $originalValue)
     {
@@ -39,8 +39,6 @@ class UserHasRole implements ValidationRule
 
     /**
      * Determine if the validation rule passes.
-     *
-     * @param mixed $value
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
@@ -68,7 +66,7 @@ class UserHasRole implements ValidationRule
                     $userHasRole = false;
             }
 
-            if (!$userHasRole) {
+            if (! $userHasRole) {
                 $fail($this->message());
             }
         }

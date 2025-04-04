@@ -22,13 +22,13 @@ class InOrder implements ValidationRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param mixed $value
-     * @param mixed $fail
+     * @param  mixed  $value
+     * @param  mixed  $fail
      */
     public function validate(string $attribute, $value, $fail): void
     {
         // Immediately fail if the value is not a integer.
-        if (!is_int($value)) {
+        if (! is_int($value)) {
             $fail(__('validation.integer'));
         }
 
@@ -44,7 +44,7 @@ class InOrder implements ValidationRule
 
         // Loop through each order and check if in order.
         foreach (range(1, count($this->orders)) as $index) {
-            if (!in_array($index, $this->orders)) {
+            if (! in_array($index, $this->orders)) {
                 $fail($this->message());
             }
         }

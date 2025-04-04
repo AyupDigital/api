@@ -23,7 +23,7 @@ class NewOrganisationEventCreatedByOrgAdmin implements AppliesUpdateRequests
      */
     public function validateUpdateRequest(UpdateRequest $updateRequest): Validator
     {
-        $rules = (new StoreRequest())
+        $rules = (new StoreRequest)
             ->merge($updateRequest->data)
             ->setUserResolver(function () use ($updateRequest) {
                 return $updateRequest->user;
@@ -49,7 +49,7 @@ class NewOrganisationEventCreatedByOrgAdmin implements AppliesUpdateRequests
 
         $organisationEvent = OrganisationEvent::create([
             'title' => $data->get('title'),
-            'slug' => $this->uniqueSlug($data->get('slug', $data->get('title')), (new OrganisationEvent())),
+            'slug' => $this->uniqueSlug($data->get('slug', $data->get('title')), (new OrganisationEvent)),
             'start_date' => $data->get('start_date'),
             'end_date' => $data->get('end_date'),
             'start_time' => $data->get('start_time'),
@@ -76,7 +76,7 @@ class NewOrganisationEventCreatedByOrgAdmin implements AppliesUpdateRequests
             'image_file_id' => $data->get('image_file_id'),
         ]);
 
-        if ($data->has('image_file_id') && !empty($data->get('image_file_id'))) {
+        if ($data->has('image_file_id') && ! empty($data->get('image_file_id'))) {
             /** @var File $file */
             $file = File::findOrFail($data->get('image_file_id'))->assigned();
 
@@ -86,7 +86,7 @@ class NewOrganisationEventCreatedByOrgAdmin implements AppliesUpdateRequests
             }
         }
 
-        if ($data->has('category_taxonomies') && !empty($data->get('category_taxonomies'))) {
+        if ($data->has('category_taxonomies') && ! empty($data->get('category_taxonomies'))) {
             // Create the category taxonomy records.
             $taxonomies = Taxonomy::whereIn('id', $data->get('category_taxonomies'))->get();
             $organisationEvent->syncTaxonomyRelationships($taxonomies);

@@ -30,7 +30,7 @@ class BatchUploader
      */
     public function __construct()
     {
-        $this->reader = new XlsxReader();
+        $this->reader = new XlsxReader;
         $this->reader->setReadDataOnly(true);
     }
 
@@ -189,7 +189,7 @@ class BatchUploader
             $slug = Str::slug($organisationArray['Name*']);
             $iteration = 0;
             do {
-                $slug = $iteration > 0 ? $slug . '-' . $iteration : $slug;
+                $slug = $iteration > 0 ? $slug.'-'.$iteration : $slug;
                 $duplicate = Organisation::query()->where('slug', $slug)->exists();
                 $iteration++;
             } while ($duplicate);
@@ -226,7 +226,7 @@ class BatchUploader
             $slug = Str::slug($serviceArray['Name*']);
             $iteration = 0;
             do {
-                $slug = $iteration > 0 ? $slug . '-' . $iteration : $slug;
+                $slug = $iteration > 0 ? $slug.'-'.$iteration : $slug;
                 $duplicate = Service::query()->where('slug', $slug)->exists();
                 $iteration++;
             } while ($duplicate);
@@ -246,8 +246,8 @@ class BatchUploader
                 'description' => $serviceArray['Description*'],
                 'wait_time' => $this->parseWaitTime($serviceArray['Wait Time']),
                 'is_free' => $isFree,
-                'fees_text' => !$isFree ? Str::limit($serviceArray['Fees Text'], 250) : null,
-                'fees_url' => !$isFree ? $serviceArray['Fees URL'] : null,
+                'fees_text' => ! $isFree ? Str::limit($serviceArray['Fees Text'], 250) : null,
+                'fees_url' => ! $isFree ? $serviceArray['Fees URL'] : null,
                 'testimonial' => $serviceArray['Testimonial'],
                 'video_embed' => $serviceArray['Video Embed'],
                 'url' => $serviceArray['URL*'],
@@ -255,7 +255,7 @@ class BatchUploader
                 'contact_phone' => $serviceArray['Contact Phone'],
                 'contact_email' => $serviceArray['Contact Email'],
                 'referral_method' => $serviceArray['Referral Method*'] ?: Service::REFERRAL_METHOD_NONE,
-                'referral_button_text' => !$isNone ? 'Make referral' : null,
+                'referral_button_text' => ! $isNone ? 'Make referral' : null,
                 'referral_email' => $isInternal ? $serviceArray['Referral Email'] : null,
                 'referral_url' => $isExternal ? $serviceArray['Referral URL'] : null,
                 'last_modified_at' => Date::now(),
@@ -290,7 +290,7 @@ class BatchUploader
 
     protected function processSocialMedia(array $serviceArray, Service $service): EloquentCollection
     {
-        $socialMedias = new EloquentCollection();
+        $socialMedias = new EloquentCollection;
 
         if ($serviceArray['Social Medias - Twitter']) {
             $socialMedias->push($service->socialMedias()->create([
@@ -332,7 +332,7 @@ class BatchUploader
 
     protected function processUsefulInfo(array $serviceArray, Service $service): EloquentCollection
     {
-        $usefulInfos = new EloquentCollection();
+        $usefulInfos = new EloquentCollection;
 
         if ($serviceArray['Useful Info 1 - Title'] && $serviceArray['Useful Info 1 - Description']) {
             $usefulInfos->push($service->usefulInfos()->create([

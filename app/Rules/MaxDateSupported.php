@@ -17,7 +17,7 @@ class MaxDateSupported implements ValidationRule
      */
     public function __construct(?string $date = null, ?string $time = null)
     {
-        if (!$date) {
+        if (! $date) {
             $this->date = Carbon::now();
         }
         $this->date = Carbon::parse($date);
@@ -27,8 +27,8 @@ class MaxDateSupported implements ValidationRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param mixed $value
-     * @param mixed $fail
+     * @param  mixed  $value
+     * @param  mixed  $fail
      */
     public function validate(string $attribute, $value, $fail): void
     {

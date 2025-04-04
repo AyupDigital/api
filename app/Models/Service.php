@@ -31,19 +31,19 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator as ValidatorFacade;
 use Illuminate\Support\Str;
 
-class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTaxonomyRelationships
+class Service extends Model implements AppliesUpdateRequests, HasTaxonomyRelationships, Notifiable
 {
+    use DispatchesJobs;
     use HasFactory;
     use HasUniqueSlug;
-    use DispatchesJobs;
     use Notifications;
     use Searchable;
     use ServiceMutators;
     use ServiceRelationships;
     use ServiceScopes;
     use UpdateRequests;
-    use UpdateTaxonomyRelationships;
     use UpdateServiceEligibilityTaxonomyRelationships;
+    use UpdateTaxonomyRelationships;
 
     const TYPE_SERVICE = 'service';
 
@@ -84,13 +84,19 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
     const SCORE_EXCELLENT = 5;
 
     const ATTENDING_TYPE_PHONE = 'phone';
+
     const ATTENDING_TYPE_ONLINE = 'online';
+
     const ATTENDING_TYPE_VENUE = 'venue';
+
     const ATTENDING_TYPE_HOME = 'home';
 
     const ATTENDING_ACCESS_REFERRAL = 'referral';
+
     const ATTENDING_ACCESS_APPOINTMENT = 'appointment';
+
     const ATTENDING_ACCESS_MEMBERSHIP = 'membership';
+
     const ATTENDING_ACCESS_DROP_IN = 'drop_in';
 
     /**
@@ -117,12 +123,12 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
         $serviceEligibilityNames = $serviceEligibilities->pluck('name')->toArray();
         $serviceEligibilityRoot = Taxonomy::serviceEligibility();
         foreach ($serviceEligibilityRoot->children as $serviceEligibilityType) {
-            if (!$serviceEligibilityType->filterDescendants($serviceEligibilityIds)) {
-                $serviceEligibilityNames[] = $serviceEligibilityType->name . ' All';
+            if (! $serviceEligibilityType->filterDescendants($serviceEligibilityIds)) {
+                $serviceEligibilityNames[] = $serviceEligibilityType->name.' All';
             }
         }
 
-        //TODO: Refactor this as it's duplicate calls but sadly I don't have bags of time with the Kiosk project.
+        // TODO: Refactor this as it's duplicate calls but sadly I don't have bags of time with the Kiosk project.
         $taxonomyIds = $this->serviceTaxonomies()
             ->pluck('taxonomy_id')
             ->toArray();
@@ -161,7 +167,7 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
                     return $categories;
                 })
                 ->filter(function ($slug) {
-                    return !empty($slug);
+                    return ! empty($slug);
                 })
                 ->unique()
                 ->values()
@@ -197,7 +203,7 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
      */
     public function validateUpdateRequest(UpdateRequest $updateRequest): Validator
     {
-        $rules = (new UpdateServiceRequest())
+        $rules = (new UpdateServiceRequest)
             ->setUserResolver(function () use ($updateRequest) {
                 return $updateRequest->user;
             })
@@ -228,7 +234,7 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
         $data = $updateRequest->data;
 
         // Update the Logo File entity if new
-        if (Arr::get($data, 'logo_file_id', $this->logo_file_id) !== $this->logo_file_id && !empty($data['logo_file_id'])) {
+        if (Arr::get($data, 'logo_file_id', $this->logo_file_id) !== $this->logo_file_id && ! empty($data['logo_file_id'])) {
             /** @var File $file */
             $file = File::findOrFail($data['logo_file_id'])->assigned();
 
@@ -317,7 +323,7 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
             $tagIds = [];
             foreach ($data['tags'] as $tagField) {
                 $tag = Tag::where('slug', Str::slug($tagField['slug']))->first();
-                if (null === $tag) {
+                if ($tag === null) {
                     $tag = new Tag([
                         'slug' => Str::slug($tagField['slug']),
                         'label' => $tagField['label'],
@@ -451,10 +457,11 @@ class Service extends Model implements AppliesUpdateRequests, Notifiable, HasTax
     }
 
     /**
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
      * @return File|Response|\Illuminate\Contracts\Support\Responsable
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
      */
-    public static function placeholderLogo(int $maxDimension = null)
+    public static function placeholderLogo(?int $maxDimension = null)
     {
         if ($maxDimension !== null) {
             return File::resizedPlaceholder($maxDimension, File::META_PLACEHOLDER_FOR_SERVICE);

@@ -22,7 +22,7 @@ class StoreSearchCollectionPersonaOperation extends Operation
     /**
      * @throws \GoldSpecDigital\ObjectOrientedOAS\Exceptions\InvalidArgumentException
      */
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         $serviceLocationSchema = ServiceLocationSchema::create();
         $serviceLocationSchema = $serviceLocationSchema->properties(

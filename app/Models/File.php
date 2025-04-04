@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Storage;
 
 class File extends Model implements Responsable
 {
-    use HasFactory;
     use FileMutators;
     use FileRelationships;
     use FileScopes;
+    use HasFactory;
 
     const MIME_TYPE_PNG = 'image/png';
 
@@ -69,7 +69,8 @@ class File extends Model implements Responsable
 
     /**
      * Create an HTTP response that represents the object.
-     * @param mixed $request
+     *
+     * @param  mixed  $request
      */
     public function toResponse($request): Response
     {
@@ -137,7 +138,7 @@ class File extends Model implements Responsable
     /**
      * Get a file record which is a resized version of the current instance.
      */
-    public function resizedVersion(int $maxDimension = null): self
+    public function resizedVersion(?int $maxDimension = null): self
     {
         // If no resize or format is SVG then return current instance.
         if ($maxDimension === null || $this->mime_type === self::MIME_TYPE_SVG) {
@@ -201,7 +202,7 @@ class File extends Model implements Responsable
             static::META_PLACEHOLDER_FOR_SERVICE_LOCATION,
         ];
 
-        if (!in_array($placeholderFor, $validPlaceholdersFor)) {
+        if (! in_array($placeholderFor, $validPlaceholdersFor)) {
             throw new \InvalidArgumentException("Invalid placeholder name [$placeholderFor]");
         }
 
@@ -249,7 +250,7 @@ class File extends Model implements Responsable
             static::MIME_TYPE_TXT => '.txt',
         ];
 
-        if (!array_key_exists($mimeType, $map)) {
+        if (! array_key_exists($mimeType, $map)) {
             throw new \InvalidArgumentException("The mime type [$mimeType] is not supported.");
         }
 
@@ -260,7 +261,6 @@ class File extends Model implements Responsable
      * Set the pending_assignment / assigned meta value.
      *
      * @throws MassAssignmentException
-     * @return File
      */
     public function assigned(): self
     {

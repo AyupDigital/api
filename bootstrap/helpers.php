@@ -17,7 +17,7 @@ if (! function_exists('is_uuid')) {
      **/
     function is_uuid(string $uuid): bool
     {
-        return 1 === preg_match('/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/', $uuid);
+        return preg_match('/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/', $uuid) === 1;
     }
 }
 
@@ -95,13 +95,13 @@ if (! function_exists('table')) {
     /**
      * Returns the table name of a model.
      */
-    function table(string $model, string $column = null): ?string
+    function table(string $model, ?string $column = null): ?string
     {
         if (! is_subclass_of($model, \Illuminate\Database\Eloquent\Model::class)) {
             throw new InvalidArgumentException("[$model] must be an instance of ".\Illuminate\Database\Eloquent\Model::class);
         }
 
-        $table = (new $model())->getTable();
+        $table = (new $model)->getTable();
 
         return $column ? "$table.$column" : $table;
     }
@@ -235,7 +235,7 @@ if (! function_exists('register_enum_type')) {
 
 if (! function_exists('per_page')) {
 
-    function per_page(int $perPage = null): int
+    function per_page(?int $perPage = null): int
     {
         $perPage = $perPage ?: config('local.pagination_results');
 
@@ -249,7 +249,7 @@ if (! function_exists('per_page')) {
 
 if (! function_exists('page')) {
 
-    function page(int $page = null): int
+    function page(?int $page = null): int
     {
         $page = $page ?? 1;
 
@@ -327,8 +327,6 @@ if (! function_exists('array_to_csv')) {
 if (! function_exists('combine_query')) {
     /**
      * Outputs the query with bindings inserted.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
      */
     function combine_query(Illuminate\Database\Eloquent\Builder $query): string
     {

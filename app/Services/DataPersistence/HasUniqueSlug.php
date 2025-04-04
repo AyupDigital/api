@@ -11,12 +11,9 @@ trait HasUniqueSlug
     /**
      * Return a unique version of the proposed slug.
      *
-     * @param string $slug
-     * @param App\Models\Model $table
-     * @param string $column
-     * @param int $index
+     * @param  App\Models\Model  $table
+     *
      * @throws BindingResolutionException
-     * @return string
      */
     public function uniqueSlug(string $slug, Model $model, string $column = 'slug', int $index = 0): string
     {

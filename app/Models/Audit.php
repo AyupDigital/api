@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Audit extends Model
 {
-    use HasFactory;
     use AuditMutators;
     use AuditRelationships;
     use AuditScopes;
+    use HasFactory;
 
     const ACTION_CREATE = 'create';
 

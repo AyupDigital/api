@@ -42,11 +42,11 @@ trait TaxonomyRelationships
 
     public function services(): BelongsToMany
     {
-        return $this->belongsToMany(Service::class, (new ServiceTaxonomy())->getTable());
+        return $this->belongsToMany(Service::class, (new ServiceTaxonomy)->getTable());
     }
 
     public function organisationEvents(): BelongsToMany
     {
-        return $this->belongsToMany(OrganisationEvent::class, (new OrganisationEventTaxonomy())->getTable());
+        return $this->belongsToMany(OrganisationEvent::class, (new OrganisationEventTaxonomy)->getTable());
     }
 }

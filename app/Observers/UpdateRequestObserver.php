@@ -37,7 +37,7 @@ class UpdateRequestObserver
 
     private function handleExistingUpdateRequest(UpdateRequest $updateRequest)
     {
-        if (!$this->ownerIsSuperAdmin($updateRequest)) {
+        if (! $this->ownerIsSuperAdmin($updateRequest)) {
             $this->sendCreatedNotificationsForExisting($updateRequest);
         }
 
@@ -47,7 +47,7 @@ class UpdateRequestObserver
 
     private function handleNewUpdateRequest(UpdateRequest $updateRequest)
     {
-        if (!$this->ownerIsSuperAdmin($updateRequest)) {
+        if (! $this->ownerIsSuperAdmin($updateRequest)) {
             $this->sendCreatedNotificationsForNew($updateRequest);
         }
     }

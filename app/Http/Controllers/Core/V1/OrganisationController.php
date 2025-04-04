@@ -42,7 +42,7 @@ class OrganisationController extends Controller
             ->allowedFilters([
                 AllowedFilter::exact('id'),
                 'name',
-                AllowedFilter::custom('has_permission', new HasPermissionFilter()),
+                AllowedFilter::custom('has_permission', new HasPermissionFilter),
             ])
             ->allowedIncludes(['pendingUpdateRequests'])
             ->allowedSorts('name')

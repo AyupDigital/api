@@ -46,7 +46,7 @@ class ResetPasswordController extends Controller
         return [
             'token' => ['required'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', new Password()],
+            'password' => ['required', 'confirmed', new Password],
         ];
     }
 
@@ -58,7 +58,7 @@ class ResetPasswordController extends Controller
     protected function sendResetResponse(Request $request, string $response)
     {
         // If OTP is disabled then skip this method.
-        if (!config('local.otp_enabled')) {
+        if (! config('local.otp_enabled')) {
             return redirect($this->redirectPath())
                 ->with('status', trans($response));
         }

@@ -7,7 +7,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 
 class UpdateSettingSchema extends Schema
 {
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         $global = Schema::object('global')
             ->required(

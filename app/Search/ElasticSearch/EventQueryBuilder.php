@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace App\Search\ElasticSearch;
 
@@ -54,7 +54,7 @@ class EventQueryBuilder extends ElasticsearchQueryBuilder implements QueryBuilde
      * @throws InvalidFormatException
      * @throws UnitException
      */
-    public function build(SearchCriteriaQuery $query, int $page = null, int $perPage = null): SearchRequestBuilder
+    public function build(SearchCriteriaQuery $query, ?int $page = null, ?int $perPage = null): SearchRequestBuilder
     {
         $page = page($page);
         $perPage = per_page($perPage);
@@ -208,7 +208,7 @@ class EventQueryBuilder extends ElasticsearchQueryBuilder implements QueryBuilde
                 'path' => 'event_location',
                 'query' => [
                     'geo_distance' => [
-                        'distance' => $distance ? $distance . 'mi' : config('local.search_distance') . 'mi',
+                        'distance' => $distance ? $distance.'mi' : config('local.search_distance').'mi',
                         'event_location.location' => $coordinate->toArray(),
                     ],
                 ],

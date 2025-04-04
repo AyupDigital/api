@@ -24,9 +24,9 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements Notifiable
 {
-    use HasFactory;
     use DispatchesJobs;
     use HasApiTokens;
+    use HasFactory;
     use Notifications;
     use SoftDeletes;
     use UserMutators;
@@ -103,7 +103,8 @@ class User extends Authenticatable implements Notifiable
 
     /**
      * Send the password reset notification.
-     * @param mixed $token
+     *
+     * @param  mixed  $token
      */
     public function sendPasswordResetNotification($token)
     {
@@ -112,7 +113,7 @@ class User extends Authenticatable implements Notifiable
         ]));
     }
 
-    protected function hasRole(Role $role, Service $service = null, Organisation $organisation = null): bool
+    protected function hasRole(Role $role, ?Service $service = null, ?Organisation $organisation = null): bool
     {
         if ($service !== null && $organisation !== null) {
             throw new InvalidArgumentException('A role cannot be assigned to both a service and an organisation');
@@ -135,7 +136,7 @@ class User extends Authenticatable implements Notifiable
      * relationship has been eager loaded. This can also cause caching issues
      * where the userRoles might be out of date if they have been modified.
      */
-    public function hasRoleCached(Role $role, Service $service = null, Organisation $organisation = null): bool
+    public function hasRoleCached(Role $role, ?Service $service = null, ?Organisation $organisation = null): bool
     {
         if ($service !== null && $organisation !== null) {
             throw new InvalidArgumentException('A role cannot be assigned to both a service and an organisation');
@@ -152,7 +153,7 @@ class User extends Authenticatable implements Notifiable
             ->isNotEmpty();
     }
 
-    protected function assignRole(Role $role, Service $service = null, Organisation $organisation = null): self
+    protected function assignRole(Role $role, ?Service $service = null, ?Organisation $organisation = null): self
     {
         if ($service !== null && $organisation !== null) {
             throw new InvalidArgumentException('A role cannot be assigned to both a service and an organisation');
@@ -174,14 +175,14 @@ class User extends Authenticatable implements Notifiable
         return $this;
     }
 
-    protected function removeRoll(Role $role, Service $service = null, Organisation $organisation = null): self
+    protected function removeRoll(Role $role, ?Service $service = null, ?Organisation $organisation = null): self
     {
         if ($service !== null && $organisation !== null) {
             throw new InvalidArgumentException('A role cannot be assigned to both a service and an organisation');
         }
 
         // Check if the user doesn't already have the role.
-        if (!$this->hasRole($role)) {
+        if (! $this->hasRole($role)) {
             return $this;
         }
 
@@ -203,8 +204,8 @@ class User extends Authenticatable implements Notifiable
      */
     protected function canRevokeRole(
         User $subject,
-        Organisation $organisation = null,
-        Service $service = null
+        ?Organisation $organisation = null,
+        ?Service $service = null
     ): bool {
         // If the invoker is a super admin.
         if ($this->isSuperAdmin()) {
@@ -229,7 +230,7 @@ class User extends Authenticatable implements Notifiable
          * If the invoker is an organisation admin for the organisation,
          * and the subject is not a global admin.
          */
-        if ($organisation && $this->isOrganisationAdmin($organisation) && !($subject->isSuperAdmin() || $subject->isGlobalAdmin() || $subject->isContentAdmin())) {
+        if ($organisation && $this->isOrganisationAdmin($organisation) && ! ($subject->isSuperAdmin() || $subject->isGlobalAdmin() || $subject->isContentAdmin())) {
             return true;
         }
 
@@ -237,7 +238,7 @@ class User extends Authenticatable implements Notifiable
          * If the invoker is a service admin for the service,
          * and the subject is not a organisation admin for the organisation.
          */
-        if ($service && $this->isServiceAdmin($service) && !$subject->isOrganisationAdmin($organisation)) {
+        if ($service && $this->isServiceAdmin($service) && ! $subject->isOrganisationAdmin($organisation)) {
             return true;
         }
 
@@ -283,7 +284,7 @@ class User extends Authenticatable implements Notifiable
          * If the invoker is an organisation admin for the organisation,
          * and the subject is not a content admin or a global admin.
          */
-        if ($this->isOrganisationAdmin() && !($subject->isSuperAdmin() || $subject->isGlobalAdmin() || $subject->isContentAdmin())) {
+        if ($this->isOrganisationAdmin() && ! ($subject->isSuperAdmin() || $subject->isGlobalAdmin() || $subject->isContentAdmin())) {
             return true;
         }
 
@@ -291,7 +292,7 @@ class User extends Authenticatable implements Notifiable
          * If the invoker is a service admin for the service,
          * and the subject is not a organisation admin for the organisation.
          */
-        if ($this->isServiceAdmin() && !($subject->isSuperAdmin() || $subject->isGlobalAdmin() || $subject->isContentAdmin() || $subject->isOrganisationAdmin())) {
+        if ($this->isServiceAdmin() && ! ($subject->isSuperAdmin() || $subject->isGlobalAdmin() || $subject->isContentAdmin() || $subject->isOrganisationAdmin())) {
             return true;
         }
 
@@ -313,18 +314,18 @@ class User extends Authenticatable implements Notifiable
         return $this->canUpdate($subject);
     }
 
-    public function isServiceWorker(Service $service = null): bool
+    public function isServiceWorker(?Service $service = null): bool
     {
         return $this->hasRole(Role::serviceWorker(), $service) || $this->isServiceAdmin($service);
     }
 
-    public function isServiceAdmin(Service $service = null): bool
+    public function isServiceAdmin(?Service $service = null): bool
     {
         return $this->hasRole(Role::serviceAdmin(), $service)
         || $this->isOrganisationAdmin($service->organisation ?? null);
     }
 
-    public function isOrganisationAdmin(Organisation $organisation = null): bool
+    public function isOrganisationAdmin(?Organisation $organisation = null): bool
     {
         return $this->hasRole(Role::organisationAdmin(), null, $organisation) || $this->isSuperAdmin();
     }
@@ -341,7 +342,7 @@ class User extends Authenticatable implements Notifiable
 
     public function isOnlyGlobalAdmin(): bool
     {
-        return $this->hasRole(Role::globalAdmin()) && !$this->isSuperAdmin();
+        return $this->hasRole(Role::globalAdmin()) && ! $this->isSuperAdmin();
     }
 
     public function isSuperAdmin(): bool
@@ -483,17 +484,17 @@ class User extends Authenticatable implements Notifiable
 
     public function canMakeServiceWorker(Service $service): bool
     {
-        return $this->isServiceWorker($service) && !($this->isGlobalAdmin() && !$this->isSuperAdmin());
+        return $this->isServiceWorker($service) && ! ($this->isGlobalAdmin() && ! $this->isSuperAdmin());
     }
 
     public function canMakeServiceAdmin(Service $service): bool
     {
-        return $this->isServiceAdmin($service) && !($this->isGlobalAdmin() && !$this->isSuperAdmin());
+        return $this->isServiceAdmin($service) && ! ($this->isGlobalAdmin() && ! $this->isSuperAdmin());
     }
 
     public function canMakeOrganisationAdmin(Organisation $organisation): bool
     {
-        return $this->isOrganisationAdmin($organisation) && !($this->isGlobalAdmin() && !$this->isSuperAdmin());
+        return $this->isOrganisationAdmin($organisation) && ! ($this->isGlobalAdmin() && ! $this->isSuperAdmin());
     }
 
     public function canMakeContentAdmin(): bool
@@ -622,7 +623,7 @@ class User extends Authenticatable implements Notifiable
     /**
      * Get the ID's for the users.
      *
-     * @param array $blacklistedRoleIds Exclude users who have these roles
+     * @param  array  $blacklistedRoleIds  Exclude users who have these roles
      */
     protected function getUserIdsForServices(SupportCollection $serviceIds, array $blacklistedRoleIds): SupportCollection
     {

@@ -169,7 +169,7 @@ trait ReportScopes
     /**
      * Referral Export Report query.
      */
-    public function getReferralExportResults(CarbonImmutable $startsAt = null, CarbonImmutable $endsAt = null): Collection
+    public function getReferralExportResults(?CarbonImmutable $startsAt = null, ?CarbonImmutable $endsAt = null): Collection
     {
         $statusUpdateQuery = DB::table('status_updates')
             ->selectRaw('referral_id, max(created_at) as last_update')
@@ -208,7 +208,7 @@ trait ReportScopes
     /**
      * Feedback Export Report query.
      */
-    public function getFeedbackExportResults(CarbonImmutable $startsAt = null, CarbonImmutable $endsAt = null): Collection
+    public function getFeedbackExportResults(?CarbonImmutable $startsAt = null, ?CarbonImmutable $endsAt = null): Collection
     {
         $query = DB::table('page_feedbacks')
             ->select([
@@ -227,7 +227,7 @@ trait ReportScopes
     /**
      * Audit Export Report query.
      */
-    public function getAuditExportResults(CarbonImmutable $startsAt = null, CarbonImmutable $endsAt = null): Collection
+    public function getAuditExportResults(?CarbonImmutable $startsAt = null, ?CarbonImmutable $endsAt = null): Collection
     {
         $query = DB::table('audits')
             ->select([
@@ -250,7 +250,7 @@ trait ReportScopes
     /**
      * Search Histories Export Report query.
      */
-    public function getSearchHistoriesExportResults(CarbonImmutable $startsAt = null, CarbonImmutable $endsAt = null): Collection
+    public function getSearchHistoriesExportResults(?CarbonImmutable $startsAt = null, ?CarbonImmutable $endsAt = null): Collection
     {
         $query = DB::table('search_histories')
             ->select([
@@ -271,9 +271,9 @@ trait ReportScopes
     /**
      * Update Request Export Report query.
      */
-    public function getUpdateRequestExportResults(CarbonImmutable $startsAt = null, CarbonImmutable $endsAt = null): Collection
+    public function getUpdateRequestExportResults(?CarbonImmutable $startsAt = null, ?CarbonImmutable $endsAt = null): Collection
     {
-        $entrySql = (new UpdateRequest())->getEntrySql();
+        $entrySql = (new UpdateRequest)->getEntrySql();
 
         $query = DB::table('update_requests')
             ->select([

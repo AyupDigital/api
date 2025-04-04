@@ -20,7 +20,7 @@ class OrganisationSignUpForm implements AppliesUpdateRequests
      */
     public function validateUpdateRequest(UpdateRequest $updateRequest): Validator
     {
-        $rules = (new StoreOrganisationSignUpFormRequest())
+        $rules = (new StoreOrganisationSignUpFormRequest)
             ->merge($updateRequest->data)
             ->rules();
 

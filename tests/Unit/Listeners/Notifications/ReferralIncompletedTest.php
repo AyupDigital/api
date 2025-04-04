@@ -35,7 +35,7 @@ class ReferralIncompletedTest extends TestCase
             return User::factory()->create();
         });
         $event = EndpointHit::onUpdate($request, '', $referral);
-        $listener = new ReferralIncompleted();
+        $listener = new ReferralIncompleted;
         $listener->handle($event);
 
         Queue::assertPushedOn(config('queue.queues.notifications', 'default'), NotifyRefereeEmail::class);
@@ -89,7 +89,7 @@ class ReferralIncompletedTest extends TestCase
             return User::factory()->create();
         });
         $event = EndpointHit::onUpdate($request, '', $referral);
-        $listener = new ReferralIncompleted();
+        $listener = new ReferralIncompleted;
         $listener->handle($event);
 
         Queue::assertPushedOn(config('queue.queues.notifications', 'default'), NotifyRefereeSms::class);
@@ -129,7 +129,7 @@ class ReferralIncompletedTest extends TestCase
             return User::factory()->create();
         });
         $event = EndpointHit::onUpdate($request, '', $referral);
-        $listener = new ReferralIncompleted();
+        $listener = new ReferralIncompleted;
         $listener->handle($event);
 
         Queue::assertPushedOn(config('queue.queues.notifications', 'default'), NotifyClientEmail::class);

@@ -117,6 +117,6 @@ return [
     |
     */
 
-    'redis' => require('redis.php'),
+    'redis' => require ('redis.php'),
 
 ];

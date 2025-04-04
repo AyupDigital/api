@@ -6,7 +6,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class() extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -17,7 +18,7 @@ return new class() extends Migration {
         });
 
         Schema::table('locations', function (Blueprint $table) {
-            DB::table((new Location())->getTable())
+            DB::table((new Location)->getTable())
                 ->update(['has_accessible_toilet' => false]);
         });
     }

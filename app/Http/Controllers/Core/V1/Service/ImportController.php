@@ -81,7 +81,7 @@ class ImportController extends Controller
      */
     public function validateSpreadsheet(string $filePath)
     {
-        $spreadsheetParser = new SpreadsheetParser();
+        $spreadsheetParser = new SpreadsheetParser;
 
         $spreadsheetParser->import(Storage::disk('local')->path($filePath));
 
@@ -105,7 +105,7 @@ class ImportController extends Controller
             /**
              * Cast Boolean rows to boolean value.
              */
-            $row['is_free'] = null === ($row['is_free'] ?? null) ?: (bool)$row['is_free'];
+            $row['is_free'] = null === ($row['is_free'] ?? null) ?: (bool) $row['is_free'];
 
             $validator = Validator::make($row, [
                 'id' => ['required', 'string', 'uuid', 'unique:services,id'],
@@ -151,7 +151,7 @@ class ImportController extends Controller
                 'fees_text' => ['present', 'nullable', 'string', 'min:1', 'max:255'],
                 'fees_url' => ['present', 'nullable', 'url', 'max:255'],
                 'testimonial' => ['present', 'nullable', 'string', 'min:1', 'max:255'],
-                'video_embed' => ['present', 'nullable', 'url', 'max:255', new VideoEmbed()],
+                'video_embed' => ['present', 'nullable', 'url', 'max:255', new VideoEmbed],
                 'url' => ['required', 'url', 'max:255'],
                 'contact_name' => ['present', 'nullable', 'string', 'min:1', 'max:255'],
                 'contact_phone' => ['present', 'nullable', 'string', 'min:1', 'max:255'],
@@ -182,7 +182,7 @@ class ImportController extends Controller
                     ),
                 ],
                 'referral_email' => [
-                    'required_if:referral_method,' . Service::REFERRAL_METHOD_INTERNAL,
+                    'required_if:referral_method,'.Service::REFERRAL_METHOD_INTERNAL,
                     'present',
                     'nullable',
                     'email',
@@ -194,7 +194,7 @@ class ImportController extends Controller
                     ),
                 ],
                 'referral_url' => [
-                    'required_if:referral_method,' . Service::REFERRAL_METHOD_EXTERNAL,
+                    'required_if:referral_method,'.Service::REFERRAL_METHOD_EXTERNAL,
                     'present',
                     'nullable',
                     'url',
@@ -245,7 +245,7 @@ class ImportController extends Controller
             /**
              * Check for duplicate IDs in the spreadsheet.
              */
-            if (false !== array_search($row['id'], $rowIds)) {
+            if (array_search($row['id'], $rowIds) !== false) {
                 $error = ['id' => ['The ID is used elsewhere in the spreadsheet.']];
                 if ($rejectedRow) {
                     $rejectedRow['errors']->merge($error);
@@ -270,7 +270,7 @@ class ImportController extends Controller
      */
     public function importSpreadsheet(string $filePath)
     {
-        $spreadsheetParser = new SpreadsheetParser();
+        $spreadsheetParser = new SpreadsheetParser;
 
         $spreadsheetParser->import(Storage::disk('local')->path($filePath));
 
@@ -290,19 +290,19 @@ class ImportController extends Controller
                 /**
                  * Cast Boolean rows to boolean value.
                  */
-                $serviceRow['is_free'] = (bool)$serviceRow['is_free'];
+                $serviceRow['is_free'] = (bool) $serviceRow['is_free'];
 
                 /**
                  * Create the Service Admin roles for each of the service organisation admins.
                  */
-                $organisationAdminIds = DB::table((new UserRole())->getTable())->where('role_id', $organisationAdminRoleId)
+                $organisationAdminIds = DB::table((new UserRole)->getTable())->where('role_id', $organisationAdminRoleId)
                     ->where('organisation_id', $serviceRow['organisation_id'])
                     ->pluck('user_id');
 
                 /**
                  * Create the Service Eligibility relationships.
                  */
-                if (!empty($serviceRow['eligibility_taxonomies'])) {
+                if (! empty($serviceRow['eligibility_taxonomies'])) {
                     $serviceEligibilityTaxonomyIds = explode(',', $serviceRow['eligibility_taxonomies']);
 
                     foreach ($serviceEligibilityTaxonomyIds as $serviceEligibilityTaxonomyId) {
@@ -342,7 +342,7 @@ class ImportController extends Controller
                 /**
                  * Add the meta fields to the Service row.
                  */
-                $serviceRow['slug'] = Str::slug(uniqid($serviceRow['name'] . '-'));
+                $serviceRow['slug'] = Str::slug(uniqid($serviceRow['name'].'-'));
                 $serviceRow['created_at'] = $now;
                 $serviceRow['updated_at'] = $now;
                 $serviceRowBatch[] = $serviceRow;
@@ -351,9 +351,9 @@ class ImportController extends Controller
                  * If the batch array has reach the import batch size create the insert queries.
                  */
                 if (count($serviceRowBatch) === self::ROW_IMPORT_BATCH_SIZE) {
-                    DB::table((new Service())->getTable())->insert($serviceRowBatch);
-                    DB::table((new UserRole())->getTable())->insert($userRoleBatch);
-                    DB::table((new ServiceEligibility())->getTable())->insert($serviceEligibilityBatch);
+                    DB::table((new Service)->getTable())->insert($serviceRowBatch);
+                    DB::table((new UserRole)->getTable())->insert($userRoleBatch);
+                    DB::table((new ServiceEligibility)->getTable())->insert($serviceEligibilityBatch);
                     $importedRows += self::ROW_IMPORT_BATCH_SIZE;
                     $serviceRowBatch = $userRoleBatch = [];
                 }
@@ -363,9 +363,9 @@ class ImportController extends Controller
              * If there are a final batch that did not meet the import batch size, create queries for these.
              */
             if (count($serviceRowBatch) && count($serviceRowBatch) !== self::ROW_IMPORT_BATCH_SIZE) {
-                DB::table((new Service())->getTable())->insert($serviceRowBatch);
-                DB::table((new UserRole())->getTable())->insert($userRoleBatch);
-                DB::table((new ServiceEligibility())->getTable())->insert($serviceEligibilityBatch);
+                DB::table((new Service)->getTable())->insert($serviceRowBatch);
+                DB::table((new UserRole)->getTable())->insert($userRoleBatch);
+                DB::table((new ServiceEligibility)->getTable())->insert($serviceEligibilityBatch);
                 $importedRows += count($serviceRowBatch);
             }
         }, 5);

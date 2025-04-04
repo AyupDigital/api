@@ -35,7 +35,7 @@ class UpdateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'min:1', 'max:255'],
             'intro' => ['required', 'string', 'min:1', 'max:500'],
-            'order' => ['required', 'integer', 'min:1', 'max:' . Collection::organisationEvents()->count()],
+            'order' => ['required', 'integer', 'min:1', 'max:'.Collection::organisationEvents()->count()],
             'enabled' => [
                 'required',
                 'boolean',

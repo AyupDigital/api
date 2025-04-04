@@ -2,26 +2,26 @@
 
 namespace Tests\Unit\Models;
 
-use Tests\TestCase;
-use App\Models\Role;
-use App\Models\User;
 use App\Models\Audit;
-use App\Models\Report;
-use App\Models\Service;
 use App\Models\Location;
-use App\Models\Referral;
-use App\Models\ReportType;
-use App\Support\Coordinate;
-use Carbon\CarbonImmutable;
 use App\Models\Organisation;
 use App\Models\PageFeedback;
+use App\Models\Referral;
+use App\Models\Report;
+use App\Models\ReportType;
+use App\Models\Role;
 use App\Models\SearchHistory;
-use App\Models\UpdateRequest;
+use App\Models\Service;
 use App\Models\ServiceLocation;
-use App\Search\SearchCriteriaQuery;
-use Illuminate\Support\Facades\Date;
-use App\Search\ElasticSearch\ServiceQueryBuilder;
+use App\Models\UpdateRequest;
+use App\Models\User;
 use App\Search\ElasticSearch\ElasticsearchQueryBuilder;
+use App\Search\ElasticSearch\ServiceQueryBuilder;
+use App\Search\SearchCriteriaQuery;
+use App\Support\Coordinate;
+use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\Date;
+use Tests\TestCase;
 
 class ReportTest extends TestCase
 {
@@ -775,10 +775,10 @@ class ReportTest extends TestCase
 
     public function test_search_histories_export_works(): void
     {
-        $criteria = new SearchCriteriaQuery();
+        $criteria = new SearchCriteriaQuery;
         $criteria->setQuery('Health and Social');
 
-        $queryBuilder = new ServiceQueryBuilder();
+        $queryBuilder = new ServiceQueryBuilder;
         $esQuery = $queryBuilder->build($criteria);
 
         // Create a single search history.
@@ -815,12 +815,12 @@ class ReportTest extends TestCase
 
     public function test_search_histories_export_works_with_location(): void
     {
-        $criteria = new SearchCriteriaQuery();
+        $criteria = new SearchCriteriaQuery;
         $criteria->setQuery('Health and Social');
         $criteria->setOrder(ElasticsearchQueryBuilder::ORDER_DISTANCE);
         $criteria->setLocation(new Coordinate(0, 0));
 
-        $queryBuilder = new ServiceQueryBuilder();
+        $queryBuilder = new ServiceQueryBuilder;
         $esQuery = $queryBuilder->build($criteria);
 
         // Create a single search history.
@@ -857,10 +857,10 @@ class ReportTest extends TestCase
 
     public function test_search_histories_export_works_with_date_range(): void
     {
-        $criteria = new SearchCriteriaQuery();
+        $criteria = new SearchCriteriaQuery;
         $criteria->setQuery('Health and Social');
 
-        $queryBuilder = new ServiceQueryBuilder();
+        $queryBuilder = new ServiceQueryBuilder;
         $esQuery = $queryBuilder->build($criteria);
 
         // Create a single search history.
@@ -906,10 +906,10 @@ class ReportTest extends TestCase
 
     public function test_search_histories_without_query_are_omitted(): void
     {
-        $criteria = new SearchCriteriaQuery();
+        $criteria = new SearchCriteriaQuery;
         $criteria->setCategories(['self-help']);
 
-        $queryBuilder = new ServiceQueryBuilder();
+        $queryBuilder = new ServiceQueryBuilder;
         $esQuery = $queryBuilder->build($criteria);
 
         // Create a single search history.

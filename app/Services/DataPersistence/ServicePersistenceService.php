@@ -17,8 +17,8 @@ use Illuminate\Support\Str;
 
 class ServicePersistenceService implements DataPersistenceService
 {
-    use ResizesImages;
     use HasUniqueSlug;
+    use ResizesImages;
 
     public function store(FormRequest $request)
     {
@@ -35,9 +35,7 @@ class ServicePersistenceService implements DataPersistenceService
     /**
      * Create an update request to update or create a Service using the data from the request.
      *
-     * @param Illuminate\Foundation\Http\FormRequest $request
-     * @param Service $service
-     * @return UpdateRequestModel
+     * @param  Illuminate\Foundation\Http\FormRequest  $request
      */
     private function processAsUpdateRequest(FormRequest $request, ?Service $service = null): UpdateRequestModel
     {
@@ -71,13 +69,13 @@ class ServicePersistenceService implements DataPersistenceService
                 'referral_button_text' => $request->missingValue('referral_button_text'),
                 'referral_email' => $request->missingValue('referral_email'),
                 'referral_url' => $request->missingValue('referral_url'),
-                'useful_infos' => $request->has('useful_infos') ? [] : new MissingValue(),
-                'offerings' => $request->has('offerings') ? [] : new MissingValue(),
-                'social_medias' => $request->has('social_medias') ? [] : new MissingValue(),
-                'gallery_items' => $request->has('gallery_items') ? [] : new MissingValue(),
-                'tags' => $request->has('tags') ? [] : new MissingValue(),
+                'useful_infos' => $request->has('useful_infos') ? [] : new MissingValue,
+                'offerings' => $request->has('offerings') ? [] : new MissingValue,
+                'social_medias' => $request->has('social_medias') ? [] : new MissingValue,
+                'gallery_items' => $request->has('gallery_items') ? [] : new MissingValue,
+                'tags' => $request->has('tags') ? [] : new MissingValue,
                 'category_taxonomies' => $request->missingValue('category_taxonomies'),
-                'eligibility_types' => $request->filled('eligibility_types') ? $request->eligibility_types : new MissingValue(),
+                'eligibility_types' => $request->filled('eligibility_types') ? $request->eligibility_types : new MissingValue,
                 'logo_file_id' => $request->missingValue('logo_file_id'),
                 'score' => $request->missingValue('score'),
                 'ends_at' => $request->missingValue('ends_at'),
@@ -128,7 +126,7 @@ class ServicePersistenceService implements DataPersistenceService
             }
 
             $updateableType = UpdateRequestModel::EXISTING_TYPE_SERVICE;
-            if (!$service) {
+            if (! $service) {
                 $updateableType = $request->user()->isGlobalAdmin() ? UpdateRequestModel::NEW_TYPE_SERVICE_GLOBAL_ADMIN : UpdateRequestModel::NEW_TYPE_SERVICE_ORG_ADMIN;
             }
 
@@ -142,7 +140,7 @@ class ServicePersistenceService implements DataPersistenceService
             // Only persist to the database if the user did not request a preview.
             if ($updateRequest->updateable_type === UpdateRequestModel::EXISTING_TYPE_SERVICE) {
                 // Preview currently only available for update operations
-                if (!$request->isPreview()) {
+                if (! $request->isPreview()) {
                     $updateRequest->save();
                 }
             } else {
@@ -156,7 +154,7 @@ class ServicePersistenceService implements DataPersistenceService
     /**
      * Create a new service using the data from the request.
      *
-     * @param Illuminate\Foundation\Http\FormRequest $request
+     * @param  Illuminate\Foundation\Http\FormRequest  $request
      * @return App\Models\Service
      */
     private function processAsNewEntity(FormRequest $request): Service
@@ -164,7 +162,7 @@ class ServicePersistenceService implements DataPersistenceService
         return DB::transaction(function () use ($request) {
             $initialCreateData = [
                 'organisation_id' => $request->organisation_id,
-                'slug' => $this->uniqueSlug($request->input('slug', $request->input('title')), (new Service())),
+                'slug' => $this->uniqueSlug($request->input('slug', $request->input('title')), (new Service)),
                 'name' => $request->name,
                 'type' => $request->type,
                 'status' => $request->status,
@@ -194,7 +192,7 @@ class ServicePersistenceService implements DataPersistenceService
             ];
 
             foreach ($request->input('eligibility_types.custom', []) as $customEligibilityType => $value) {
-                $fieldName = 'eligibility_' . $customEligibilityType . '_custom';
+                $fieldName = 'eligibility_'.$customEligibilityType.'_custom';
                 $initialCreateData[$fieldName] = $value;
             }
 
@@ -251,7 +249,7 @@ class ServicePersistenceService implements DataPersistenceService
                 $tagIds = [];
                 foreach ($request->tags as $tagField) {
                     $tag = Tag::where('slug', Str::slug($tagField['slug']))->first();
-                    if (null === $tag) {
+                    if ($tag === null) {
                         $tag = new Tag([
                             'slug' => Str::slug($tagField['slug']),
                             'label' => $tagField['label'],

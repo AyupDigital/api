@@ -22,7 +22,7 @@ trait UserRelationships
 
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(Role::class, (new UserRole())->getTable())->distinct();
+        return $this->belongsToMany(Role::class, (new UserRole)->getTable())->distinct();
     }
 
     /**
@@ -31,7 +31,7 @@ trait UserRelationships
      */
     public function orderedRoles(): BelongsToMany
     {
-        $sql = (new User())->getHighestRoleOrderSql();
+        $sql = (new User)->getHighestRoleOrderSql();
 
         return $this->roles()->orderByRaw($sql['sql'], $sql['bindings']);
     }

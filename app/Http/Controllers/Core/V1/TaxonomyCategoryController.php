@@ -59,7 +59,7 @@ class TaxonomyCategoryController extends Controller
 
             $category = Taxonomy::create([
                 'parent_id' => $parent->id,
-                'slug' => $slugGenerator->generate($request->name, (new Taxonomy())),
+                'slug' => $slugGenerator->generate($request->name, (new Taxonomy)),
                 'name' => $request->name,
                 'order' => $request->order,
                 'depth' => 0, // Placeholder

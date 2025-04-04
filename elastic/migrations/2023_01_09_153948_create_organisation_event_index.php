@@ -82,7 +82,7 @@ final class CreateOrganisationEventIndex implements MigrationInterface
      */
     public function up(): void
     {
-        $settings = (new EventsIndexSettings())->getSettings();
+        $settings = (new EventsIndexSettings)->getSettings();
         Index::dropIfExists('events');
         Index::createRaw('events', $this->mapping, $settings);
     }

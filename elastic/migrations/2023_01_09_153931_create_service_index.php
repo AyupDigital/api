@@ -79,7 +79,7 @@ final class CreateServiceIndex implements MigrationInterface
      */
     public function up(): void
     {
-        $settings = (new ServicesIndexSettings())->getSettings();
+        $settings = (new ServicesIndexSettings)->getSettings();
         Index::dropIfExists('services');
         Index::createRaw('services', $this->mapping, $settings);
     }

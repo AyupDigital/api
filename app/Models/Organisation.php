@@ -23,12 +23,12 @@ use Illuminate\Support\Facades\Validator as ValidatorFacade;
 class Organisation extends Model implements AppliesUpdateRequests, HasTaxonomyRelationships
 {
     use HasFactory;
+    use HasUniqueSlug;
     use OrganisationMutators;
     use OrganisationRelationships;
     use OrganisationScopes;
     use UpdateRequests;
     use UpdateTaxonomyRelationships;
-    use HasUniqueSlug;
 
     /**
      * Return the OrganisationTaxonomy relationship.
@@ -43,7 +43,7 @@ class Organisation extends Model implements AppliesUpdateRequests, HasTaxonomyRe
      */
     public function validateUpdateRequest(UpdateRequest $updateRequest): Validator
     {
-        $rules = (new UpdateOrganisationRequest())
+        $rules = (new UpdateOrganisationRequest)
             ->setUserResolver(function () use ($updateRequest) {
                 return $updateRequest->user;
             })
@@ -129,10 +129,11 @@ class Organisation extends Model implements AppliesUpdateRequests, HasTaxonomyRe
     }
 
     /**
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
      * @return File|Response|\Illuminate\Contracts\Support\Responsable
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
      */
-    public static function placeholderLogo(int $maxDimension = null)
+    public static function placeholderLogo(?int $maxDimension = null)
     {
         if ($maxDimension !== null) {
             return File::resizedPlaceholder($maxDimension, File::META_PLACEHOLDER_FOR_ORGANISATION);

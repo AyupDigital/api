@@ -2,21 +2,21 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\File;
-use App\Models\User;
+use App\Events\EndpointHit;
 use App\Models\Audit;
+use App\Models\Collection;
+use App\Models\CollectionTaxonomy;
+use App\Models\File;
+use App\Models\Organisation;
 use App\Models\Service;
 use App\Models\Taxonomy;
-use App\Models\Collection;
-use App\Events\EndpointHit;
+use App\Models\User;
 use Carbon\CarbonImmutable;
-use App\Models\Organisation;
 use Illuminate\Http\Response;
-use Laravel\Passport\Passport;
-use App\Models\CollectionTaxonomy;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class CollectionPersonasTest extends TestCase
 {
@@ -500,10 +500,10 @@ class CollectionPersonasTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 3]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 4]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 4]);
     }
 
     /**
@@ -573,10 +573,10 @@ class CollectionPersonasTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['order' => 2]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 3]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 4]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['order' => 2]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 4]);
     }
 
     /**
@@ -646,10 +646,10 @@ class CollectionPersonasTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 3]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['order' => 4]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['order' => 4]);
     }
 
     /**
@@ -775,7 +775,7 @@ class CollectionPersonasTest extends TestCase
     /**
      * @test
      */
-    public function createCollectionWithUniqueSlugAsSuperAdmin201(): void
+    public function create_collection_with_unique_slug_as_super_admin201(): void
     {
         $user = User::factory()->create();
         $user->makeSuperAdmin();
@@ -1319,9 +1319,9 @@ class CollectionPersonasTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 3]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 1]);
     }
 
     /**
@@ -1394,9 +1394,9 @@ class CollectionPersonasTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 3]);
     }
 
     /**
@@ -1469,9 +1469,9 @@ class CollectionPersonasTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 3]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 2]);
     }
 
     /**
@@ -1600,7 +1600,7 @@ class CollectionPersonasTest extends TestCase
     /**
      * @test
      */
-    public function updateCollectionWithUniqueSlugAsSuperAdmin200(): void
+    public function update_collection_with_unique_slug_as_super_admin200(): void
     {
         $user = User::factory()->create();
         $user->makeSuperAdmin();
@@ -1747,8 +1747,8 @@ class CollectionPersonasTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/collections/personas/{$persona->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Collection())->getTable(), ['id' => $persona->id]);
-        $this->assertDatabaseMissing((new CollectionTaxonomy())->getTable(), ['collection_id' => $persona->id]);
+        $this->assertDatabaseMissing((new Collection)->getTable(), ['id' => $persona->id]);
+        $this->assertDatabaseMissing((new CollectionTaxonomy)->getTable(), ['collection_id' => $persona->id]);
     }
 
     /**
@@ -1809,9 +1809,9 @@ class CollectionPersonasTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/collections/personas/{$first->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Collection())->getTable(), ['id' => $first->id]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 2]);
+        $this->assertDatabaseMissing((new Collection)->getTable(), ['id' => $first->id]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 2]);
     }
 
     /**
@@ -1872,9 +1872,9 @@ class CollectionPersonasTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/collections/personas/{$second->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Collection())->getTable(), ['id' => $second->id]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 2]);
+        $this->assertDatabaseMissing((new Collection)->getTable(), ['id' => $second->id]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 2]);
     }
 
     /**
@@ -1935,9 +1935,9 @@ class CollectionPersonasTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/collections/personas/{$third->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Collection())->getTable(), ['id' => $third->id]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 2]);
+        $this->assertDatabaseMissing((new Collection)->getTable(), ['id' => $third->id]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 2]);
     }
 
     /**
@@ -2022,7 +2022,7 @@ class CollectionPersonasTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,' . base64_encode($image),
+            'file' => 'data:image/png;base64,'.base64_encode($image),
         ]);
         $imageResponse->assertStatus(Response::HTTP_CREATED);
 

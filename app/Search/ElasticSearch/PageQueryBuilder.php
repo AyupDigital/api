@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace App\Search\ElasticSearch;
 
@@ -27,7 +27,7 @@ class PageQueryBuilder extends ElasticsearchQueryBuilder implements QueryBuilder
         $this->filterPath = 'bool.filter';
     }
 
-    public function build(SearchCriteriaQuery $query, int $page = null, int $perPage = null): SearchRequestBuilder
+    public function build(SearchCriteriaQuery $query, ?int $page = null, ?int $perPage = null): SearchRequestBuilder
     {
         $page = page($page);
         $perPage = per_page($perPage);

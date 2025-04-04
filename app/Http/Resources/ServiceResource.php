@@ -62,7 +62,7 @@ class ServiceResource extends JsonResource
             // Relationships.
             'service_locations' => ServiceLocationResource::collection($this->whenLoaded('serviceLocations')),
             'organisation' => new OrganisationResource($this->whenLoaded('organisation')),
-            'pending_update_requests' => UpdateRequestResource::collection($this->whenLoaded('pendingUpdateRequests'))
+            'pending_update_requests' => UpdateRequestResource::collection($this->whenLoaded('pendingUpdateRequests')),
         ];
 
         /**

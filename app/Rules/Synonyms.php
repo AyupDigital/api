@@ -10,13 +10,11 @@ class Synonyms implements ValidationRule
 {
     /**
      * Determine if the validation rule passes.
-     *
-     * @param mixed $value
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         foreach ($value as $synonym) {
-            if (!is_string($synonym)) {
+            if (! is_string($synonym)) {
                 $fail(__('validation.string'));
             }
         }

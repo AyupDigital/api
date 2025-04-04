@@ -12,7 +12,6 @@ use Generator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class Report extends Model
@@ -42,8 +41,8 @@ class Report extends Model
      */
     public static function generate(
         ReportType $type,
-        CarbonImmutable $startsAt = null,
-        CarbonImmutable $endsAt = null
+        ?CarbonImmutable $startsAt = null,
+        ?CarbonImmutable $endsAt = null
     ): self {
         // Generate the file name.
         $filename = sprintf(
@@ -69,10 +68,10 @@ class Report extends Model
         ]);
 
         // Get the name for the report generation method.
-        $methodName = 'generate' . ucfirst(Str::camel($type->name));
+        $methodName = 'generate'.ucfirst(Str::camel($type->name));
 
         // Throw exception if the report type does not have a generate method.
-        if (!method_exists($report, $methodName)) {
+        if (! method_exists($report, $methodName)) {
             throw new Exception("The report type [{$type->name}] does not have a corresponding generate method");
         }
 
@@ -222,8 +221,8 @@ class Report extends Model
     }
 
     public function generateReferralsExport(
-        CarbonImmutable $startsAt = null,
-        CarbonImmutable $endsAt = null
+        ?CarbonImmutable $startsAt = null,
+        ?CarbonImmutable $endsAt = null
     ): self {
         // Update the date range fields if passed.
         if ($startsAt && $endsAt) {
@@ -268,8 +267,8 @@ class Report extends Model
     }
 
     public function generateFeedbackExport(
-        CarbonImmutable $startsAt = null,
-        CarbonImmutable $endsAt = null
+        ?CarbonImmutable $startsAt = null,
+        ?CarbonImmutable $endsAt = null
     ): self {
         // Update the date range fields if passed.
         if ($startsAt && $endsAt) {
@@ -302,8 +301,8 @@ class Report extends Model
     }
 
     public function generateAuditLogsExport(
-        CarbonImmutable $startsAt = null,
-        CarbonImmutable $endsAt = null
+        ?CarbonImmutable $startsAt = null,
+        ?CarbonImmutable $endsAt = null
     ): self {
         // Update the date range fields if passed.
         if ($startsAt && $endsAt) {
@@ -342,8 +341,8 @@ class Report extends Model
     }
 
     public function generateSearchHistoriesExport(
-        CarbonImmutable $startsAt = null,
-        CarbonImmutable $endsAt = null
+        ?CarbonImmutable $startsAt = null,
+        ?CarbonImmutable $endsAt = null
     ): self {
         // Update the date range fields if passed.
         if ($startsAt && $endsAt) {
@@ -385,8 +384,8 @@ class Report extends Model
     }
 
     public function generateHistoricUpdateRequestsExport(
-        CarbonImmutable $startsAt = null,
-        CarbonImmutable $endsAt = null
+        ?CarbonImmutable $startsAt = null,
+        ?CarbonImmutable $endsAt = null
     ): self {
         // Update the date range fields if passed.
         if ($startsAt && $endsAt) {

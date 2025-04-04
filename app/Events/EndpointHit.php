@@ -60,7 +60,7 @@ class EndpointHit
     /**
      * Create a new event instance.
      */
-    protected function __construct(Request $request, string $action, string $description, Model $model = null)
+    protected function __construct(Request $request, string $action, string $description, ?Model $model = null)
     {
         $user = $request->user('api');
 
@@ -74,22 +74,22 @@ class EndpointHit
         $this->model = $model;
     }
 
-    public static function onCreate(Request $request, string $message, Model $model = null): self
+    public static function onCreate(Request $request, string $message, ?Model $model = null): self
     {
         return new static($request, Audit::ACTION_CREATE, $message, $model);
     }
 
-    public static function onRead(Request $request, string $message, Model $model = null): self
+    public static function onRead(Request $request, string $message, ?Model $model = null): self
     {
         return new static($request, Audit::ACTION_READ, $message, $model);
     }
 
-    public static function onUpdate(Request $request, string $message, Model $model = null): self
+    public static function onUpdate(Request $request, string $message, ?Model $model = null): self
     {
         return new static($request, Audit::ACTION_UPDATE, $message, $model);
     }
 
-    public static function onDelete(Request $request, string $message, Model $model = null): self
+    public static function onDelete(Request $request, string $message, ?Model $model = null): self
     {
         return new static($request, Audit::ACTION_DELETE, $message, $model);
     }
@@ -134,15 +134,15 @@ class EndpointHit
         return $this->model;
     }
 
-    public function isFor(string $model, string $action = null): bool
+    public function isFor(string $model, ?string $action = null): bool
     {
         return $action
             ? ($this->getModel() instanceof $model) && $this->getAction() === $action
             : $this->getModel() instanceof $model;
     }
 
-    public function isntFor(string $model, string $action = null): bool
+    public function isntFor(string $model, ?string $action = null): bool
     {
-        return !$this->isFor($model, $action);
+        return ! $this->isFor($model, $action);
     }
 }

@@ -16,8 +16,8 @@ use Illuminate\Support\Str;
 
 class Referral extends Model implements Notifiable
 {
-    use HasFactory;
     use DispatchesJobs;
+    use HasFactory;
     use Notifications;
     use ReferralMutators;
     use ReferralRelationships;
@@ -117,7 +117,7 @@ class Referral extends Model implements Notifiable
         return $this->status === static::STATUS_COMPLETED;
     }
 
-    public function updateStatus(User $user, string $to, string $comments = null): StatusUpdate
+    public function updateStatus(User $user, string $to, ?string $comments = null): StatusUpdate
     {
         /** @var StatusUpdate $statusUpdate */
         $statusUpdate = $this->statusUpdates()->create([

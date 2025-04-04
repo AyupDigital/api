@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Service;
 
-use App\Models\Organisation;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Log;
 
 class DestroyRequest extends FormRequest
 {

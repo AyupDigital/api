@@ -8,7 +8,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\Info as BaseInfo;
 
 class Info extends BaseInfo
 {
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->title(sprintf('%s Core API Specification', config('app.name')))

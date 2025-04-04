@@ -33,7 +33,7 @@ class StoreRequest extends FormRequest
             'address_line_3' => ['present', 'nullable', 'string', 'min:1', 'max:255'],
             'city' => ['required', 'string', 'min:1', 'max:255'],
             'county' => ['required', 'string', 'min:1', 'max:255'],
-            'postcode' => ['required', 'string', 'min:1', 'max:255', new Postcode()],
+            'postcode' => ['required', 'string', 'min:1', 'max:255', new Postcode],
             'country' => ['required', 'string', 'min:1', 'max:255'],
             'accessibility_info' => ['present', 'nullable', 'string', 'min:1', 'max:10000'],
             'has_wheelchair_access' => ['required', 'boolean'],
@@ -43,7 +43,7 @@ class StoreRequest extends FormRequest
                 'nullable',
                 'exists:files,id',
                 new FileIsMimeType(File::MIME_TYPE_PNG, File::MIME_TYPE_JPG, File::MIME_TYPE_JPEG, File::MIME_TYPE_SVG),
-                new FileIsPendingAssignment(),
+                new FileIsPendingAssignment,
             ],
         ];
     }

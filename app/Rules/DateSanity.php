@@ -44,12 +44,12 @@ class DateSanity implements ValidationRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param mixed $value
-     * @param mixed $fail
+     * @param  mixed  $value
+     * @param  mixed  $fail
      */
     public function validate(string $attribute, $value, $fail): void
     {
-        if (!$this->end->greaterThanOrEqualTo($this->start)) {
+        if (! $this->end->greaterThanOrEqualTo($this->start)) {
             $fail($this->message());
         }
 

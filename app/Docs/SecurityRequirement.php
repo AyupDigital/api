@@ -11,7 +11,7 @@ class SecurityRequirement extends BaseSecurityRequirement
     /**
      * @throws \GoldSpecDigital\ObjectOrientedOAS\Exceptions\InvalidArgumentException
      */
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->securityScheme(OAuth2SecurityScheme::create());

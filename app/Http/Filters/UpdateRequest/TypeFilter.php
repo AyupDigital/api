@@ -17,6 +17,6 @@ class TypeFilter implements Filter
             ];
         }
 
-        return $query->whereIn('updateable_type', (array)$value);
+        return $query->whereIn('updateable_type', (array) $value);
     }
 }

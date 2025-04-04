@@ -7,7 +7,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
-return new class() extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -23,7 +24,7 @@ return new class() extends Migration {
                 do {
                     $slug = $iteration === 0
                     ? Str::slug($event->title)
-                    : Str::slug($event->title) . '-' . $iteration;
+                    : Str::slug($event->title).'-'.$iteration;
                     $iteration++;
                 } while (OrganisationEvent::query()->where('slug', $slug)->exists());
 

@@ -38,7 +38,7 @@ class OrganisationEventController extends Controller
     public function index(IndexRequest $request): AnonymousResourceCollection
     {
         $baseQuery = OrganisationEvent::query();
-        if (!$request->user() && !isset($request->get('filter')['ends_after'])) {
+        if (! $request->user() && ! isset($request->get('filter')['ends_after'])) {
             $baseQuery->endsAfter((new DateTime('now'))->format('Y-m-d'));
         }
 
@@ -56,7 +56,7 @@ class OrganisationEventController extends Controller
                 AllowedFilter::scope('has_induction_loop', 'hasInductionLoop'),
                 AllowedFilter::scope('has_accessible_toilet', 'hasAccessibleToilet'),
                 AllowedFilter::scope('collections', 'inCollections'),
-                AllowedFilter::custom('has_permission', new HasPermissionFilter()),
+                AllowedFilter::custom('has_permission', new HasPermissionFilter),
             ])
             ->allowedIncludes(['organisation', 'pendingUpdateRequests'])
             ->allowedSorts([

@@ -33,15 +33,15 @@ class OpenActiveTaxonomyImporter
     /**
      * Fetch the Open Active taxonomy data and store it as a collection.
      *
-     * @param mixed $openActiveDirectoryUrl
+     * @param  mixed  $openActiveDirectoryUrl
      */
     public function fetchTaxonomies($openActiveDirectoryUrl): array
     {
-        $client = new Client();
+        $client = new Client;
         try {
             $response = $client->get($openActiveDirectoryUrl);
-            if (200 === $response->getStatusCode() && $response->getBody()->isReadable()) {
-                $data = json_decode((string)$response->getBody(), true);
+            if ($response->getStatusCode() === 200 && $response->getBody()->isReadable()) {
+                $data = json_decode((string) $response->getBody(), true);
 
                 return $data['concept'];
             }
@@ -81,7 +81,7 @@ class OpenActiveTaxonomyImporter
     /**
      * Import the formatted taxonomies into the database.
      *
-     * @param Taxonomy $rootTaxonomy
+     * @param  Taxonomy  $rootTaxonomy
      */
     public function importTaxonomies(Taxonomy $openActiveCategory, array $taxonomyImports)
     {
@@ -89,7 +89,7 @@ class OpenActiveTaxonomyImporter
         DB::transaction(function () use ($openActiveCategory, $taxonomyImports) {
             Schema::disableForeignKeyConstraints();
 
-            DB::table((new Taxonomy())->getTable())->insert($taxonomyImports);
+            DB::table((new Taxonomy)->getTable())->insert($taxonomyImports);
 
             Schema::enableForeignKeyConstraints();
 
@@ -103,7 +103,7 @@ class OpenActiveTaxonomyImporter
      * Map the imported data into an import friendly format.
      *
      * @param array openActiveTaxonomyData
-     * @param mixed $openActiveTaxonomyData
+     * @param  mixed  $openActiveTaxonomyData
      */
     public function mapOpenActiveTaxonomyImport(Taxonomy $rootTaxonomy, $openActiveTaxonomyData): array
     {
@@ -144,7 +144,7 @@ class OpenActiveTaxonomyImporter
         ];
 
         if (Schema::hasColumn('taxonomies', 'slug')) {
-            $modelData['slug'] = $this->slugGenerator->generate($taxonomyData['prefLabel'], (new Taxonomy()));
+            $modelData['slug'] = $this->slugGenerator->generate($taxonomyData['prefLabel'], (new Taxonomy));
         }
 
         return $modelData;

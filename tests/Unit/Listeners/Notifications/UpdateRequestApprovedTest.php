@@ -2,15 +2,15 @@
 
 namespace Tests\Unit\Listeners\Notifications;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Service;
 use App\Events\EndpointHit;
-use App\Models\Organisation;
-use Illuminate\Http\Request;
-use App\Models\UpdateRequest;
-use Illuminate\Support\Facades\Queue;
 use App\Listeners\Notifications\UpdateRequestApproved;
+use App\Models\Organisation;
+use App\Models\Service;
+use App\Models\UpdateRequest;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Queue;
+use Tests\TestCase;
 
 class UpdateRequestApprovedTest extends TestCase
 {
@@ -35,7 +35,7 @@ class UpdateRequestApprovedTest extends TestCase
             return User::factory()->create();
         });
         $event = EndpointHit::onUpdate($request, '', $updateRequest);
-        $listener = new UpdateRequestApproved();
+        $listener = new UpdateRequestApproved;
         $listener->handle($event);
 
         Queue::assertPushedOn(
@@ -107,7 +107,7 @@ class UpdateRequestApprovedTest extends TestCase
 
         $request = Request::create('');
         $event = EndpointHit::onUpdate($request, '', $updateRequest);
-        $listener = new UpdateRequestApproved();
+        $listener = new UpdateRequestApproved;
         $listener->handle($event);
 
         Queue::assertPushedOn(

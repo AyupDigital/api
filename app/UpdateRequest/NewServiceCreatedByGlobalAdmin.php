@@ -25,7 +25,7 @@ class NewServiceCreatedByGlobalAdmin implements AppliesUpdateRequests
      */
     public function validateUpdateRequest(UpdateRequest $updateRequest): Validator
     {
-        $rules = (new StoreRequest())
+        $rules = (new StoreRequest)
             ->merge($updateRequest->data)
             ->setUserResolver(function () use ($updateRequest) {
                 return $updateRequest->user;
@@ -44,7 +44,7 @@ class NewServiceCreatedByGlobalAdmin implements AppliesUpdateRequests
 
         $insert = [
             'organisation_id' => $data->get('organisation_id'),
-            'slug' => $this->uniqueSlug($data->get('slug', $data->get('name')), (new Service())),
+            'slug' => $this->uniqueSlug($data->get('slug', $data->get('name')), (new Service)),
             'name' => $data->get('name'),
             'type' => $data->get('type'),
             'status' => $data->get('status'),
@@ -75,7 +75,7 @@ class NewServiceCreatedByGlobalAdmin implements AppliesUpdateRequests
         if ($data->has('eligibility_types') && $data['eligibility_types']['custom'] ?? null) {
             // Create the custom fields
             foreach ($data['eligibility_types']['custom'] as $customEligibilityType => $value) {
-                $fieldName = 'eligibility_' . $customEligibilityType . '_custom';
+                $fieldName = 'eligibility_'.$customEligibilityType.'_custom';
                 $insert[$fieldName] = $value;
             }
         }
@@ -148,7 +148,7 @@ class NewServiceCreatedByGlobalAdmin implements AppliesUpdateRequests
             $tagIds = [];
             foreach ($data['tags'] as $tagField) {
                 $tag = Tag::where('slug', Str::slug($tagField['slug']))->first();
-                if (null === $tag) {
+                if ($tag === null) {
                     $tag = new Tag([
                         'slug' => Str::slug($tagField['slug']),
                         'label' => $tagField['label'],

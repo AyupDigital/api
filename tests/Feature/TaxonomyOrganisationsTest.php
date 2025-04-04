@@ -2,17 +2,17 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
+use App\Events\EndpointHit;
 use App\Models\Audit;
+use App\Models\Organisation;
 use App\Models\Service;
 use App\Models\Taxonomy;
-use App\Events\EndpointHit;
+use App\Models\User;
 use Carbon\CarbonImmutable;
-use App\Models\Organisation;
 use Illuminate\Http\Response;
-use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Event;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class TaxonomyOrganisationsTest extends TestCase
 {
@@ -171,7 +171,7 @@ class TaxonomyOrganisationsTest extends TestCase
         $response->assertJsonFragment($payload);
         foreach ($taxonomyOrganisation as $organisation) {
             $this->assertDatabaseHas(
-                (new Taxonomy())->getTable(),
+                (new Taxonomy)->getTable(),
                 ['id' => $organisation->id, 'order' => $organisation->order + 1]
             );
         }
@@ -201,12 +201,12 @@ class TaxonomyOrganisationsTest extends TestCase
         foreach ($taxonomyOrganisations as $organisation) {
             if ($organisation->order < 2) {
                 $this->assertDatabaseHas(
-                    (new Taxonomy())->getTable(),
+                    (new Taxonomy)->getTable(),
                     ['id' => $organisation->id, 'order' => $organisation->order]
                 );
             } else {
                 $this->assertDatabaseHas(
-                    (new Taxonomy())->getTable(),
+                    (new Taxonomy)->getTable(),
                     ['id' => $organisation->id, 'order' => $organisation->order + 1]
                 );
             }
@@ -236,7 +236,7 @@ class TaxonomyOrganisationsTest extends TestCase
         $response->assertJsonFragment($payload);
         foreach ($taxonomyOrganisations as $organisation) {
             $this->assertDatabaseHas(
-                (new Taxonomy())->getTable(),
+                (new Taxonomy)->getTable(),
                 ['id' => $organisation->id, 'order' => $organisation->order]
             );
         }
@@ -280,7 +280,7 @@ class TaxonomyOrganisationsTest extends TestCase
     /**
      * @test
      */
-    public function createTaxonomyOrganisationWithUniqueSlugAsSuperAdmin201(): void
+    public function create_taxonomy_organisation_with_unique_slug_as_super_admin201(): void
     {
         $user = User::factory()->create()->makeSuperAdmin();
         $siblingCount = Taxonomy::organisation()->children()->count();
@@ -489,9 +489,9 @@ class TaxonomyOrganisationsTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $organisationOne->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $organisationTwo->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $organisationThree->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $organisationOne->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $organisationTwo->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $organisationThree->id, 'order' => 3]);
     }
 
     /**
@@ -512,9 +512,9 @@ class TaxonomyOrganisationsTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $organisationOne->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $organisationTwo->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $organisationThree->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $organisationOne->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $organisationTwo->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $organisationThree->id, 'order' => 3]);
     }
 
     /**
@@ -535,9 +535,9 @@ class TaxonomyOrganisationsTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $organisationOne->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $organisationTwo->id, 'order' => 3]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $organisationThree->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $organisationOne->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $organisationTwo->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $organisationThree->id, 'order' => 2]);
     }
 
     /**
@@ -581,7 +581,7 @@ class TaxonomyOrganisationsTest extends TestCase
     /**
      * @test
      */
-    public function updateTaxonomyOrganisationWithUniqueSlugAsSuperAdmin200(): void
+    public function update_taxonomy_organisation_with_unique_slug_as_super_admin200(): void
     {
         $user = User::factory()->create()->makeSuperAdmin();
         $category1 = $this->createTaxonomyOrganisation([
@@ -725,7 +725,7 @@ class TaxonomyOrganisationsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/taxonomies/organisations/{$organisation->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Taxonomy())->getTable(), ['id' => $organisation->id]);
+        $this->assertDatabaseMissing((new Taxonomy)->getTable(), ['id' => $organisation->id]);
     }
 
     /**

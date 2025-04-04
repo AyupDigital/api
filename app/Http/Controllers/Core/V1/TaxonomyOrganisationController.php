@@ -53,7 +53,7 @@ class TaxonomyOrganisationController extends Controller
     {
         return DB::transaction(function () use ($request, $slugGenerator) {
             $organisation = Taxonomy::organisation()->children()->create([
-                'slug' => $slugGenerator->generate($request->name, (new Taxonomy())),
+                'slug' => $slugGenerator->generate($request->name, (new Taxonomy)),
                 'name' => $request->name,
                 'order' => $request->order,
                 'depth' => 1,

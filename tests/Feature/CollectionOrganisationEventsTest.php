@@ -2,23 +2,23 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\File;
-use App\Models\User;
+use App\Events\EndpointHit;
 use App\Models\Audit;
+use App\Models\Collection;
+use App\Models\CollectionTaxonomy;
+use App\Models\File;
+use App\Models\Organisation;
+use App\Models\OrganisationEvent;
 use App\Models\Service;
 use App\Models\Taxonomy;
-use App\Models\Collection;
-use App\Events\EndpointHit;
+use App\Models\User;
 use Carbon\CarbonImmutable;
-use Illuminate\Support\Str;
-use App\Models\Organisation;
 use Illuminate\Http\Response;
-use Laravel\Passport\Passport;
-use App\Models\OrganisationEvent;
-use App\Models\CollectionTaxonomy;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class CollectionOrganisationEventsTest extends TestCase
 {
@@ -302,11 +302,11 @@ class CollectionOrganisationEventsTest extends TestCase
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
         $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
+            'filename' => Str::random().'.svg',
             'mime_type' => 'image/svg+xml',
         ]);
 
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
 
         $image->uploadBase64EncodedFile($base64Image);
 
@@ -392,11 +392,11 @@ class CollectionOrganisationEventsTest extends TestCase
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
         $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
+            'filename' => Str::random().'.svg',
             'mime_type' => 'image/svg+xml',
         ]);
 
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
 
         $image->uploadBase64EncodedFile($base64Image);
 
@@ -441,10 +441,10 @@ class CollectionOrganisationEventsTest extends TestCase
         // Delete the existing seeded personas.
         $this->truncateCollectionOrganisationEvents();
 
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
 
         $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
+            'filename' => Str::random().'.svg',
             'mime_type' => 'image/svg+xml',
         ]);
 
@@ -502,10 +502,10 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 3]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 4]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 4]);
     }
 
     /**
@@ -516,10 +516,10 @@ class CollectionOrganisationEventsTest extends TestCase
         // Delete the existing seeded personas.
         $this->truncateCollectionOrganisationEvents();
 
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
 
         $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
+            'filename' => Str::random().'.svg',
             'mime_type' => 'image/svg+xml',
         ]);
 
@@ -577,10 +577,10 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['order' => 2]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 3]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 4]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['order' => 2]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 4]);
     }
 
     /**
@@ -591,10 +591,10 @@ class CollectionOrganisationEventsTest extends TestCase
         // Delete the existing seeded personas.
         $this->truncateCollectionOrganisationEvents();
 
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
 
         $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
+            'filename' => Str::random().'.svg',
             'mime_type' => 'image/svg+xml',
         ]);
 
@@ -652,10 +652,10 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 3]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['order' => 4]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['order' => 4]);
     }
 
     /**
@@ -666,10 +666,10 @@ class CollectionOrganisationEventsTest extends TestCase
         // Delete the existing seeded personas.
         $this->truncateCollectionOrganisationEvents();
 
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
 
         $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
+            'filename' => Str::random().'.svg',
             'mime_type' => 'image/svg+xml',
         ]);
 
@@ -704,10 +704,10 @@ class CollectionOrganisationEventsTest extends TestCase
         // Delete the existing seeded personas.
         $this->truncateCollectionOrganisationEvents();
 
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
 
         $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
+            'filename' => Str::random().'.svg',
             'mime_type' => 'image/svg+xml',
         ]);
 
@@ -881,10 +881,10 @@ class CollectionOrganisationEventsTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
 
         $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
+            'filename' => Str::random().'.svg',
             'mime_type' => 'image/svg+xml',
         ]);
 
@@ -1137,10 +1137,10 @@ class CollectionOrganisationEventsTest extends TestCase
         $organisationEvent = Collection::organisationEvents()->inRandomOrder()->firstOrFail();
         $taxonomy = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
 
         $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
+            'filename' => Str::random().'.svg',
             'mime_type' => 'image/svg+xml',
         ]);
 
@@ -1323,9 +1323,9 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 3]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 1]);
     }
 
     /**
@@ -1391,9 +1391,9 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 3]);
     }
 
     /**
@@ -1459,9 +1459,9 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 3]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 2]);
     }
 
     /**
@@ -1807,8 +1807,8 @@ class CollectionOrganisationEventsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/collections/organisation-events/{$organisationEvent->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Collection())->getTable(), ['id' => $organisationEvent->id]);
-        $this->assertDatabaseMissing((new CollectionTaxonomy())->getTable(), ['collection_id' => $organisationEvent->id]);
+        $this->assertDatabaseMissing((new Collection)->getTable(), ['id' => $organisationEvent->id]);
+        $this->assertDatabaseMissing((new CollectionTaxonomy)->getTable(), ['collection_id' => $organisationEvent->id]);
     }
 
     /**
@@ -1863,9 +1863,9 @@ class CollectionOrganisationEventsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/collections/organisation-events/{$first->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Collection())->getTable(), ['id' => $first->id]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 2]);
+        $this->assertDatabaseMissing((new Collection)->getTable(), ['id' => $first->id]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 2]);
     }
 
     /**
@@ -1920,9 +1920,9 @@ class CollectionOrganisationEventsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/collections/organisation-events/{$second->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Collection())->getTable(), ['id' => $second->id]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $third->id, 'order' => 2]);
+        $this->assertDatabaseMissing((new Collection)->getTable(), ['id' => $second->id]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $third->id, 'order' => 2]);
     }
 
     /**
@@ -1977,9 +1977,9 @@ class CollectionOrganisationEventsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/collections/organisation-events/{$third->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Collection())->getTable(), ['id' => $third->id]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $first->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Collection())->getTable(), ['id' => $second->id, 'order' => 2]);
+        $this->assertDatabaseMissing((new Collection)->getTable(), ['id' => $third->id]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $first->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Collection)->getTable(), ['id' => $second->id, 'order' => 2]);
     }
 
     /**
@@ -2064,7 +2064,7 @@ class CollectionOrganisationEventsTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,' . base64_encode($image),
+            'file' => 'data:image/png;base64,'.base64_encode($image),
         ]);
         $imageResponse->assertStatus(Response::HTTP_CREATED);
 

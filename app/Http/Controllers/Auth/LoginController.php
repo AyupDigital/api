@@ -52,7 +52,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request, User $user)
     {
         // If OTP is disabled then skip this method.
-        if (!config('local.otp_enabled')) {
+        if (! config('local.otp_enabled')) {
             return;
         }
 
@@ -99,8 +99,9 @@ EOT;
     }
 
     /**
-     * @throws ValidationException
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     *
+     * @throws ValidationException
      */
     public function otp(Request $request)
     {
@@ -173,6 +174,6 @@ EOT;
             Str::lower($request->input($this->username()))
         );
 
-        return $key . '|' . $request->ip();
+        return $key.'|'.$request->ip();
     }
 }

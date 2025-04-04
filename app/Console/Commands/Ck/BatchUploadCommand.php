@@ -33,7 +33,7 @@ class BatchUploadCommand extends Command
     {
         parent::__construct();
 
-        $this->batchUploader = new BatchUploader();
+        $this->batchUploader = new BatchUploader;
     }
 
     /**

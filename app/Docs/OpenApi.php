@@ -13,7 +13,7 @@ class OpenApi extends BaseOpenApi implements Responsable
     /**
      * @throws \GoldSpecDigital\ObjectOrientedOAS\Exceptions\InvalidArgumentException
      */
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->openapi(static::OPENAPI_3_0_2)
@@ -130,11 +130,11 @@ class OpenApi extends BaseOpenApi implements Responsable
                 Tags\CollectionCategoriesTag::create(),
                 Tags\CollectionOrganisationEventsTag::create(),
                 Tags\CollectionPersonasTag::create(),
-                
+
                 Tags\FilesTag::create(),
                 Tags\LocationsTag::create(),
                 Tags\NotificationsTag::create(),
-                
+
                 Tags\OrganisationsTag::create(),
                 Tags\OrganisationEventsTag::create(),
                 Tags\OrganisationSignUpFormsTag::create(),
@@ -149,7 +149,7 @@ class OpenApi extends BaseOpenApi implements Responsable
                 Tags\ServicesTag::create(),
                 Tags\SettingsTag::create(),
                 Tags\StatusUpdatesTag::create(),
-                
+
                 Tags\TagsTag::create(),
                 Tags\TaxonomyCategoriesTag::create(),
                 Tags\TaxonomyOrganisationsTag::create(),
@@ -161,7 +161,8 @@ class OpenApi extends BaseOpenApi implements Responsable
 
     /**
      * Create an HTTP response that represents the object.
-     * @param mixed $request
+     *
+     * @param  mixed  $request
      */
     public function toResponse($request): JsonResponse
     {

@@ -22,7 +22,7 @@ class IndexUpdateRequestOperation extends Operation
     /**
      * @throws \GoldSpecDigital\ObjectOrientedOAS\Exceptions\InvalidArgumentException
      */
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->action(static::ACTION_GET)
@@ -105,7 +105,7 @@ EOT
                     )
                     ->schema(Schema::string()),
                 IncludeParameter::create(null, ['user']),
-                SortParameter::create(null, ['entry','created_at'], '-created_at')
+                SortParameter::create(null, ['entry', 'created_at'], '-created_at')
             )
             ->responses(
                 Response::ok()->content(

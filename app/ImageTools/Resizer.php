@@ -57,7 +57,7 @@ class Resizer
     }
 
     /**
-     * @param mixed $srcImageResource
+     * @param  mixed  $srcImageResource
      * @return resource
      */
     protected function createDestinationImageResource($srcImageResource, array $dimensions)
@@ -90,7 +90,8 @@ class Resizer
 
     /**
      * Convert an image resource to a string.
-     * @param mixed $imageResource
+     *
+     * @param  mixed  $imageResource
      */
     protected function imageResourceToString($imageResource): string
     {

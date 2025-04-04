@@ -28,7 +28,7 @@ class StoreRequest extends FormRequest
             'service_id' => ['required', 'exists:services,id'],
             'name' => ['required', 'string', 'min:1', 'max:255'],
             'email' => ['required_without_all:phone,other_contact', 'nullable', 'email', 'max:255'],
-            'phone' => ['required_without_all:email,other_contact', 'nullable', 'string', 'min:1', 'max:255', new UkMobilePhoneNumber()],
+            'phone' => ['required_without_all:email,other_contact', 'nullable', 'string', 'min:1', 'max:255', new UkMobilePhoneNumber],
             'other_contact' => ['required_without_all:phone,email', 'nullable', 'string', 'min:1', 'max:255'],
             'postcode_outward_code' => ['present', 'nullable', 'string', 'min:1', 'max:255'],
             'comments' => ['present', 'nullable', 'string', 'min:1', 'max:255'],
@@ -41,7 +41,7 @@ class StoreRequest extends FormRequest
             $rules = array_merge($rules, [
                 'referee_name' => ['required', 'string', 'min:1', 'max:255'],
                 'referee_email' => ['required', 'email', 'max:255'],
-                'referee_phone' => ['required', 'string', 'min:1', 'max:255', new UkPhoneNumber()],
+                'referee_phone' => ['required', 'string', 'min:1', 'max:255', new UkPhoneNumber],
                 'organisation_taxonomy_id' => [
                     'required_without:organisation',
                     'nullable',

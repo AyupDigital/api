@@ -25,7 +25,7 @@ trait OrganisationEventRelationships
 
     public function taxonomies(): BelongsToMany
     {
-        return $this->belongsToMany(Taxonomy::class, (new OrganisationEventTaxonomy())->getTable());
+        return $this->belongsToMany(Taxonomy::class, (new OrganisationEventTaxonomy)->getTable());
     }
 
     public function organisationEventTaxonomies(): HasMany
@@ -43,8 +43,6 @@ trait OrganisationEventRelationships
 
     /**
      * Return the image relationship.
-     *
-     * @return BelongsTo
      */
     public function imageFile(): BelongsTo
     {

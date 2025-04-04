@@ -55,7 +55,7 @@ class OrganisationEventResource extends JsonResource
             'organisation' => new OrganisationResource($this->whenLoaded('organisation')),
             'location' => new LocationResource($this->whenLoaded('location')),
             'category_taxonomies' => TaxonomyResource::collection($this->taxonomies),
-            'pending_update_requests' => UpdateRequestResource::collection($this->whenLoaded('pendingUpdateRequests'))
+            'pending_update_requests' => UpdateRequestResource::collection($this->whenLoaded('pendingUpdateRequests')),
         ];
     }
 }

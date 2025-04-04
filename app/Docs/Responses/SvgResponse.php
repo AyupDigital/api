@@ -10,7 +10,7 @@ use Illuminate\Http\Response as LaravelResponse;
 
 class SvgResponse extends Response
 {
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->statusCode(LaravelResponse::HTTP_OK)

@@ -22,7 +22,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'synonyms' => ['present', 'array'],
-            'synonyms.*' => ['present', 'array', new Synonyms()],
+            'synonyms.*' => ['present', 'array', new Synonyms],
             'synonyms.*.*' => ['string'],
         ];
     }

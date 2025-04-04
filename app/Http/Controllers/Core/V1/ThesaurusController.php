@@ -81,7 +81,7 @@ class ThesaurusController extends Controller
         // Fill out the arrays with empty strings to match the highest.
         foreach ($synonyms as &$synonym) {
             foreach (range(0, $highestCount - 1) as $index) {
-                if (!isset($synonym[$index])) {
+                if (! isset($synonym[$index])) {
                     $synonym[$index] = '';
                 }
             }
