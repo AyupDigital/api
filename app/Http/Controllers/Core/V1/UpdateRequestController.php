@@ -127,10 +127,8 @@ class UpdateRequestController extends Controller
             $canView = $request->user()->isContentAdmin();
         }
 
-        if ()
 
         if (!$canView) {
-            dd('here');
             return abort(401);
         }
 
