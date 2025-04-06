@@ -83,6 +83,7 @@ class CollectionOrganisationEventController extends Controller
                 ],
                 'order' => $request->order,
                 'enabled' => $request->enabled,
+                'image_file_id' => $request->image_file_id ?? null,
             ]);
 
             if ($request->filled('image_file_id')) {
@@ -141,16 +142,16 @@ class CollectionOrganisationEventController extends Controller
                 'meta' => [
                     'intro' => $request->intro,
                     'subtitle' => $request->subtitle,
-                    'image_file_id' => $request->has('image_file_id')
+                    'image_file_id' => $request->has('image_file_id') && $request->image_file_id !== null
                     ? $request->image_file_id
-                    : $collection->meta['image_file_id'] ?? null,
+                    : null,
                     'sideboxes' => $sideboxes,
                 ],
                 'order' => $request->order,
                 'enabled' => $request->enabled,
             ]);
 
-            if ($request->filled('image_file_id')) {
+            if ($request->filled('image_file_id') && $request->image_file_id !== null) {
                 File::findOrFail($request->image_file_id)->assigned();
             }
 

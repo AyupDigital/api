@@ -282,12 +282,22 @@ class CollectionPersonasTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
+        $image = File::factory()->pendingAssignment()->create([
+            'filename' => Str::random().'.svg',
+            'mime_type' => 'image/svg+xml',
+        ]);
+
+        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+
+        $image->uploadBase64EncodedFile($base64Image);
+
         Passport::actingAs($user);
 
         $response = $this->json('POST', '/core/v1/collections/personas', [
             'name' => 'Test Persona',
             'intro' => 'Lorem ipsum',
             'subtitle' => 'Subtitle here',
+            'image_file_id' => $image->id,
             'order' => 1,
             'enabled' => true,
             'homepage' => false,
