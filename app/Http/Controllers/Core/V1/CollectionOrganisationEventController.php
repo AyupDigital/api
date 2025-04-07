@@ -85,7 +85,7 @@ class CollectionOrganisationEventController extends Controller
                 'enabled' => $request->enabled,
             ]);
 
-            if ($request->filled('image_file_id')) {
+            if ($request->filled('image_file_id') && $request->get('image_file_id') !== null) {
                 File::findOrFail($request->image_file_id)->assigned();
             }
 
