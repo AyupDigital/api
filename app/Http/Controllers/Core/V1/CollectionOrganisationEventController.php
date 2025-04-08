@@ -83,7 +83,6 @@ class CollectionOrganisationEventController extends Controller
                 ],
                 'order' => $request->order,
                 'enabled' => $request->enabled,
-                'image_file_id' => $request->image_file_id ?? null,
             ]);
 
             if ($request->filled('image_file_id')) {
@@ -143,8 +142,8 @@ class CollectionOrganisationEventController extends Controller
                     'intro' => $request->intro,
                     'subtitle' => $request->subtitle,
                     'image_file_id' => $request->has('image_file_id') && $request->image_file_id !== null
-                    ? $request->image_file_id
-                    : null,
+                        ? $request->image_file_id
+                        : null,
                     'sideboxes' => $sideboxes,
                 ],
                 'order' => $request->order,

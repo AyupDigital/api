@@ -16,8 +16,10 @@ use App\Rules\MarkdownMinLength;
 use App\Rules\NullableIf;
 use App\Rules\RootTaxonomyIs;
 use App\Rules\Slug;
+use App\Rules\StartDateLessThanEndDate;
 use App\Rules\UkPhoneNumber;
 use App\Rules\UserHasRole;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -58,15 +60,20 @@ class UpdateRequest extends FormRequest
                     $this->organisation_event->slug
                 ),
             ],
-            'start_date' => ['date_format:Y-m-d', new DateSanity($this)],
-            'end_date' => ['date_format:Y-m-d', new DateSanity($this)],
-            'start_time' => ['date_format:H:i:s', new DateSanity($this)],
-            'end_time' => ['date_format:H:i:s', new DateSanity($this)],
+            'start_date' => ['date_format:Y-m-d'],
+            'end_date' => ['date_format:Y-m-d', new StartDateLessThanEndDate(
+                startDate: Carbon::parse($this->get('start_date')),
+                endDate: Carbon::parse($this->get('end_date')),
+                startTime: $this->get('start_time'),
+                endTime: $this->get('end_time'),
+            ), new DateSanity(Carbon::parse($this->get('end_date')), $this->get('end_time'))],
+            'start_time' => ['date_format:H:i:s'],
+            'end_time' => ['date_format:H:i:s'],
             'intro' => ['string', 'min:1', 'max:255'],
             'description' => [
                 'string',
                 new MarkdownMinLength(1),
-                new MarkdownMaxLength(config('local.event_description_max_chars'), 'Description tab - The long description must be '.config('local.event_description_max_chars').' characters or fewer.'),
+                new MarkdownMaxLength(config('local.event_description_max_chars'), 'Description tab - The long description must be ' . config('local.event_description_max_chars') . ' characters or fewer.'),
             ],
             'is_free' => ['boolean'],
             'fees_text' => ['nullable', 'string', 'min:1', 'max:255', 'required_if:is_free,false'],
