@@ -18,6 +18,7 @@ class CollectionPersonaResource extends JsonResource
             'slug' => $this->slug,
             'name' => $this->name,
             'intro' => $this->meta['intro'],
+            'image_file_id' => $this->meta['image_file_id'] ?? null,
             'subtitle' => $this->meta['subtitle'],
             'order' => $this->order,
             'enabled' => $this->enabled,

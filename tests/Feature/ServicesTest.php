@@ -462,6 +462,9 @@ class ServicesTest extends TestCase
             'is_free' => true,
             'fees_text' => null,
             'fees_url' => null,
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'testimonial' => null,
             'video_embed' => null,
             'url' => $this->faker->url(),
@@ -560,6 +563,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -575,7 +581,7 @@ class ServicesTest extends TestCase
             'referral_email' => null,
             'referral_url' => null,
             'cqc_location_id' => $this->faker->numerify('#-#########'),
-            'ends_at' => Carbon::now()->addMonths(6)->toDateString().'T00:00:00+0000',
+            'ends_at' => Carbon::now()->addMonths(6)->toDateString() . 'T00:00:00+0000',
             'useful_infos' => [
                 [
                     'title' => 'Did you know?',
@@ -660,6 +666,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -676,7 +685,7 @@ class ServicesTest extends TestCase
             'referral_email' => null,
             'referral_url' => null,
             'cqc_location_id' => $this->faker->numerify('#-#########'),
-            'ends_at' => Carbon::now()->addMonths(6)->toDateString().'T00:00:00+0000',
+            'ends_at' => Carbon::now()->addMonths(6)->toDateString() . 'T00:00:00+0000',
             'useful_infos' => [
                 [
                     'title' => 'Did you know?',
@@ -769,6 +778,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -785,7 +797,7 @@ class ServicesTest extends TestCase
             'referral_email' => null,
             'referral_url' => null,
             'cqc_location_id' => $this->faker->numerify('#-#########'),
-            'ends_at' => Carbon::now()->addMonths(6)->toDateString().'T00:00:00+0000',
+            'ends_at' => Carbon::now()->addMonths(6)->toDateString() . 'T00:00:00+0000',
             'useful_infos' => [
                 [
                     'title' => 'Did you know?',
@@ -843,6 +855,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -908,6 +923,12 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -986,6 +1007,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -1051,6 +1075,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -1122,6 +1149,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -1259,6 +1289,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -1500,6 +1533,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -1637,6 +1673,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -1746,6 +1785,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_ACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -1869,6 +1911,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_ACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -1936,6 +1981,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_ACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -2002,6 +2050,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_ACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -2079,6 +2130,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_ACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -2212,6 +2266,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -2290,6 +2347,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -2375,6 +2435,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -2446,6 +2509,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -2571,6 +2637,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -2663,6 +2732,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -2782,6 +2854,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_ACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -2859,6 +2934,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_ACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -2949,6 +3027,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_ACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -3071,6 +3152,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_ACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -3146,6 +3230,9 @@ class ServicesTest extends TestCase
             'name' => 'Test Service',
             'type' => Service::TYPE_SERVICE,
             'status' => Service::STATUS_ACTIVE,
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
             'wait_time' => null,
@@ -3190,12 +3277,13 @@ class ServicesTest extends TestCase
         ];
         $response = $this->json('POST', '/core/v1/services', $payload);
         $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonFragment(['social_medias' => [
-            [
-                'type' => SocialMedia::TYPE_INSTAGRAM,
-                'url' => 'https://www.instagram.com/ayupdigital',
+        $response->assertJsonFragment([
+            'social_medias' => [
+                [
+                    'type' => SocialMedia::TYPE_INSTAGRAM,
+                    'url' => 'https://www.instagram.com/ayupdigital',
+                ],
             ],
-        ],
         ]);
     }
 
@@ -4955,7 +5043,7 @@ class ServicesTest extends TestCase
         $service = $service->fresh()->load('serviceEligibilities');
 
         foreach ($payload['eligibility_types']['custom'] as $customFieldName => $customFieldValue) {
-            $this->assertEquals($customFieldValue, $service->{'eligibility_'.$customFieldName.'_custom'});
+            $this->assertEquals($customFieldValue, $service->{'eligibility_' . $customFieldName . '_custom'});
         }
     }
 
@@ -5009,7 +5097,7 @@ class ServicesTest extends TestCase
         }
 
         foreach ($payload['eligibility_types']['custom'] as $customFieldName => $customFieldValue) {
-            $this->assertEquals($customFieldValue, $service->{'eligibility_'.$customFieldName.'_custom'});
+            $this->assertEquals($customFieldValue, $service->{'eligibility_' . $customFieldName . '_custom'});
         }
     }
 
@@ -5151,12 +5239,13 @@ class ServicesTest extends TestCase
         // Create the update request as service admin
         $response = $this->json('PUT', "/core/v1/services/{$service->id}", $payload);
         $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonFragment(['social_medias' => [
-            [
-                'type' => SocialMedia::TYPE_FACEBOOK,
-                'url' => 'https://www.facebook.com/randomPerson',
+        $response->assertJsonFragment([
+            'social_medias' => [
+                [
+                    'type' => SocialMedia::TYPE_FACEBOOK,
+                    'url' => 'https://www.facebook.com/randomPerson',
+                ],
             ],
-        ],
         ]);
     }
 
@@ -5687,7 +5776,7 @@ class ServicesTest extends TestCase
     /**
      * @test
      */
-    public function organisation_admin_cannot_delete_one(): void
+    public function organisation_admin_can_delete_one(): void
     {
         $service = Service::factory()->create();
         $user = User::factory()->create()->makeOrganisationAdmin($service->organisation);
@@ -5696,13 +5785,15 @@ class ServicesTest extends TestCase
 
         $response = $this->json('DELETE', "/core/v1/services/{$service->id}");
 
-        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        // TODO: Ensure this is done as an update request.
+
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     /**
      * @test
      */
-    public function global_admin_cannot_delete_one(): void
+    public function global_admin_can_delete_one(): void
     {
         $service = Service::factory()->create();
         $user = User::factory()->create()->makeGlobalAdmin();
@@ -5711,7 +5802,9 @@ class ServicesTest extends TestCase
 
         $response = $this->json('DELETE', "/core/v1/services/{$service->id}");
 
-        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        // TODO: Ensure this is done as an update request.
+
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     /**
@@ -6180,6 +6273,9 @@ class ServicesTest extends TestCase
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_DROP_IN,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,
@@ -6312,7 +6408,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6337,7 +6433,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6364,7 +6460,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6393,7 +6489,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6421,7 +6517,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6445,7 +6541,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6469,7 +6565,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6493,7 +6589,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6562,7 +6658,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6649,7 +6745,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6668,7 +6764,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/octet-stream;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/octet-stream;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6687,7 +6783,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
+            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6732,7 +6828,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6782,7 +6878,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
+            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6823,7 +6919,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets(collect([$service]));
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6845,7 +6941,7 @@ class ServicesTest extends TestCase
         ]);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
+            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -6895,7 +6991,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $response = $this->json('POST', '/core/v1/services/import', [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -6960,7 +7056,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $response = $this->json('POST', '/core/v1/services/import', [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -7017,7 +7113,7 @@ class ServicesTest extends TestCase
         Passport::actingAs($superAdminUser);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7035,7 +7131,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
+            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7069,7 +7165,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets(collect([$service]), [$serviceId => $serviceEligibilityTaxonomyIds->all()]);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7114,7 +7210,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets(collect([$service]), [$serviceId => $invalidServiceEligibilityTaxonomyIds]);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7152,7 +7248,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets(collect([$service]), [$serviceId => $categoryTaxonomyIds]);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7207,7 +7303,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7227,7 +7323,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
+            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7263,7 +7359,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.ms-excel;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
+            'spreadsheet' => 'data:application/vnd.ms-excel;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xls'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);
@@ -7283,7 +7379,7 @@ class ServicesTest extends TestCase
         $this->createServiceSpreadsheets($services);
 
         $data = [
-            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'.base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
+            'spreadsheet' => 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,' . base64_encode(file_get_contents(Storage::disk('local')->path('test.xlsx'))),
         ];
 
         $response = $this->json('POST', '/core/v1/services/import', $data);

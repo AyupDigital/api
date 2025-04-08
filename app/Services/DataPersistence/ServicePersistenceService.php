@@ -23,8 +23,8 @@ class ServicePersistenceService implements DataPersistenceService
     public function store(FormRequest $request)
     {
         return $request->user()->isSuperAdmin()
-        ? $this->processAsNewEntity($request)
-        : $this->processAsUpdateRequest($request);
+            ? $this->processAsNewEntity($request)
+            : $this->processAsUpdateRequest($request);
     }
 
     public function update(FormRequest $request, Model $model)
@@ -168,6 +168,9 @@ class ServicePersistenceService implements DataPersistenceService
                 'status' => $request->status,
                 'intro' => $request->intro,
                 'description' => sanitize_markdown($request->description),
+                'national' => $request->national,
+                'attending_type' => $request->attending_type,
+                'attending_access' => $request->attending_access,
                 'wait_time' => $request->wait_time,
                 'is_free' => $request->is_free,
                 'fees_text' => $request->fees_text,
@@ -187,12 +190,12 @@ class ServicePersistenceService implements DataPersistenceService
                 'score' => $request->score,
                 'last_modified_at' => Date::now(),
                 'ends_at' => $request->filled('ends_at')
-                ? Date::createFromFormat(CarbonImmutable::ISO8601, $request->ends_at)
-                : null,
+                    ? Date::createFromFormat(CarbonImmutable::ISO8601, $request->ends_at)
+                    : null,
             ];
 
             foreach ($request->input('eligibility_types.custom', []) as $customEligibilityType => $value) {
-                $fieldName = 'eligibility_'.$customEligibilityType.'_custom';
+                $fieldName = 'eligibility_' . $customEligibilityType . '_custom';
                 $initialCreateData[$fieldName] = $value;
             }
 

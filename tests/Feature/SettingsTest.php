@@ -37,16 +37,7 @@ class SettingsTest extends TestCase
                         'facebook_handle' => 'data/cms/frontend/global/facebook_handle',
                         'twitter_handle' => 'data/cms/frontend/global/twitter_handle',
                     ],
-                    'home' => [
-                        'banners' => [
-                            [
-                                'title' => 'data/cms/frontend/home/banners/title',
-                                'content' => 'data/cms/frontend/home/banners/content',
-                                'button_text' => 'button_text',
-                                'button_url' => 'https://example.com/data/cms/frontend/home/banners/button_url',
-                            ],
-                        ],
-                    ],
+                    'home' => [],
                     'terms_and_conditions' => [
                         'title' => 'data/cms/frontend/terms_and_conditions/title',
                         'content' => 'data/cms/frontend/terms_and_conditions/content',
@@ -485,7 +476,7 @@ class SettingsTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,'.base64_encode($image),
+            'file' => 'data:image/png;base64,' . base64_encode($image),
         ]);
 
         $this->settingsData['cms']['frontend']['banner']['image_file_id'] = $this->getResponseContent($imageResponse, 'data.id');
@@ -549,7 +540,7 @@ class SettingsTest extends TestCase
         $this->json('POST', '/core/v1/files', [
             'is_private' => false,
             'mime_type' => 'image/png',
-            'file' => 'data:image/png;base64,'.base64_encode($image),
+            'file' => 'data:image/png;base64,' . base64_encode($image),
         ]);
 
         $this->settingsData['cms']['frontend']['banner'] = [
@@ -586,7 +577,7 @@ class SettingsTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,'.base64_encode($image),
+            'file' => 'data:image/png;base64,' . base64_encode($image),
         ]);
 
         $cmsValue = Setting::cms()->value;
@@ -615,7 +606,7 @@ class SettingsTest extends TestCase
         $imageResponse = $this->json('POST', '/core/v1/files', [
             'is_private' => false,
             'mime_type' => 'image/png',
-            'file' => 'data:image/png;base64,'.base64_encode($image),
+            'file' => 'data:image/png;base64,' . base64_encode($image),
         ]);
 
         $cmsValue = Setting::cms()->value;

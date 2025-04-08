@@ -16,6 +16,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Passport\Passport;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class CollectionPersonasTest extends TestCase
@@ -283,11 +284,11 @@ class CollectionPersonasTest extends TestCase
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
         $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
+            'filename' => Str::random() . '.svg',
             'mime_type' => 'image/svg+xml',
         ]);
 
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
 
         $image->uploadBase64EncodedFile($base64Image);
 
@@ -359,6 +360,15 @@ class CollectionPersonasTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
+        $image = File::factory()->pendingAssignment()->create([
+            'filename' => Str::random() . '.svg',
+            'mime_type' => 'image/svg+xml',
+        ]);
+
+        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+
+        $image->uploadBase64EncodedFile($base64Image);
+
         Passport::actingAs($user);
 
         $response = $this->json('POST', '/core/v1/collections/personas', [
@@ -375,6 +385,7 @@ class CollectionPersonasTest extends TestCase
                 ],
             ],
             'category_taxonomies' => [$randomCategory->id],
+            'image_file_id' => $image->id,
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
@@ -392,6 +403,7 @@ class CollectionPersonasTest extends TestCase
                     'content' => 'Sidebox content',
                 ],
             ],
+            'image_file_id' => $image->id,
         ]);
     }
 
@@ -407,6 +419,15 @@ class CollectionPersonasTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
+        $image = File::factory()->pendingAssignment()->create([
+            'filename' => Str::random() . '.svg',
+            'mime_type' => 'image/svg+xml',
+        ]);
+
+        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+
+        $image->uploadBase64EncodedFile($base64Image);
+
         Passport::actingAs($user);
 
         $response = $this->json('POST', '/core/v1/collections/personas', [
@@ -423,6 +444,7 @@ class CollectionPersonasTest extends TestCase
                 ],
             ],
             'category_taxonomies' => [$randomCategory->id],
+            'image_file_id' => $image->id,
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
@@ -440,6 +462,7 @@ class CollectionPersonasTest extends TestCase
                     'content' => 'Sidebox content',
                 ],
             ],
+            'image_file_id' => $image->id,
         ]);
     }
 
@@ -456,6 +479,16 @@ class CollectionPersonasTest extends TestCase
          */
         $user = User::factory()->create();
         $user->makeSuperAdmin();
+
+        $image = File::factory()->pendingAssignment()->create([
+            'filename' => Str::random() . '.svg',
+            'mime_type' => 'image/svg+xml',
+        ]);
+
+        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+
+        $image->uploadBase64EncodedFile($base64Image);
+
         $first = Collection::create([
             'type' => Collection::TYPE_PERSONA,
             'slug' => 'first',
@@ -467,6 +500,7 @@ class CollectionPersonasTest extends TestCase
                 'intro' => 'Lorem ipsum',
                 'subtitle' => 'Subtitle here',
                 'sideboxes' => [],
+                'image_file_id' => $image->id,
             ],
         ]);
         $second = Collection::create([
@@ -480,6 +514,7 @@ class CollectionPersonasTest extends TestCase
                 'intro' => 'Lorem ipsum',
                 'subtitle' => 'Subtitle here',
                 'sideboxes' => [],
+                'image_file_id' => $image->id,
             ],
         ]);
         $third = Collection::create([
@@ -492,6 +527,7 @@ class CollectionPersonasTest extends TestCase
             'meta' => [
                 'intro' => 'Lorem ipsum',
                 'subtitle' => 'Subtitle here',
+                'image_file_id' => $image->id,
                 'sideboxes' => [],
             ],
         ]);
@@ -505,6 +541,7 @@ class CollectionPersonasTest extends TestCase
             'order' => 1,
             'enabled' => true,
             'homepage' => false,
+            'image_file_id' => $image->id,
             'sideboxes' => [],
             'category_taxonomies' => [],
         ]);
@@ -529,6 +566,16 @@ class CollectionPersonasTest extends TestCase
          */
         $user = User::factory()->create();
         $user->makeSuperAdmin();
+
+        $image = File::factory()->pendingAssignment()->create([
+            'filename' => Str::random() . '.svg',
+            'mime_type' => 'image/svg+xml',
+        ]);
+
+        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+
+        $image->uploadBase64EncodedFile($base64Image);
+
         $first = Collection::create([
             'type' => Collection::TYPE_PERSONA,
             'slug' => 'first',
@@ -578,6 +625,7 @@ class CollectionPersonasTest extends TestCase
             'order' => 2,
             'enabled' => true,
             'homepage' => false,
+            'image_file_id' => $image->id,
             'sideboxes' => [],
             'category_taxonomies' => [],
         ]);
@@ -602,6 +650,16 @@ class CollectionPersonasTest extends TestCase
          */
         $user = User::factory()->create();
         $user->makeSuperAdmin();
+
+        $image = File::factory()->pendingAssignment()->create([
+            'filename' => Str::random() . '.svg',
+            'mime_type' => 'image/svg+xml',
+        ]);
+
+        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+
+        $image->uploadBase64EncodedFile($base64Image);
+
         $first = Collection::create([
             'type' => Collection::TYPE_PERSONA,
             'slug' => 'first',
@@ -651,6 +709,7 @@ class CollectionPersonasTest extends TestCase
             'order' => 4,
             'enabled' => true,
             'homepage' => false,
+            'image_file_id' => $image->id,
             'sideboxes' => [],
             'category_taxonomies' => [],
         ]);
@@ -705,6 +764,16 @@ class CollectionPersonasTest extends TestCase
          */
         $user = User::factory()->create();
         $user->makeSuperAdmin();
+
+        $image = File::factory()->pendingAssignment()->create([
+            'filename' => Str::random() . '.svg',
+            'mime_type' => 'image/svg+xml',
+        ]);
+
+        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+
+        $image->uploadBase64EncodedFile($base64Image);
+
         Collection::create([
             'type' => Collection::TYPE_PERSONA,
             'slug' => 'first',
@@ -743,6 +812,7 @@ class CollectionPersonasTest extends TestCase
             'homepage' => false,
             'sideboxes' => [],
             'category_taxonomies' => [],
+            'image_file_id' => $image->id,
         ]);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -762,6 +832,15 @@ class CollectionPersonasTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
+        $image = File::factory()->pendingAssignment()->create([
+            'filename' => Str::random() . '.svg',
+            'mime_type' => 'image/svg+xml',
+        ]);
+
+        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+
+        $image->uploadBase64EncodedFile($base64Image);
+
         Passport::actingAs($user);
 
         $response = $this->json('POST', '/core/v1/collections/personas', [
@@ -771,6 +850,7 @@ class CollectionPersonasTest extends TestCase
             'order' => 1,
             'enabled' => true,
             'homepage' => false,
+            'image_file_id' => $image->id,
             'sideboxes' => [],
             'category_taxonomies' => [$randomCategory->id],
         ]);
@@ -789,6 +869,16 @@ class CollectionPersonasTest extends TestCase
     {
         $user = User::factory()->create();
         $user->makeSuperAdmin();
+
+        $image = File::factory()->pendingAssignment()->create([
+            'filename' => Str::random() . '.svg',
+            'mime_type' => 'image/svg+xml',
+        ]);
+
+        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+
+        $image->uploadBase64EncodedFile($base64Image);
+
         Passport::actingAs($user);
 
         $response = $this->json('POST', '/core/v1/collections/personas', [
@@ -798,11 +888,21 @@ class CollectionPersonasTest extends TestCase
             'order' => 1,
             'enabled' => true,
             'homepage' => false,
+            'image_file_id' => $image->id,
             'sideboxes' => [],
             'category_taxonomies' => [Taxonomy::category()->children()->inRandomOrder()->firstOrFail()->id],
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
+
+        $image = File::factory()->pendingAssignment()->create([
+            'filename' => Str::random() . '.svg',
+            'mime_type' => 'image/svg+xml',
+        ]);
+
+        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
+
+        $image->uploadBase64EncodedFile($base64Image);
 
         $this->assertDatabaseHas('collections', [
             'id' => $response->json('data.id'),
@@ -817,6 +917,7 @@ class CollectionPersonasTest extends TestCase
             'order' => 2,
             'enabled' => true,
             'homepage' => false,
+            'image_file_id' => $image->id,
             'sideboxes' => [],
             'category_taxonomies' => [Taxonomy::category()->children()->inRandomOrder()->firstOrFail()->id],
         ]);
@@ -2032,7 +2133,7 @@ class CollectionPersonasTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,'.base64_encode($image),
+            'file' => 'data:image/png;base64,' . base64_encode($image),
         ]);
         $imageResponse->assertStatus(Response::HTTP_CREATED);
 
