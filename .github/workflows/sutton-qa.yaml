@@ -1,0 +1,23 @@
+name: Deploy to Sutton QA
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release/**
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: Sutton QA
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+
+      - name: Run envoyer deploy
+        run: curl ${{ secrets.ENVOYER_DEPLOY_URL }} -d "branch=${{ steps.extract_branch.outputs.branch }}"
