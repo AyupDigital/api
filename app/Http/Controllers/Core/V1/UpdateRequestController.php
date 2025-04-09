@@ -106,8 +106,8 @@ class UpdateRequestController extends Controller
         }
 
         if ($updatable instanceof ServiceLocation) {
-            $updateRequest->updatable->load('service');
-            $canView = $request->user()->isServiceAdmin($updateRequest->updatable->service);
+            $model = $updatable->load('service');
+            $canView = $request->user()->isServiceAdmin($model->service);
         }
 
         if ($updatable instanceof Organisation) {

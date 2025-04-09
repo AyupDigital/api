@@ -391,8 +391,9 @@ class UpdateRequestsTest extends TestCase
         Passport::actingAs($user);
 
         $serviceLocation = ServiceLocation::factory()->create();
+        $serviceLocation->service()->associate($service);
         $updateRequest = $serviceLocation->updateRequests()->create([
-            'user_id' => User::factory()->create()->id,
+            'user_id' => $user->id,
             'data' => ['name' => 'Test Name'],
         ]);
 
