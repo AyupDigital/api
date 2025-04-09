@@ -4,6 +4,7 @@ namespace Tests\Unit\Rules;
 
 use App\Rules\DateSanity;
 use App\Rules\StartDateLessThanEndDate;
+use Carbon\Carbon;
 use PHPUnit\Framework\TestCase;
 
 class DateSanityTest extends TestCase
@@ -11,7 +12,7 @@ class DateSanityTest extends TestCase
     public function test_date_greater_than_2038_is_not_accepted(): void
     {
         $rule = new DateSanity(
-            date: now()->addYears(20),
+            date: Carbon::now()->addYears(20),
         );
         $failed = false;
 
@@ -25,7 +26,7 @@ class DateSanityTest extends TestCase
     public function test_date_time_greater_than_2038_is_not_accepted(): void
     {
         $rule = new DateSanity(
-            date: now()->addYears(20),
+            date: Carbon::now()->addYears(20),
             time: '12:00',
         );
         $failed = false;
@@ -40,7 +41,7 @@ class DateSanityTest extends TestCase
     public function test_date_less_than_2038_is_accepted(): void
     {
         $rule = new DateSanity(
-            date: now()->addDay(1)
+            date: Carbon::now()->addDay(1)
         );
         $failed = false;
 
@@ -54,7 +55,7 @@ class DateSanityTest extends TestCase
     public function test_date_time_less_than_2038_is_accepted(): void
     {
         $rule = new DateSanity(
-            date: now()->addDay(1),
+            date: Carbon::now()->addDay(1),
             time: '12:00',
         );
         $failed = false;
