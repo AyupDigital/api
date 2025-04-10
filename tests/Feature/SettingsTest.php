@@ -2,18 +2,18 @@
 
 namespace Tests\Feature;
 
-use App\Events\EndpointHit;
+use Tests\TestCase;
+use App\Models\User;
 use App\Models\Audit;
-use App\Models\Organisation;
 use App\Models\Service;
 use App\Models\Setting;
-use App\Models\User;
-use Illuminate\Http\Response;
+use App\Events\EndpointHit;
 use Illuminate\Support\Arr;
+use App\Models\Organisation;
+use Illuminate\Http\Response;
+use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Passport\Passport;
-use Tests\TestCase;
 
 class SettingsTest extends TestCase
 {
@@ -90,6 +90,8 @@ class SettingsTest extends TestCase
             ],
         ];
 
+        Setting::cms()->update(['value' => $this->settingsData['cms']]);
+
         $this->settingsStructure = [
             'data' => [
                 'cms' => [
@@ -116,11 +118,11 @@ class SettingsTest extends TestCase
                             'title',
                             'content',
                         ],
-                        'cookie_policy' => [
+                        'privacy_policy' => [
                             'title',
                             'content',
                         ],
-                        'privacy_policy' => [
+                        'cookie_policy' => [
                             'title',
                             'content',
                         ],
@@ -183,13 +185,13 @@ class SettingsTest extends TestCase
                             'title' => 'data/cms/frontend/terms_and_conditions/title',
                             'content' => 'data/cms/frontend/terms_and_conditions/content',
                         ],
-                        'cookie_policy' => [
-                            'title' => 'data/cms/frontend/cookie_policy/title',
-                            'content' => 'data/cms/frontend/cookie_policy/content',
-                        ],
                         'privacy_policy' => [
                             'title' => 'data/cms/frontend/privacy_policy/title',
                             'content' => 'data/cms/frontend/privacy_policy/content',
+                        ],
+                        'cookie_policy' => [
+                            'title' => 'data/cms/frontend/cookie_policy/title',
+                            'content' => 'data/cms/frontend/cookie_policy/content',
                         ],
                         'accessibility_statement' => [
                             'title' => 'data/cms/frontend/accessibility_statement/title',
@@ -238,7 +240,6 @@ class SettingsTest extends TestCase
     public function test_structure_correct_when_listed(): void
     {
         $response = $this->getJson('/core/v1/settings');
-
         $response->assertJsonStructure($this->settingsStructure);
     }
 
@@ -246,72 +247,7 @@ class SettingsTest extends TestCase
     {
         $response = $this->getJson('/core/v1/settings');
 
-        $response->assertJson([
-            'data' => [
-                'cms' => [
-                    'frontend' => [
-                        'global' => [
-                            'footer_title' => 'Footer title',
-                            'footer_content' => 'Footer content',
-                            'contact_phone' => 'Contact phone',
-                            'contact_email' => 'Contact email',
-                            'facebook_handle' => 'Facebook handle',
-                            'twitter_handle' => 'Twitter handle',
-                        ],
-                        'home' => [
-                            'banners' => [
-                                [
-                                    'title' => null,
-                                    'content' => null,
-                                    'button_text' => null,
-                                    'button_url' => null,
-                                ],
-                            ],
-                        ],
-                        'terms_and_conditions' => [
-                            'title' => 'Title',
-                            'content' => 'Content',
-                        ],
-                        'privacy_policy' => [
-                            'title' => 'Title',
-                            'content' => 'Content',
-                        ],
-                        'cookie_policy' => [
-                            'title' => 'Title',
-                            'content' => 'Content',
-                        ],
-                        'accessibility_statement' => [
-                            'title' => 'Title',
-                            'content' => 'Content',
-                        ],
-                        'about' => [
-                            'title' => 'Title',
-                            'content' => 'Content',
-                            'video_url' => 'Video URL',
-                        ],
-                        'contact' => [
-                            'title' => 'Title',
-                            'content' => 'Content',
-                        ],
-                        'get_involved' => [
-                            'title' => 'Title',
-                            'content' => 'Content',
-                        ],
-                        'favourites' => [
-                            'title' => 'Title',
-                            'content' => 'Content',
-                        ],
-                        'banner' => [
-                            'title' => null,
-                            'content' => null,
-                            'button_text' => null,
-                            'button_url' => null,
-                            'has_image' => false,
-                        ],
-                    ],
-                ],
-            ],
-        ]);
+        $response->assertJson($this->settingsResponse);
     }
 
     public function test_audit_created_when_listed(): void
@@ -485,7 +421,7 @@ class SettingsTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,'.base64_encode($image),
+            'file' => 'data:image/png;base64,' . base64_encode($image),
         ]);
 
         $this->settingsData['cms']['frontend']['banner']['image_file_id'] = $this->getResponseContent($imageResponse, 'data.id');
@@ -549,7 +485,7 @@ class SettingsTest extends TestCase
         $this->json('POST', '/core/v1/files', [
             'is_private' => false,
             'mime_type' => 'image/png',
-            'file' => 'data:image/png;base64,'.base64_encode($image),
+            'file' => 'data:image/png;base64,' . base64_encode($image),
         ]);
 
         $this->settingsData['cms']['frontend']['banner'] = [
@@ -586,7 +522,7 @@ class SettingsTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,'.base64_encode($image),
+            'file' => 'data:image/png;base64,' . base64_encode($image),
         ]);
 
         $cmsValue = Setting::cms()->value;
@@ -615,7 +551,7 @@ class SettingsTest extends TestCase
         $imageResponse = $this->json('POST', '/core/v1/files', [
             'is_private' => false,
             'mime_type' => 'image/png',
-            'file' => 'data:image/png;base64,'.base64_encode($image),
+            'file' => 'data:image/png;base64,' . base64_encode($image),
         ]);
 
         $cmsValue = Setting::cms()->value;

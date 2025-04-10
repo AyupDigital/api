@@ -91,7 +91,7 @@ class SettingController extends Controller
                                 'button_url' => $request->input('cms.frontend.banner.button_url'),
                                 'image_file_id' => $request->input(
                                     'cms.frontend.banner.image_file_id',
-                                    Setting::cms()->value['frontend']['banner']['image_file_id']
+                                    Setting::cms()->value['frontend']['banner']['image_file_id'] ?? null
                                 ),
                             ],
                         ],

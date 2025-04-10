@@ -390,9 +390,11 @@ class UpdateRequestsTest extends TestCase
         $user = User::factory()->create()->makeServiceAdmin($service);
         Passport::actingAs($user);
 
-        $serviceLocation = ServiceLocation::factory()->create();
+        $serviceLocation = ServiceLocation::factory()->create([
+            'service_id' => $service->id
+        ]);
         $updateRequest = $serviceLocation->updateRequests()->create([
-            'user_id' => User::factory()->create()->id,
+            'user_id' => $user->id,
             'data' => ['name' => 'Test Name'],
         ]);
 
@@ -415,10 +417,15 @@ class UpdateRequestsTest extends TestCase
     public function organisation_admin_can_view_one(): void
     {
         $organisation = Organisation::factory()->create();
+        $service = Service::factory()->create([
+            'organisation_id' => $organisation->id,
+        ]);
         $user = User::factory()->create()->makeOrganisationAdmin($organisation);
         Passport::actingAs($user);
 
-        $serviceLocation = ServiceLocation::factory()->create();
+        $serviceLocation = ServiceLocation::factory()->create([
+            'service_id' => $service->id
+        ]);
         $updateRequest = $serviceLocation->updateRequests()->create([
             'user_id' => User::factory()->create()->id,
             'data' => ['name' => 'Test Name'],
@@ -1086,6 +1093,9 @@ class UpdateRequestsTest extends TestCase
             'type' => Service::TYPE_SERVICE,
             'status' => Service::STATUS_INACTIVE,
             'intro' => 'This is a test intro',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_MEMBERSHIP,
             'description' => 'Lorem ipsum',
             'wait_time' => null,
             'is_free' => true,
@@ -1199,6 +1209,9 @@ class UpdateRequestsTest extends TestCase
             'status' => Service::STATUS_ACTIVE,
             'intro' => 'This is a test intro',
             'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => Service::ATTENDING_TYPE_VENUE,
+            'attending_access' => Service::ATTENDING_ACCESS_MEMBERSHIP,
             'wait_time' => null,
             'is_free' => true,
             'fees_text' => null,

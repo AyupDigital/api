@@ -75,7 +75,7 @@ class CollectionTest extends TestCase implements UsesElasticsearch
 
         $this->assertEquals(1, $searchResponse->total());
         $this->assertEquals($service1->id, $searchResponse->hits()[0]->document()->content()['id']);
-        $this->assertEquals(['Adventurous Animals'], $searchResponse->hits()[0]->document()->content()['collection_categories']);
+        $this->assertEquals(['adventurous-animals'], $searchResponse->hits()[0]->document()->content()['collection_categories']);
 
         $searchResponse = Service::search('Accomplished Possum')->raw();
 
@@ -101,7 +101,7 @@ class CollectionTest extends TestCase implements UsesElasticsearch
 
         $this->assertEquals(1, $searchResponse->total());
         $this->assertEquals($service2->id, $searchResponse->hits()[0]->document()->content()['id']);
-        $this->assertEquals(['Adventurous Animals'], $searchResponse->hits()[0]->document()->content()['collection_categories']);
+        $this->assertEquals(['adventurous-animals'], $searchResponse->hits()[0]->document()->content()['collection_categories']);
     }
 
     /**

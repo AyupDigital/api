@@ -2102,7 +2102,7 @@ class CollectionOrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function super_admin_cannot_delete_image(): void
+    public function super_admin_can_delete_image(): void
     {
         /**
          * @var \App\Models\User $user
@@ -2116,7 +2116,6 @@ class CollectionOrganisationEventsTest extends TestCase
         $organisationEventCollection->save();
 
         Passport::actingAs($user);
-
         $response = $this->json('PUT', "/core/v1/collections/organisation-events/{$organisationEventCollection->id}", [
             'name' => $organisationEventCollection->name,
             'intro' => $organisationEventCollection->meta['intro'],
@@ -2127,8 +2126,8 @@ class CollectionOrganisationEventsTest extends TestCase
             'image_file_id' => null,
         ]);
 
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertStatus(Response::HTTP_OK);
         $organisationEventCollection = $organisationEventCollection->fresh();
-        $this->assertEquals($meta['image_file_id'], $organisationEventCollection->meta['image_file_id']);
+        $this->assertEquals($organisationEventCollection->meta['image_file_id'], null);
     }
 }

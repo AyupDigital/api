@@ -73,7 +73,6 @@ class CollectionCategoriesTest extends TestCase
     public function guest_can_list_all_of_them(): void
     {
         $collectionCategoryCount = Collection::categories()->count();
-
         $response = $this->json('GET', '/core/v1/collections/categories/all');
 
         $response->assertStatus(Response::HTTP_OK);

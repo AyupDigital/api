@@ -15,8 +15,11 @@ use App\Rules\MarkdownMaxLength;
 use App\Rules\MarkdownMinLength;
 use App\Rules\RootTaxonomyIs;
 use App\Rules\Slug;
+use App\Rules\StartDateLessThanEndDate;
 use App\Rules\UkPhoneNumber;
 use App\Rules\UserHasRole;
+use Carbon\Carbon;
+use DOTNET;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -53,16 +56,21 @@ class StoreRequest extends FormRequest
             ],
             'title' => ['required', 'string', 'min:1', 'max:255'],
             'slug' => ['string', 'min:1', 'max:255', new Slug],
-            'start_date' => ['required', 'date_format:Y-m-d', new DateSanity($this)],
-            'end_date' => ['required', 'date_format:Y-m-d', new DateSanity($this)],
-            'start_time' => ['required', 'date_format:H:i:s', new DateSanity($this)],
-            'end_time' => ['required', 'date_format:H:i:s', new DateSanity($this)],
+            'start_date' => ['required', 'date_format:Y-m-d'],
+            'end_date' => ['required', 'date_format:Y-m-d', new StartDateLessThanEndDate(
+                startDate: Carbon::parse($this->get('start_date')),
+                endDate: Carbon::parse($this->get('end_date')),
+                startTime: $this->get('start_time'),
+                endTime: $this->get('end_time'),
+            ), new DateSanity(Carbon::parse($this->get('end_date')), $this->get('end_time'))],
+            'start_time' => ['required', 'date_format:H:i:s'],
+            'end_time' => ['required', 'date_format:H:i:s'],
             'intro' => ['required', 'string', 'min:1', 'max:255'],
             'description' => [
                 'required',
                 'string',
                 new MarkdownMinLength(1),
-                new MarkdownMaxLength(config('local.event_description_max_chars'), 'Description tab - The long description must be '.config('local.event_description_max_chars').' characters or fewer.'),
+                new MarkdownMaxLength(config('local.event_description_max_chars'), 'Description tab - The long description must be ' . config('local.event_description_max_chars') . ' characters or fewer.'),
             ],
             'is_free' => ['required', 'boolean'],
             'fees_text' => [

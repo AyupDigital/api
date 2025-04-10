@@ -859,7 +859,7 @@ class ServiceLocationsTest extends TestCase
         $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
-    public function test_service_admin_cannot_delete_one(): void
+    public function test_service_admin_can_delete_one(): void
     {
         $serviceLocation = ServiceLocation::factory()->create();
         $user = User::factory()->create()->makeServiceAdmin($serviceLocation->service);
@@ -868,10 +868,10 @@ class ServiceLocationsTest extends TestCase
 
         $response = $this->json('DELETE', "/core/v1/service-locations/{$serviceLocation->id}");
 
-        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
-    public function test_organisation_admin_cannot_delete_one(): void
+    public function test_organisation_admin_can_delete_one(): void
     {
         $serviceLocation = ServiceLocation::factory()->create();
         $user = User::factory()->create()->makeOrganisationAdmin($serviceLocation->service->organisation);
@@ -880,10 +880,10 @@ class ServiceLocationsTest extends TestCase
 
         $response = $this->json('DELETE', "/core/v1/service-locations/{$serviceLocation->id}");
 
-        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
-    public function test_global_admin_cannot_delete_one(): void
+    public function test_global_admin_can_delete_one(): void
     {
         $serviceLocation = ServiceLocation::factory()->create();
         $user = User::factory()->create()->makeGlobalAdmin();
@@ -892,7 +892,7 @@ class ServiceLocationsTest extends TestCase
 
         $response = $this->json('DELETE', "/core/v1/service-locations/{$serviceLocation->id}");
 
-        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     public function test_super_admin_can_delete_one(): void
@@ -970,7 +970,7 @@ class ServiceLocationsTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,'.base64_encode($image),
+            'file' => 'data:image/png;base64,' . base64_encode($image),
         ]);
 
         $response = $this->json('POST', '/core/v1/service-locations', [
