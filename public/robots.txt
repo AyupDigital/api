@@ -1,13 +1,2 @@
-User-agent: Googlebot
-Disallow:
-
-User-agent: AdsBot-Google
-Disallow:
-
-User-agent: Googlebot-Image
-Disallow:
-
 User-agent: *
 Disallow: /
-
-Sitemap: https://api.staging.connectedplaces.org/sitemap
