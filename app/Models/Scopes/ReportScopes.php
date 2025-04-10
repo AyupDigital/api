@@ -83,6 +83,7 @@ trait ReportScopes
                 'services.referral_method as service_referral_method',
                 'services.referral_email as service_referral_email',
                 'services.status as service_status',
+                'services.created_at as service_created_at'
             ])
             ->selectRaw('group_concat(distinct trim(trailing ", " from replace(concat_ws(", ", locations.address_line_1, locations.address_line_2, locations.address_line_3, locations.city, locations.county, locations.postcode, locations.country), ", , ", ", ")) separator "|") as service_locations')
             ->join('organisations', 'services.organisation_id', '=', 'organisations.id')
@@ -125,6 +126,7 @@ trait ReportScopes
                 'organisations.email as organisation_email',
                 'organisations.phone as organisation_phone',
                 'organisations.url as organisation_url',
+                'organisations.created_at as organisation_created_at'
             ])
             ->selectRaw('ifnull(service_counts.count, 0) as organisation_services_count')
             ->selectRaw('ifnull(non_admin_user_counts.count, 0) as non_admin_users_count')

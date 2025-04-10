@@ -126,6 +126,7 @@ class Report extends Model
             'Referral Contact',
             'Status',
             'Locations Delivered At',
+            'Service Created At'
         ];
 
         $data = $this->getServiceExportResults()->map(function ($row) {
@@ -143,6 +144,7 @@ class Report extends Model
                 $row->service_referral_email,
                 $row->service_status,
                 $row->service_locations,
+                $row->service_created_at,
             ];
         })->all();
 
@@ -164,6 +166,7 @@ class Report extends Model
             'Organisation Phone',
             'Organisation URL',
             'Number of Accounts Attributed',
+            'Organisation Created At'
         ];
 
         $data = $this->getOrganisationExportResults()->map(function ($row) {
@@ -175,6 +178,7 @@ class Report extends Model
                 $row->organisation_phone,
                 $row->organisation_url,
                 $row->non_admin_users_count,
+                $row->organisation_created_at
             ];
         })->all();
 

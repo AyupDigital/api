@@ -249,6 +249,7 @@ class ReportTest extends TestCase
             'Referral Contact',
             'Status',
             'Locations Delivered At',
+            'Service Created At'
         ], $csv[0]);
 
         // Assert created service exported.
@@ -268,6 +269,7 @@ class ReportTest extends TestCase
             $service->serviceLocations->map(function (ServiceLocation $serviceLocation) {
                 return $serviceLocation->location->full_address;
             })->implode('|'),
+            $service->created_at
         ], $csv[1]);
     }
 
@@ -293,6 +295,7 @@ class ReportTest extends TestCase
             'Organisation Phone',
             'Organisation URL',
             'Number of Accounts Attributed',
+            'Service Created At'
         ];
 
         // Generate the report.
