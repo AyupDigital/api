@@ -11,6 +11,7 @@ class LocationController
 {
     public function __invoke(Request $request)
     {
+        // TODO: Move this to a Request class if it grows.
         $request->validate([
             'query' => 'string|required',
             'page' => 'integer|nullable',
@@ -27,7 +28,7 @@ class LocationController
                     ->orWhere('postcode', 'like', '%'.$searchQuery.'%')
                     ->orWhere('country', 'like', '%'.$searchQuery.'%');
             })->paginate(
-                $request->input('per_page', 10),
+                $request->input('per_page', 25),
                 ['*'],
                 'page',
                 $request->input('page', 1)
