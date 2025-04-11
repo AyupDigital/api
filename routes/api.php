@@ -160,6 +160,8 @@ Route::prefix('/core/v1')
                 ->name('search.collections.personas');
             Route::post('/search/pages', Core\V1\Search\PageController::class)->name('search.pages');
             Route::post('/search/events', Core\V1\Search\EventController::class)->name('search.events');
+            Route::post('/search/locations', Core\V1\Search\LocationController::class)
+                ->name('search.locations');
 
             // Service Locations.
             Route::match(['GET', 'POST'], '/service-locations/index', [Core\V1\ServiceLocationController::class, 'index']);
