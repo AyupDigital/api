@@ -2567,6 +2567,50 @@ class PagesTest extends TestCase
     /**
      * @test
      */
+    public function create_information_page_with_image_as_content_admin200(): void
+    {
+        /**
+         * @var \App\Models\User $user
+         */
+        $user = User::factory()->create();
+        $user->makeContentAdmin();
+
+        $imageSvg = File::factory()->pendingAssignment()->imageSvg()->create();
+
+        Passport::actingAs($user);
+
+        $parentPage = Page::factory()->create();
+
+        $data = [
+            'title' => $this->faker->sentence(),
+            'excerpt' => trim(substr($this->faker->paragraph(2), 0, 149)),
+            'content' => [
+                'introduction' => [
+                    'content' => [
+                        [
+                            'type' => 'copy',
+                            'value' => $this->faker->realText(),
+                        ],
+                        [
+                            'type' => 'image',
+                            'id' => $imageSvg->id,
+                        ],
+                    ],
+                ],
+            ],
+            'parent_id' => $parentPage->id,
+            'page_type' => 'information',
+        ];
+        $response = $this->json('POST', '/core/v1/pages', $data);
+
+        $response->assertStatus(Response::HTTP_OK);
+
+        $response->assertJsonFragment($data);
+    }
+
+    /**
+     * @test
+     */
     public function create_landing_page_with_call_to_actions_as_content_admin200(): void
     {
         /**

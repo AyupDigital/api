@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Models\File;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Str;
@@ -95,6 +96,27 @@ class PageContent implements ValidationRule
                     $fail('The video url must be provided by either YouTube or Vimeo.');
                 }
             }
+        } else if ($value['type'] === 'image') {
+            if (empty($value['id']) || $value['id'] === "") {
+                $fail('Image is required, please make sure you have uploaded the image');
+                return;
+            }
+
+            if (!File::where('id', $value['id'])->exists()) {
+                $fail('Image must exist, please make sure you have uploaded the image');
+                return;
+            }
+
+            $isPendingAssignment = true;
+            (new FileIsPendingAssignment())->validate('id', $value['id'], function () use (&$isPendingAssignment) {
+                $isPendingAssignment = false;
+            });
+            if (!$isPendingAssignment) {
+                $fail('Image must be pending assignment');
+                return;
+            }
+        
+        
         } else {
             $fail('Invalid content type');
         }
