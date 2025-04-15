@@ -877,7 +877,7 @@ class LocationsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/locations/{$location->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Location)->getTable(), ['id' => $location->id]);
+        $this->assertSoftDeleted((new Location)->getTable(), ['id' => $location->id]);
     }
 
     /**
@@ -941,7 +941,7 @@ class LocationsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/locations/{$location->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Location)->getTable(), ['id' => $location->id]);
+        $this->assertSoftDeleted((new Location)->getTable(), ['id' => $location->id]);
         $this->assertDatabaseMissing('update_requests', ['id' => $updateRequest->id, 'deleted_at' => null]);
     }
 

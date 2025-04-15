@@ -3363,7 +3363,7 @@ class OrganisationEventsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/organisation-events/{$organisationEvent->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new OrganisationEvent)->getTable(), ['id' => $organisationEvent->id]);
+        $this->assertSoftDeleted((new OrganisationEvent)->getTable(), ['id' => $organisationEvent->id]);
     }
 
     /**
@@ -3424,7 +3424,7 @@ class OrganisationEventsTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        $this->assertDatabaseMissing((new OrganisationEvent)->getTable(), ['id' => $organisationEvent->id]);
+        $this->assertSoftDeleted((new OrganisationEvent)->getTable(), ['id' => $organisationEvent->id]);
         $this->assertDatabaseMissing('update_requests', ['id' => $updateRequest->id, 'deleted_at' => null]);
     }
 }

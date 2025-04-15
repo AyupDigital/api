@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('slug')->after('logo_file_id');
         });
 
-        Organisation::query()->chunk(200, function (Collection $organisations) {
+        Organisation::withoutGlobalScopes()->chunk(200, function (Collection $organisations) {
             $organisations->each(function (Organisation $organisation) {
                 $iteration = 0;
                 do {

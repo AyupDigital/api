@@ -15,6 +15,7 @@ use App\UpdateRequest\UpdateRequests;
 use ElasticScoutDriverPlus\Searchable;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -30,6 +31,7 @@ class OrganisationEvent extends Model implements AppliesUpdateRequests, HasTaxon
     use Searchable;
     use UpdateRequests;
     use UpdateTaxonomyRelationships;
+    use SoftDeletes;
 
     /**
      * The attributes that should be cast to native types.

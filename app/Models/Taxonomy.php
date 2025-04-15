@@ -54,7 +54,7 @@ class Taxonomy extends Model
 
     public function touchServices(): Taxonomy
     {
-        $this->services()->get()->searchable();
+        $this->services()->withoutGlobalScopes()->get()->searchable();
 
         return $this;
     }
@@ -72,7 +72,7 @@ class Taxonomy extends Model
     {
         $this->update(['depth' => $this->getDepth()]);
 
-        $this->children()->each(function (Taxonomy $child) {
+        $this->children()->withoutGlobalScopes()->each(function (Taxonomy $child) {
             $child->updateDepth();
         });
 

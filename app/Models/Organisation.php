@@ -15,6 +15,7 @@ use App\UpdateRequest\UpdateRequests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -29,6 +30,7 @@ class Organisation extends Model implements AppliesUpdateRequests, HasTaxonomyRe
     use OrganisationScopes;
     use UpdateRequests;
     use UpdateTaxonomyRelationships;
+    use SoftDeletes;
 
     /**
      * Return the OrganisationTaxonomy relationship.

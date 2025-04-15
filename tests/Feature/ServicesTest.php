@@ -5850,7 +5850,7 @@ class ServicesTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/services/{$service->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Service)->getTable(), ['id' => $service->id]);
+        $this->assertSoftDeleted((new Service)->getTable(), ['id' => $service->id]);
     }
 
     /**
@@ -5869,7 +5869,7 @@ class ServicesTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/services/{$service->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Service)->getTable(), ['id' => $service->id]);
+        $this->assertSoftDeleted((new Service)->getTable(), ['id' => $service->id]);
     }
 
     /*

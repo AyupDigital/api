@@ -295,7 +295,7 @@ class ReportTest extends TestCase
             'Organisation Phone',
             'Organisation URL',
             'Number of Accounts Attributed',
-            'Service Created At'
+            'Organisation Created At'
         ];
 
         // Generate the report.
@@ -319,6 +319,7 @@ class ReportTest extends TestCase
             $organisation->phone,
             $organisation->url,
             1,
+            $organisation->created_at
         ], $csv[1]);
 
         // Create a service
@@ -354,6 +355,7 @@ class ReportTest extends TestCase
             $organisation->phone,
             $organisation->url,
             1,
+            $organisation->created_at
         ], $csv[1]);
     }
 

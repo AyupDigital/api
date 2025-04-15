@@ -32,6 +32,7 @@ class User extends Authenticatable implements Notifiable
     use UserMutators;
     use UserRelationships;
     use UserScopes;
+    use SoftDeletes;
 
     /**
      * The "type" of the primary key ID.

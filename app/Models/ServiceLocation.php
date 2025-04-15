@@ -12,6 +12,7 @@ use App\Support\Time;
 use App\UpdateRequest\UpdateRequests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Date;
@@ -25,6 +26,7 @@ class ServiceLocation extends Model implements AppliesUpdateRequests
     use ServiceLocationRelationships;
     use ServiceLocationScopes;
     use UpdateRequests;
+    use SoftDeletes;
 
     /**
      * Determine if the service location is open at this point in time.
