@@ -95,6 +95,19 @@ class User extends Authenticatable implements Notifiable
                 $model->{$model->getKeyName()} = uuid();
             }
         });
+
+        static::deleting(function (User $user) {
+            if ($user->isForceDeleting()) {
+                return;
+            }
+
+            $user->update([
+                'first_name' => 'REDACTED',
+                'last_name' => 'REDACTED',
+                'email' => 'redacted@redacted.com',
+                'phone' => '07123456789',
+            ]);
+        });
     }
 
     public function hasAppend(string $name): bool
