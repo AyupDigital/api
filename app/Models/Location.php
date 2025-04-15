@@ -14,6 +14,7 @@ use App\Support\Coordinate;
 use App\UpdateRequest\UpdateRequests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
@@ -26,6 +27,7 @@ class Location extends Model implements AppliesUpdateRequests
     use LocationRelationships;
     use LocationScopes;
     use UpdateRequests;
+    use SoftDeletes;
 
     /**
      * The attributes that should be cast to native types.

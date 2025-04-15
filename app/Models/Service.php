@@ -23,6 +23,7 @@ use ElasticScoutDriverPlus\Searchable;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
@@ -44,6 +45,7 @@ class Service extends Model implements AppliesUpdateRequests, HasTaxonomyRelatio
     use UpdateRequests;
     use UpdateServiceEligibilityTaxonomyRelationships;
     use UpdateTaxonomyRelationships;
+    use SoftDeletes;
 
     const TYPE_SERVICE = 'service';
 

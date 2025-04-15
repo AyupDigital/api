@@ -7,6 +7,7 @@ use App\Models\CollectionTaxonomy;
 use App\Models\Location;
 use App\Models\OrganisationEventTaxonomy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\DB;
 
 trait OrganisationEventScopes
@@ -81,7 +82,7 @@ trait OrganisationEventScopes
 
     public function scopeCollectionTaxonomies(Builder $query): Builder
     {
-        return $query->from((new CollectionTaxonomy)->getTable())->whereIn('taxonomy_id', function ($query) {
+        return $query->withoutGlobalScope(new SoftDeletingScope())->from((new CollectionTaxonomy)->getTable())->whereIn('taxonomy_id', function ($query) {
             $query->select('taxonomy_id')
                 ->from((new OrganisationEventTaxonomy)->getTable())
                 ->where('organisation_event_id', $this->id);
@@ -93,7 +94,7 @@ trait OrganisationEventScopes
      */
     public function scopeCollections(Builder $query): Builder
     {
-        return $query->from((new Collection)->getTable())
+        return $query->withoutGlobalScope(new SoftDeletingScope())->from((new Collection)->getTable())
             ->where('type', Collection::TYPE_ORGANISATION_EVENT)
             ->whereIn('id', function ($query) {
                 $query->from((new CollectionTaxonomy)->getTable())

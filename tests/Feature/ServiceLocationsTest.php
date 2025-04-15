@@ -905,7 +905,7 @@ class ServiceLocationsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/service-locations/{$serviceLocation->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new ServiceLocation)->getTable(), ['id' => $serviceLocation->id]);
+        $this->assertSoftDeleted((new ServiceLocation)->getTable(), ['id' => $serviceLocation->id]);
     }
 
     public function test_audit_created_when_deleted(): void

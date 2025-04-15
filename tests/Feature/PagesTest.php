@@ -4521,7 +4521,7 @@ class PagesTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        $this->assertDatabaseMissing('pages', ['id' => $page->id]);
+        $this->assertSoftDeleted('pages', ['id' => $page->id]);
     }
 
     /**
@@ -4628,9 +4628,9 @@ class PagesTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        $this->assertDatabaseMissing('pages', ['id' => $page->id]);
+        $this->assertSoftDeleted('pages', ['id' => $page->id]);
         foreach ($pageCollectionIds as $collectionId) {
-            $this->assertDatabaseMissing('collection_page', ['page_id' => $page->id, 'collection_id' => $collectionId]);
+            $this->assertDatabaseHas('collection_page', ['page_id' => $page->id, 'collection_id' => $collectionId]);
             $this->assertDatabaseHas('collections', ['id' => $collectionId]);
         }
     }
@@ -4656,9 +4656,9 @@ class PagesTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        $this->assertDatabaseMissing('pages', ['id' => $page->id]);
+        $this->assertSoftDeleted('pages', ['id' => $page->id]);
         foreach ($pageCollectionIds as $collectionId) {
-            $this->assertDatabaseMissing('collection_page', ['page_id' => $page->id, 'collection_id' => $collectionId]);
+            $this->assertDatabaseHas('collection_page', ['page_id' => $page->id, 'collection_id' => $collectionId]);
             $this->assertDatabaseHas('collections', ['id' => $collectionId]);
         }
     }
@@ -4684,7 +4684,7 @@ class PagesTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        $this->assertDatabaseMissing('pages', ['id' => $page->id]);
+        $this->assertSoftDeleted('pages', ['id' => $page->id]);
         $this->assertDatabaseMissing('files', ['id' => $imageId]);
     }
 
@@ -4729,7 +4729,7 @@ class PagesTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        $this->assertDatabaseMissing('pages', ['id' => $page->id]);
+        $this->assertSoftDeleted('pages', ['id' => $page->id]);
         $this->assertDatabaseMissing('update_requests', ['id' => $updateRequest->id, 'deleted_at' => null]);
     }
 }

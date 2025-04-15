@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('pages', function (Blueprint $table) {
-            Page::chunk(50, function ($pages) {
+            Page::withoutGlobalScopes()->chunk(50, function ($pages) {
                 foreach ($pages as $page) {
                     $content = $page->content;
 

@@ -32,6 +32,7 @@ class User extends Authenticatable implements Notifiable
     use UserMutators;
     use UserRelationships;
     use UserScopes;
+    use SoftDeletes;
 
     /**
      * The "type" of the primary key ID.
@@ -93,6 +94,19 @@ class User extends Authenticatable implements Notifiable
             if (empty($model->{$model->getKeyName()})) {
                 $model->{$model->getKeyName()} = uuid();
             }
+        });
+
+        static::deleting(function (User $user) {
+            if ($user->isForceDeleting()) {
+                return;
+            }
+
+            $user->update([
+                'first_name' => 'REDACTED',
+                'last_name' => 'REDACTED',
+                'email' => 'redacted@redacted.com',
+                'phone' => '07123456789',
+            ]);
         });
     }
 

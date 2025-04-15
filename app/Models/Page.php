@@ -13,6 +13,7 @@ use App\UpdateRequest\UpdateRequests;
 use ElasticScoutDriverPlus\Searchable;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator as ValidatorFacade;
 use Kalnoy\Nestedset\NodeTrait;
@@ -31,6 +32,7 @@ class Page extends Model implements AppliesUpdateRequests
     use Searchable {
         Searchable::usesSoftDelete insteadof NodeTrait;
     }
+    use SoftDeletes;
 
     use UpdateRequests;
 

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('slug')->after('id');
         });
 
-        OrganisationEvent::query()->chunk(200, function (Collection $events) {
+        OrganisationEvent::withoutGlobalScopes()->chunk(200, function (Collection $events) {
             $events->each(function (OrganisationEvent $event) {
                 $iteration = 0;
                 do {

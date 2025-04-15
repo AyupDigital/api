@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('slug')->after('id');
         });
 
-        Page::query()->chunk(200, function (Collection $pages) {
+        Page::withoutGlobalScopes()->chunk(200, function (Collection $pages) {
             $pages->each(function (Page $page) {
                 $iteration = 0;
                 do {

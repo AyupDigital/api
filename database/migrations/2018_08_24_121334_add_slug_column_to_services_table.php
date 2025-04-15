@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('slug')->after('logo_file_id');
         });
 
-        Service::query()->chunk(200, function (Collection $services) {
+        Service::withoutGlobalScopes()->chunk(200, function (Collection $services) {
             $services->each(function (Service $service) {
                 $iteration = 0;
                 do {

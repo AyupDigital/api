@@ -42,7 +42,7 @@ return new class extends Migration
         Taxonomy::firstOrNew([
             'parent_id' => $categoryId,
             'name' => 'Services',
-        ])->fill([
+        ])->fill([  
             'parent_id' => $lgaStandardsId,
             'order' => 0,
             'depth' => 1,
@@ -57,7 +57,8 @@ return new class extends Migration
                 $query->select('id')
                     ->from((new Taxonomy)->getTable())
                     ->where('parent_id', $lgaStandardsId);
-            })->pluck('service_id');
+            })
+            ->pluck('service_id');
 
         // Relate those Services to LGA Standards as well
         DB::table((new ServiceTaxonomy)->getTable())

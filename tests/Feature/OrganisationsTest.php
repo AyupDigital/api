@@ -1695,7 +1695,7 @@ class OrganisationsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/organisations/{$organisation->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Organisation)->getTable(), ['id' => $organisation->id]);
+        $this->assertSoftDeleted((new Organisation)->getTable(), ['id' => $organisation->id]);
     }
 
     /**
@@ -1748,7 +1748,7 @@ class OrganisationsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/organisations/{$organisation->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Organisation)->getTable(), ['id' => $organisation->id]);
+        $this->assertSoftDeleted((new Organisation)->getTable(), ['id' => $organisation->id]);
         $this->assertDatabaseMissing('update_requests', ['id' => $updateRequest->id, 'deleted_at' => null]);
     }
 
@@ -1767,7 +1767,7 @@ class OrganisationsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/organisations/{$organisation->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Organisation)->getTable(), ['id' => $organisation->id]);
+        $this->assertSoftDeleted((new Organisation)->getTable(), ['id' => $organisation->id]);
         $this->assertDatabaseMissing((new OrganisationTaxonomy)->getTable(), [
             'organisation_id' => $organisation->id,
             'taxonomy_id' => $taxonomy->id,
