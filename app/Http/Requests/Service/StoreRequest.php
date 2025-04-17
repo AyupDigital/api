@@ -5,6 +5,7 @@ namespace App\Http\Requests\Service;
 use App\Http\Requests\HasMissingValues;
 use App\Models\File;
 use App\Models\Organisation;
+use App\Models\RegularOpeningHour;
 use App\Models\Role;
 use App\Models\Service;
 use App\Models\SocialMedia;
@@ -286,6 +287,38 @@ class StoreRequest extends FormRequest
             'eligibility_types.custom.ethnicity' => ['nullable', 'string', 'min:1', 'max:255'],
             'eligibility_types.custom.housing' => ['nullable', 'string', 'min:1', 'max:255'],
             'eligibility_types.custom.other' => ['nullable', 'string', 'min:1', 'max:255'],
+            'service_locations' => ['present', 'array'],
+            'service_locations.*.location_id' => ['required_with:service_locations.*', 'exists:locations,id'],
+            'service_locations.*.name' => ['required_with:service_locations.*', 'string', 'min:1', 'max:255'],
+            'service_locations.*.regular_opening_hours' => ['present', 'array'],
+            'service_locations.*.regular_opening_hours.*' => ['array'],
+            'service_locations.*.regular_opening_hours.*.frequency' => ['required_with:regular_opening_hours.*', Rule::in([
+                RegularOpeningHour::FREQUENCY_WEEKLY,
+                RegularOpeningHour::FREQUENCY_MONTHLY,
+                RegularOpeningHour::FREQUENCY_FORTNIGHTLY,
+                RegularOpeningHour::FREQUENCY_NTH_OCCURRENCE_OF_MONTH,
+            ])],
+            'service_locations.*.regular_opening_hours.*.weekday' => ['required_if:regular_opening_hours.*.frequency,'.RegularOpeningHour::FREQUENCY_WEEKLY, 'nullable', 'integer', 'min:1', 'max:7'],
+            'service_locations.*.regular_opening_hours.*.day_of_month' => ['required_if:regular_opening_hours.*.frequency,'.RegularOpeningHour::FREQUENCY_MONTHLY, 'nullable', 'integer', 'min:1', 'max:31'],
+            'service_locations.*.regular_opening_hours.*.occurrence_of_month' => ['required_if:regular_opening_hours.*.frequency,'.RegularOpeningHour::FREQUENCY_NTH_OCCURRENCE_OF_MONTH, 'nullable', 'integer', 'min:1', 'max: 5'],
+            'service_locations.*.regular_opening_hours.*.starts_at' => ['required_if:regular_opening_hours.*.frequency,'.RegularOpeningHour::FREQUENCY_FORTNIGHTLY, 'nullable', 'date_format:Y-m-d'],
+            'service_locations.*.regular_opening_hours.*.opens_at' => ['required_with:regular_opening_hours.*', 'date_format:H:i:s'],
+            'service_locations.*.regular_opening_hours.*.closes_at' => ['required_with:regular_opening_hours.*', 'date_format:H:i:s'],
+
+            'service_locations.*.holiday_opening_hours' => ['present', 'array'],
+            'service_locations.*.holiday_opening_hours.*' => ['array'],
+            'service_locations.*.holiday_opening_hours.*.is_closed' => ['required_with:holiday_opening_hours.*', 'boolean'],
+            'service_locations.*.holiday_opening_hours.*.starts_at' => ['required_with:holiday_opening_hours.*', 'date_format:Y-m-d'],
+            'service_locations.*.holiday_opening_hours.*.ends_at' => ['required_with:holiday_opening_hours.*', 'date_format:Y-m-d'],
+            'service_locations.*.holiday_opening_hours.*.opens_at' => ['required_with:holiday_opening_hours.*', 'date_format:H:i:s'],
+            'service_locations.*.holiday_opening_hours.*.closes_at' => ['required_with:holiday_opening_hours.*', 'date_format:H:i:s'],
+
+            'service_locations.*.image_file_id' => [
+                'nullable',
+                'exists:files,id',
+                new FileIsMimeType(File::MIME_TYPE_PNG, File::MIME_TYPE_SVG, File::MIME_TYPE_JPG, File::MIME_TYPE_JPEG),
+                new FileIsPendingAssignment,
+            ],
         ];
     }
 

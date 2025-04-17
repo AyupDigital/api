@@ -2,7 +2,9 @@
 
 namespace App\Services\DataPersistence;
 
+use App\Actions\StoreServiceLocationAction;
 use App\Contracts\DataPersistenceService;
+use App\DataTransferObjects\ServiceLocationRequestObject;
 use App\Models\Model;
 use App\Models\Service;
 use App\Models\Tag;
@@ -79,6 +81,7 @@ class ServicePersistenceService implements DataPersistenceService
                 'logo_file_id' => $request->missingValue('logo_file_id'),
                 'score' => $request->missingValue('score'),
                 'ends_at' => $request->missingValue('ends_at'),
+                'service_locations' => $request->filled('service_locations') ? $request->service_locations : new MissingValue,
             ]);
 
             // Loop through each useful info.
@@ -271,6 +274,21 @@ class ServicePersistenceService implements DataPersistenceService
             // Create the service eligibility taxonomy records and custom fields
             $eligibilityTypes = Taxonomy::whereIn('id', $request->input('eligibility_types.taxonomies', []))->get();
             $service->syncEligibilityRelationships($eligibilityTypes);
+
+            foreach ($request->service_locations as $serviceLocation) {
+                $serviceLocationRequestObject = new ServiceLocationRequestObject(
+                    name: $serviceLocation['name'],
+                    locationId: $serviceLocation['location_id'],
+                    regularOpeningHours: $serviceLocation['regular_opening_hours'] ?? [],
+                    holidayOpeningHours: $serviceLocation['holiday_opening_hours'] ?? [],
+                    imageFileId: $serviceLocation['image_file_id'] ?? null,
+                );
+
+                (new StoreServiceLocationAction)->handle(
+                    $service,
+                    $serviceLocationRequestObject,
+                );
+            }
 
             return $service;
         });
