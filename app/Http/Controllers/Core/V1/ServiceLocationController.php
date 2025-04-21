@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Core\V1;
 
+use App\Actions\StoreServiceLocationAction;
+use App\DataTransferObjects\ServiceLocationRequestObject;
 use App\Events\EndpointHit;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ServiceLocation\DestroyRequest;
@@ -14,6 +16,7 @@ use App\Http\Responses\ResourceDeleted;
 use App\Http\Responses\UpdateRequestReceived;
 use App\Models\File;
 use App\Models\RegularOpeningHour;
+use App\Models\Service;
 use App\Models\ServiceLocation;
 use App\Support\MissingValue;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -58,58 +61,16 @@ class ServiceLocationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request, StoreServiceLocationAction $storeServiceLocationAction)
     {
-        return DB::transaction(function () use ($request) {
-            // Create the service location.
-            $serviceLocation = ServiceLocation::create([
-                'service_id' => $request->service_id,
-                'location_id' => $request->location_id,
-                'name' => $request->name,
-                'image_file_id' => $request->image_file_id,
-            ]);
+        return DB::transaction(function () use ($request, $storeServiceLocationAction) {
+            $service = Service::findOrFail($request->service_id);
+            $requestObject = ServiceLocationRequestObject::fromRequest($request);
 
-            // Attach the regular opening hours.
-            foreach ($request->regular_opening_hours as $regularOpeningHour) {
-                $serviceLocation->regularOpeningHours()->create([
-                    'frequency' => $regularOpeningHour['frequency'],
-                    'weekday' => (in_array($regularOpeningHour['frequency'], [RegularOpeningHour::FREQUENCY_WEEKLY, RegularOpeningHour::FREQUENCY_NTH_OCCURRENCE_OF_MONTH]))
-                        ? $regularOpeningHour['weekday']
-                        : null,
-                    'day_of_month' => ($regularOpeningHour['frequency'] === RegularOpeningHour::FREQUENCY_MONTHLY)
-                        ? $regularOpeningHour['day_of_month']
-                        : null,
-                    'occurrence_of_month' => ($regularOpeningHour['frequency'] === RegularOpeningHour::FREQUENCY_NTH_OCCURRENCE_OF_MONTH)
-                        ? $regularOpeningHour['occurrence_of_month']
-                        : null,
-                    'starts_at' => ($regularOpeningHour['frequency'] === RegularOpeningHour::FREQUENCY_FORTNIGHTLY)
-                        ? $regularOpeningHour['starts_at']
-                        : null,
-                    'opens_at' => $regularOpeningHour['opens_at'],
-                    'closes_at' => $regularOpeningHour['closes_at'],
-                ]);
-            }
-
-            // Attach the holiday opening hours.
-            foreach ($request->holiday_opening_hours as $holidayOpeningHour) {
-                $serviceLocation->holidayOpeningHours()->create([
-                    'is_closed' => $holidayOpeningHour['is_closed'],
-                    'starts_at' => $holidayOpeningHour['starts_at'],
-                    'ends_at' => $holidayOpeningHour['ends_at'],
-                    'opens_at' => $holidayOpeningHour['opens_at'],
-                    'closes_at' => $holidayOpeningHour['closes_at'],
-                ]);
-            }
-
-            if ($request->filled('image_file_id')) {
-                /** @var File $file */
-                $file = File::findOrFail($request->image_file_id)->assigned();
-
-                // Create resized version for common dimensions.
-                foreach (config('local.cached_image_dimensions') as $maxDimension) {
-                    $file->resizedVersion($maxDimension);
-                }
-            }
+            $serviceLocation = $storeServiceLocationAction->handle(
+                $service,
+                $requestObject,
+            );
 
             event(EndpointHit::onCreate($request, "Created service location [{$serviceLocation->id}]", $serviceLocation));
 

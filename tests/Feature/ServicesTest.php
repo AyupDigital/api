@@ -6,6 +6,7 @@ use App\Events\EndpointHit;
 use App\Models\Audit;
 use App\Models\File;
 use App\Models\HolidayOpeningHour;
+use App\Models\Location;
 use App\Models\Organisation;
 use App\Models\RegularOpeningHour;
 use App\Models\Role;
@@ -1262,6 +1263,7 @@ class ServicesTest extends TestCase
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
+    
 
     /**
      * @test
