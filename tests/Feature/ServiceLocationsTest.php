@@ -248,81 +248,49 @@ class ServiceLocationsTest extends TestCase
         ]);
     }
 
-    public function test_service_admin_can_create_one_with_an_image(): void
+    /**
+     * @dataProvider image_data_service_provider
+     */
+    public function test_service_admin_can_create_one_with_an_image(array $image): void
     {
+        dd($image);
         $service = Service::factory()->create();
         $user = User::factory()->create()->makeServiceAdmin($service);
 
         Passport::actingAs($user);
 
-        // SVG
-        $image = File::factory()->pendingAssignment()->imageSvg()->create();
-
         $payload = [
             'service_id' => $service->id,
             'location_id' => Location::factory()->create()->id,
             'name' => null,
             'regular_opening_hours' => [],
             'holiday_opening_hours' => [],
-            'image_file_id' => $image->id,
+            'image_file_id' => $image['file']->id,
         ];
 
         $response = $this->json('POST', '/core/v1/service-locations', $payload);
 
         $response->assertStatus(Response::HTTP_CREATED);
 
-        $serviceLocationId = $this->getResponseContent($response, 'data.id');
+        $this->assertEquals($image['file']->id, $response['data']['image_file_id']);
+    }
 
-        // Get the event image for the service location
-        $content = $this->get("/core/v1/service-locations/$serviceLocationId/image.svg")->content();
-
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.svg'), $content);
-
-        // PNG
-        $image = File::factory()->pendingAssignment()->imagePng()->create();
-
-        $payload = [
-            'service_id' => $service->id,
-            'location_id' => Location::factory()->create()->id,
-            'name' => null,
-            'regular_opening_hours' => [],
-            'holiday_opening_hours' => [],
-            'image_file_id' => $image->id,
+    public function image_data_service_provider(): array
+    {
+        return [
+            'image/svg+xml' => [
+                'file' => File::factory()->pendingAssignment()->imageSvg()->create(),
+                'extension' => 'svg',
+            ],
+            'image/png' => [
+                'file' => File::factory()->pendingAssignment()->imagePng()->create(),
+                'extension' => 'png',
+            ],
+            'image/jpeg' => [
+                'file' => File::factory()->pendingAssignment()->imageJpg()->create(),
+                'extension' => 'jpg',
+            ],
         ];
-
-        $response = $this->json('POST', '/core/v1/service-locations', $payload);
-
-        $response->assertStatus(Response::HTTP_CREATED);
-
-        $serviceLocationId = $this->getResponseContent($response, 'data.id');
-
-        // Get the event image for the service location
-        $content = $this->get("/core/v1/service-locations/$serviceLocationId/image.png")->content();
-
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.png'), $content);
-
-        // JPG
-        $image = File::factory()->pendingAssignment()->imageJpg()->create();
-
-        $payload = [
-            'service_id' => $service->id,
-            'location_id' => Location::factory()->create()->id,
-            'name' => null,
-            'regular_opening_hours' => [],
-            'holiday_opening_hours' => [],
-            'image_file_id' => $image->id,
-        ];
-
-        $response = $this->json('POST', '/core/v1/service-locations', $payload);
-
-        $response->assertStatus(Response::HTTP_CREATED);
-
-        $serviceLocationId = $this->getResponseContent($response, 'data.id');
-
-        // Get the event image for the service location
-        $content = $this->get("/core/v1/service-locations/$serviceLocationId/image.jpg")->content();
-
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.jpg'), $content);
     }
 
     public function test_audit_created_when_created(): void

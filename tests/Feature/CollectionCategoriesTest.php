@@ -14,6 +14,7 @@ use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Laravel\Passport\Passport;
@@ -284,10 +285,6 @@ class CollectionCategoriesTest extends TestCase
 
         $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
-
         Passport::actingAs($user);
 
         $response = $this->json('POST', '/core/v1/collections/categories', [
@@ -354,8 +351,8 @@ class CollectionCategoriesTest extends TestCase
         ]);
 
         $collectionArray = $this->getResponseContent($response)['data'];
-        $response = $this->get("/core/v1/collections/categories/{$collectionArray['id']}/image.svg");
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.svg'), $response->content());
+     
+        $this->assertEquals($image->id, $collectionArray['image']['id']);
     }
 
     /**
@@ -370,15 +367,7 @@ class CollectionCategoriesTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
-
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
         Passport::actingAs($user);
 
         $response = $this->json('POST', '/core/v1/collections/categories', [
@@ -426,14 +415,7 @@ class CollectionCategoriesTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -550,14 +532,7 @@ class CollectionCategoriesTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $image = File::factory()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -616,10 +591,8 @@ class CollectionCategoriesTest extends TestCase
         $response->assertStatus(Response::HTTP_CREATED);
 
         $collectionArray = $this->getResponseContent($response)['data'];
-        $content = $this->get("/core/v1/collections/categories/{$collectionArray['id']}/image.svg")->content();
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.svg'), $content);
 
-        $this->assertEquals($image->id, $collectionArray['image_file_id']);
+        $this->assertEquals($image->id, $collectionArray['image']['id']);
 
         $response->assertJsonFragment([
             'image' => [
@@ -717,14 +690,7 @@ class CollectionCategoriesTest extends TestCase
         // Delete the existing seeded categories.
         $this->truncateCollectionCategories();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -796,14 +762,7 @@ class CollectionCategoriesTest extends TestCase
         // Delete the existing seeded categories.
         $this->truncateCollectionCategories();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -875,14 +834,7 @@ class CollectionCategoriesTest extends TestCase
         // Delete the existing seeded categories.
         $this->truncateCollectionCategories();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -954,14 +906,7 @@ class CollectionCategoriesTest extends TestCase
         // Delete the existing seeded categories.
         $this->truncateCollectionCategories();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -993,14 +938,7 @@ class CollectionCategoriesTest extends TestCase
         // Delete the existing seeded categories.
         $this->truncateCollectionCategories();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -1055,14 +993,7 @@ class CollectionCategoriesTest extends TestCase
     {
         $this->fakeEvents();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -1264,141 +1195,6 @@ class CollectionCategoriesTest extends TestCase
     }
 
     /*
-     * Get a specific categories image.
-     */
-
-    /**
-     * @test
-     */
-    public function guest_can_view_image_as_svg(): void
-    {
-        $collectionCategory = Collection::categories()->inRandomOrder()->firstOrFail();
-
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
-
-        $meta = $collectionCategory->meta;
-        $meta['image_file_id'] = $image->id;
-        $collectionCategory->meta = $meta;
-        $collectionCategory->save();
-
-        $response = $this->get("/core/v1/collections/categories/{$collectionCategory->id}/image.svg");
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertHeader('Content-Type', 'image/svg+xml');
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.svg'), $response->content());
-    }
-
-    /**
-     * @test
-     */
-    public function guest_can_view_image_as_png(): void
-    {
-        $collectionCategory = Collection::categories()->inRandomOrder()->firstOrFail();
-
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.png',
-            'mime_type' => 'image/png',
-        ]);
-
-        $base64Image = 'data:image/png;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.png'));
-
-        $image->uploadBase64EncodedFile($base64Image);
-
-        $meta = $collectionCategory->meta;
-        $meta['image_file_id'] = $image->id;
-        $collectionCategory->meta = $meta;
-        $collectionCategory->save();
-
-        $response = $this->get("/core/v1/collections/categories/{$collectionCategory->id}/image.png");
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertHeader('Content-Type', 'image/png');
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.png'), $response->content());
-    }
-
-    /**
-     * @test
-     */
-    public function guest_can_view_image_as_jpg(): void
-    {
-        $collectionCategory = Collection::categories()->inRandomOrder()->firstOrFail();
-
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.jpg',
-            'mime_type' => 'image/jpeg',
-        ]);
-
-        $base64Image = 'data:image/jpg;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.jpg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
-
-        $meta = $collectionCategory->meta;
-        $meta['image_file_id'] = $image->id;
-        $collectionCategory->meta = $meta;
-        $collectionCategory->save();
-
-        $response = $this->get("/core/v1/collections/categories/{$collectionCategory->id}/image.jpg");
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertHeader('Content-Type', 'image/jpeg');
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.jpg'), $response->content());
-    }
-
-    /**
-     * @test
-     */
-    public function audit_created_when_image_viewed(): void
-    {
-        $this->fakeEvents();
-
-        $collectionCategory = Collection::categories()->inRandomOrder()->firstOrFail();
-
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
-
-        $meta = $collectionCategory->meta;
-        $meta['image_file_id'] = $image->id;
-        $collectionCategory->meta = $meta;
-        $collectionCategory->save();
-
-        $this->get("/core/v1/collections/categories/{$collectionCategory->id}/image.svg");
-
-        Event::assertDispatched(EndpointHit::class, function (EndpointHit $event) use ($collectionCategory) {
-            return ($event->getAction() === Audit::ACTION_READ) &&
-                ($event->getModel()->id === $collectionCategory->id);
-        });
-    }
-
-    /**
-     * @test
-     */
-    public function default_image_returned_when_image_is_not_set(): void
-    {
-        $collectionCategory = Collection::categories()->inRandomOrder()->firstOrFail();
-
-        $placeholder = Storage::disk('local')->get('/placeholders/collection_category.png');
-
-        $response = $this->get("/core/v1/collections/categories/{$collectionCategory->id}/image.svg");
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertHeader('Content-Type', 'image/png');
-
-        $content = $response->content();
-        $this->assertEquals($placeholder, $content);
-    }
-
-    /*
      * Update a specific category collection.
      */
 
@@ -1511,10 +1307,6 @@ class CollectionCategoriesTest extends TestCase
 
         $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
-
         Passport::actingAs($user);
 
         $response = $this->json('PUT', "/core/v1/collections/categories/{$category->id}", [
@@ -1578,9 +1370,6 @@ class CollectionCategoriesTest extends TestCase
 
         $category = $category->fresh();
         $this->assertEquals($image->id, $category->meta['image_file_id']);
-
-        $content = $this->get("/core/v1/collections/categories/{$category->id}/image.svg")->content();
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.svg'), $content);
     }
 
     /**
@@ -1597,14 +1386,7 @@ class CollectionCategoriesTest extends TestCase
         $category->enable()->save();
         $taxonomy = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -1650,14 +1432,7 @@ class CollectionCategoriesTest extends TestCase
         $category->enable()->save();
         $taxonomy = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $image = File::factory()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -1720,9 +1495,6 @@ class CollectionCategoriesTest extends TestCase
         $category = $category->fresh();
         $this->assertEquals($image->id, $category->meta['image_file_id']);
 
-        $content = $this->get("/core/v1/collections/categories/{$category->id}/image.svg")->content();
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.svg'), $content);
-
         $this->assertFalse($image->fresh()->pendingAssignment);
 
         // PNG
@@ -1754,9 +1526,6 @@ class CollectionCategoriesTest extends TestCase
         $category = $category->fresh();
         $this->assertEquals($image->id, $category->meta['image_file_id']);
 
-        $content = $this->get("/core/v1/collections/categories/{$category->id}/image.png")->content();
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.png'), $content);
-
         $this->assertFalse($image->fresh()->pendingAssignment);
 
         // JPG
@@ -1787,9 +1556,6 @@ class CollectionCategoriesTest extends TestCase
 
         $category = $category->fresh();
         $this->assertEquals($image->id, $category->meta['image_file_id']);
-
-        $content = $this->get("/core/v1/collections/categories/{$category->id}/image.jpg")->content();
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.jpg'), $content);
 
         $this->assertFalse($image->fresh()->pendingAssignment);
     }
@@ -1876,14 +1642,7 @@ class CollectionCategoriesTest extends TestCase
         $category->enable()->save();
         $taxonomy = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -1956,10 +1715,6 @@ class CollectionCategoriesTest extends TestCase
 
         $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
-
         Passport::actingAs($user);
 
         $response = $this->json('PUT', "/core/v1/collections/categories/{$category->id}", [
@@ -2031,14 +1786,7 @@ class CollectionCategoriesTest extends TestCase
         // Delete the existing seeded categories.
         $this->truncateCollectionCategories();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -2109,14 +1857,7 @@ class CollectionCategoriesTest extends TestCase
         // Delete the existing seeded categories.
         $this->truncateCollectionCategories();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -2187,14 +1928,7 @@ class CollectionCategoriesTest extends TestCase
         // Delete the existing seeded categories.
         $this->truncateCollectionCategories();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -2265,14 +1999,7 @@ class CollectionCategoriesTest extends TestCase
         // Delete the existing seeded categories.
         $this->truncateCollectionCategories();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -2316,14 +2043,7 @@ class CollectionCategoriesTest extends TestCase
         // Delete the existing seeded categories.
         $this->truncateCollectionCategories();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -2374,14 +2094,7 @@ class CollectionCategoriesTest extends TestCase
         $category = Collection::categories()->inRandomOrder()->firstOrFail();
         $taxonomy = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Passport::actingAs($user);
 

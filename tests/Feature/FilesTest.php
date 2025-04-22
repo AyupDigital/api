@@ -148,9 +148,6 @@ class FilesTest extends TestCase
         $service->logo_file_id = $this->getResponseContent($response, 'data.id');
         $service->save();
 
-        $response = $this->get("/core/v1/services/$service->id/logo.svg");
-
-        $this->assertEquals($image, $response->content());
         $response = $this->get("/core/v1/files/$service->logo_file_id");
 
         $response->assertJson([

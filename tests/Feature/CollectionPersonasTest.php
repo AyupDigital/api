@@ -16,7 +16,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Passport\Passport;
-use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class CollectionPersonasTest extends TestCase
@@ -283,14 +282,7 @@ class CollectionPersonasTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -360,14 +352,7 @@ class CollectionPersonasTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -419,14 +404,7 @@ class CollectionPersonasTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -480,14 +458,7 @@ class CollectionPersonasTest extends TestCase
         $user = User::factory()->create();
         $user->makeSuperAdmin();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         $first = Collection::create([
             'type' => Collection::TYPE_PERSONA,
@@ -567,14 +538,7 @@ class CollectionPersonasTest extends TestCase
         $user = User::factory()->create();
         $user->makeSuperAdmin();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         $first = Collection::create([
             'type' => Collection::TYPE_PERSONA,
@@ -651,14 +615,7 @@ class CollectionPersonasTest extends TestCase
         $user = User::factory()->create();
         $user->makeSuperAdmin();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         $first = Collection::create([
             'type' => Collection::TYPE_PERSONA,
@@ -765,14 +722,7 @@ class CollectionPersonasTest extends TestCase
         $user = User::factory()->create();
         $user->makeSuperAdmin();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Collection::create([
             'type' => Collection::TYPE_PERSONA,
@@ -832,14 +782,7 @@ class CollectionPersonasTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -870,14 +813,7 @@ class CollectionPersonasTest extends TestCase
         $user = User::factory()->create();
         $user->makeSuperAdmin();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -895,14 +831,7 @@ class CollectionPersonasTest extends TestCase
 
         $response->assertStatus(Response::HTTP_CREATED);
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random() . '.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,' . base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         $this->assertDatabaseHas('collections', [
             'id' => $response->json('data.id'),
