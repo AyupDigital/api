@@ -19,7 +19,6 @@ class ServiceSchema extends Schema
                     ->format(static::FORMAT_UUID),
                 Schema::string('organisation_id')
                     ->format(static::FORMAT_UUID),
-                Schema::boolean('has_logo'),
                 Schema::string('name'),
                 Schema::string('slug'),
                 Schema::string('type')
