@@ -49,7 +49,7 @@ class NominatimGeocoder extends Geocoder
         if (count($results) === 0) {
             $this->saveToCache($address, null);
 
-            throw new AddressNotFoundException();
+            throw new AddressNotFoundException;
         }
 
         // Get the latitude and longitude.

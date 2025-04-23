@@ -35,24 +35,24 @@ class CanUpdateCategoryTaxonomyRelationships implements ValidationRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param mixed $value
-     * @param mixed $fail
+     * @param  mixed  $value
+     * @param  mixed  $fail
      */
     public function validate(string $attribute, $value, $fail): void
     {
         // Immediately fail if the value is not an array of strings.
-        if (!is_array($value)) {
+        if (! is_array($value)) {
             $fail(__('validation.array'));
         }
 
         foreach ($value as $item) {
-            if (!is_string($item)) {
+            if (! is_string($item)) {
                 $fail(':attribute must be an array of strings');
             }
         }
 
         // Allow changing of taxonomies if global admin.
-        if (!($this->user->isSuperAdmin()
+        if (! ($this->user->isSuperAdmin()
             || ($this->model instanceof Service && $this->user->isGlobalAdmin())
             || ($this->model instanceof Organisation && $this->user->isOrganisationAdmin($this->model))
             || ($this->model instanceof OrganisationEvent && $this->user->isOrganisationAdmin($this->model->organisation)))
@@ -77,6 +77,6 @@ class CanUpdateCategoryTaxonomyRelationships implements ValidationRule
      */
     public function message(): string
     {
-        return 'You are not authorised to update this ' . class_basename($this->model) . '\'s category taxonomies.';
+        return 'You are not authorised to update this '.class_basename($this->model).'\'s category taxonomies.';
     }
 }

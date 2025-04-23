@@ -32,19 +32,19 @@ class CanUpdateServiceEligibilityTaxonomyRelationships implements ValidationRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param mixed $value
-     * @param mixed $fail
+     * @param  mixed  $value
+     * @param  mixed  $fail
      */
     public function validate(string $attribute, $value, $fail): void
     {
         // Immediately fail if the value is not an array of strings.
-        if (!is_array($value)) {
+        if (! is_array($value)) {
             $fail(__('validation.array'));
         }
 
         // Allow changing of taxonomies if service admin.
         if (
-            !($this->model instanceof Service && $this->user->isServiceAdmin($this->model))
+            ! ($this->model instanceof Service && $this->user->isServiceAdmin($this->model))
         ) {
 
             // Only pass if the taxonomies remain unchanged.
@@ -66,6 +66,6 @@ class CanUpdateServiceEligibilityTaxonomyRelationships implements ValidationRule
      */
     public function message(): string
     {
-        return 'You are not authorised to update this ' . class_basename($this->model) . '\'s category taxonomies.';
+        return 'You are not authorised to update this '.class_basename($this->model).'\'s category taxonomies.';
     }
 }

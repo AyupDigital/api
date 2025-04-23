@@ -28,7 +28,7 @@ class CanRevokeRoleFromUser implements ValidationRule
     /**
      * CanAssignRoleToUser constructor.
      */
-    public function __construct(User $user, User $subject, array $revokedRoles = null)
+    public function __construct(User $user, User $subject, ?array $revokedRoles = null)
     {
         $this->user = $user;
         $this->subject = $subject;
@@ -38,50 +38,50 @@ class CanRevokeRoleFromUser implements ValidationRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param mixed $role
-     * @param mixed $fail
+     * @param  mixed  $role
+     * @param  mixed  $fail
      */
     public function validate(string $attribute, $role, $fail): void
     {
         // Immediately fail if the value is not an array.
-        if (!$this->validateRole($role)) {
+        if (! $this->validateRole($role)) {
             $fail(':attribute must be an array with a role key and if required a service_id or organisation_id key');
         }
 
         // Skip if the role is not provided in the revoked roles array.
-        if (!$this->shouldSkip($role)) {
+        if (! $this->shouldSkip($role)) {
 
             switch ($role['role']) {
                 case Role::NAME_SERVICE_WORKER:
                     $service = Service::query()->findOrFail($role['service_id']);
-                    if (!$this->user->canRevokeServiceWorker($this->subject, $service)) {
+                    if (! $this->user->canRevokeServiceWorker($this->subject, $service)) {
                         $fail($this->message('Service Worker'));
                     }
                     break;
                 case Role::NAME_SERVICE_ADMIN:
                     $service = Service::query()->findOrFail($role['service_id']);
-                    if (!$this->user->canRevokeServiceAdmin($this->subject, $service)) {
+                    if (! $this->user->canRevokeServiceAdmin($this->subject, $service)) {
                         $fail($this->message('Service Admin'));
                     }
                     break;
                 case Role::NAME_ORGANISATION_ADMIN:
                     $organisation = Organisation::query()->findOrFail($role['organisation_id']);
-                    if (!$this->user->canRevokeOrganisationAdmin($this->subject, $organisation)) {
+                    if (! $this->user->canRevokeOrganisationAdmin($this->subject, $organisation)) {
                         $fail($this->message('Organisation Admin'));
                     }
                     break;
                 case Role::NAME_CONTENT_ADMIN:
-                    if (!$this->user->canRevokeContentAdmin($this->subject)) {
+                    if (! $this->user->canRevokeContentAdmin($this->subject)) {
                         $fail($this->message('Content Admin'));
                     }
                     break;
                 case Role::NAME_GLOBAL_ADMIN:
-                    if (!$this->user->canRevokeGlobalAdmin($this->subject)) {
+                    if (! $this->user->canRevokeGlobalAdmin($this->subject)) {
                         $fail($this->message('Global Admin'));
                     }
                     break;
                 case Role::NAME_SUPER_ADMIN:
-                    if (!$this->user->canRevokeSuperAdmin($this->subject)) {
+                    if (! $this->user->canRevokeSuperAdmin($this->subject)) {
                         $fail($this->message('Super Admin'));
                     }
                     break;
@@ -92,7 +92,8 @@ class CanRevokeRoleFromUser implements ValidationRule
 
     /**
      * Get the validation error message.
-     * @param mixed $role
+     *
+     * @param  mixed  $role
      */
     public function message($role): string
     {
@@ -101,17 +102,18 @@ class CanRevokeRoleFromUser implements ValidationRule
 
     /**
      * Validates the value.
-     * @param mixed $role
+     *
+     * @param  mixed  $role
      */
     protected function validateRole($role): bool
     {
         // check if array.
-        if (!is_array($role)) {
+        if (! is_array($role)) {
             return false;
         }
 
         // check if role key provided.
-        if (!isset($role['role'])) {
+        if (! isset($role['role'])) {
             return false;
         }
 
@@ -119,12 +121,12 @@ class CanRevokeRoleFromUser implements ValidationRule
         switch ($role['role']) {
             case Role::NAME_SERVICE_WORKER:
             case Role::NAME_SERVICE_ADMIN:
-                if (!isset($role['service_id']) || !is_string($role['service_id'])) {
+                if (! isset($role['service_id']) || ! is_string($role['service_id'])) {
                     return false;
                 }
                 break;
             case Role::NAME_ORGANISATION_ADMIN:
-                if (!isset($role['organisation_id']) || !is_string($role['organisation_id'])) {
+                if (! isset($role['organisation_id']) || ! is_string($role['organisation_id'])) {
                     return false;
                 }
                 break;

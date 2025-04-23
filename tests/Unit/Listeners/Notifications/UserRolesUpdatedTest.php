@@ -27,8 +27,8 @@ class UserRolesUpdatedTest extends TestCase
         Request::create('')->setUserResolver(function () {
             return User::factory()->create();
         });
-        $event = new UserRolesUpdatedEvent($user, new Collection(), $user->userRoles);
-        $listener = new UserRolesUpdatedListener();
+        $event = new UserRolesUpdatedEvent($user, new Collection, $user->userRoles);
+        $listener = new UserRolesUpdatedListener;
         $listener->handle($event);
 
         Queue::assertPushedOn(config('queue.queues.notifications', 'default'), NotifyUserEmail::class);
@@ -70,7 +70,7 @@ class UserRolesUpdatedTest extends TestCase
             ]),
         ]);
 
-        $listener = new UserRolesUpdatedListener();
+        $listener = new UserRolesUpdatedListener;
         $revokedRoles = $listener->getRevokedRoles($oldRoles, $newRoles);
 
         $this->assertEquals(1, $revokedRoles->count());
@@ -101,7 +101,7 @@ class UserRolesUpdatedTest extends TestCase
             ]),
         ]);
 
-        $listener = new UserRolesUpdatedListener();
+        $listener = new UserRolesUpdatedListener;
         $revokedRoles = $listener->getRevokedRoles($oldRoles, $newRoles);
 
         $this->assertEquals(0, $revokedRoles->count());
@@ -148,7 +148,7 @@ class UserRolesUpdatedTest extends TestCase
             $organisationOneAdminUserRole,
         ]);
 
-        $listener = new UserRolesUpdatedListener();
+        $listener = new UserRolesUpdatedListener;
         $revokedRoles = $listener->getRevokedRoles($oldRoles, $newRoles);
 
         $this->assertEquals(2, $revokedRoles->count());
@@ -182,7 +182,7 @@ class UserRolesUpdatedTest extends TestCase
             $globalAdmin,
         ]);
 
-        $listener = new UserRolesUpdatedListener();
+        $listener = new UserRolesUpdatedListener;
         $addedRoles = $listener->getAddedRoles($oldRoles, $newRoles);
 
         $this->assertEquals(1, $addedRoles->count());

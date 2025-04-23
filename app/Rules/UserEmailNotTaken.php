@@ -22,7 +22,7 @@ class UserEmailNotTaken implements ValidationRule
     /**
      * Create a new rule instance.
      */
-    public function __construct(User $excludedUser = null, string $message = null)
+    public function __construct(?User $excludedUser = null, ?string $message = null)
     {
         $this->excludedUser = $excludedUser;
         $this->message = $message;
@@ -31,11 +31,11 @@ class UserEmailNotTaken implements ValidationRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param mixed $email
+     * @param  mixed  $email
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!is_string($value)) {
+        if (! is_string($value)) {
             $fail(__('validation.string'));
         }
 

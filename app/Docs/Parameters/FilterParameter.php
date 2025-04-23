@@ -7,7 +7,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\Parameter;
 
 class FilterParameter extends Parameter
 {
-    public static function create(string $objectId = null, string $field = ''): BaseObject
+    public static function create(?string $objectId = null, string $field = ''): BaseObject
     {
         return parent::create($objectId)
             ->in(static::IN_QUERY)

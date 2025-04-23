@@ -36,7 +36,7 @@ class UpdateRequest extends FormRequest
             'address_line_3' => ['nullable', 'string', 'min:1', 'max:255'],
             'city' => ['string', 'min:1', 'max:255'],
             'county' => ['string', 'min:1', 'max:255'],
-            'postcode' => ['string', 'min:1', 'max:255', new Postcode()],
+            'postcode' => ['string', 'min:1', 'max:255', new Postcode],
             'country' => ['string', 'min:1', 'max:255'],
             'accessibility_info' => ['nullable', 'string', 'min:1', 'max:10000'],
             'has_wheelchair_access' => ['boolean'],
@@ -46,7 +46,7 @@ class UpdateRequest extends FormRequest
                 'nullable',
                 'exists:files,id',
                 new FileIsMimeType(File::MIME_TYPE_PNG, File::MIME_TYPE_JPG, File::MIME_TYPE_JPEG, File::MIME_TYPE_SVG),
-                new FileIsPendingAssignment(),
+                new FileIsPendingAssignment,
             ],
         ];
     }

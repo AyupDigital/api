@@ -75,7 +75,7 @@ class ImportController extends Controller
      */
     public function validateSpreadsheet(string $filePath)
     {
-        $spreadsheetParser = new SpreadsheetParser();
+        $spreadsheetParser = new SpreadsheetParser;
 
         $spreadsheetParser->import(Storage::disk('local')->path($filePath));
 
@@ -114,7 +114,7 @@ class ImportController extends Controller
             /**
              * Check for duplicate IDs in the spreadsheet.
              */
-            if (false !== array_search($row['id'], $rowIds)) {
+            if (array_search($row['id'], $rowIds) !== false) {
                 $error = ['id' => ['The ID is used elsewhere in the spreadsheet.']];
                 if ($rejectedRow) {
                     $rejectedRow['errors']->merge($error);
@@ -155,7 +155,7 @@ class ImportController extends Controller
                 'select group_concat(distinct id order by id separator ";") as ids',
                 'group_concat(distinct name order by name separator ";") as results',
                 'count(name) as row_count',
-                $this->buildSqlReplaceCharacterSet('lower(trim(name))', $normaliseCharacters) . ' as normalised_col',
+                $this->buildSqlReplaceCharacterSet('lower(trim(name))', $normaliseCharacters).' as normalised_col',
             ]),
         ];
         $sql[] = 'FROM organisations';
@@ -164,7 +164,7 @@ class ImportController extends Controller
          * Ignore those organisations where the user has flagged the duplicate as allowed.
          */
         if (count($this->ignoreDuplicateIds)) {
-            $sql[] = 'where id NOT IN ("' . implode('","', $this->ignoreDuplicateIds) . '")';
+            $sql[] = 'where id NOT IN ("'.implode('","', $this->ignoreDuplicateIds).'")';
         }
 
         $sql[] = 'group by normalised_col';
@@ -172,7 +172,7 @@ class ImportController extends Controller
         /**
          * Filter to only take organisations that match with imported rows, or all existing duplicate named organisations are included.
          */
-        $sql[] = 'having normalised_col IN ("' . implode('","', $normalisedNames) . '")';
+        $sql[] = 'having normalised_col IN ("'.implode('","', $normalisedNames).'")';
         $sql[] = 'and row_count > 1';
 
         return DB::select(implode(' ', $sql));
@@ -188,9 +188,9 @@ class ImportController extends Controller
         $sql = $string;
         foreach ($replace as $chr) {
             if ($chr === "'" || $chr === '"') {
-                $chr = '\\' . $chr;
+                $chr = '\\'.$chr;
             }
-            $sql = 'replace(' . $sql . ',"' . $chr . '","' . $replacement . '")';
+            $sql = 'replace('.$sql.',"'.$chr.'","'.$replacement.'")';
         }
 
         return $sql;
@@ -219,7 +219,7 @@ class ImportController extends Controller
                  * Find the imported row details for the duplicate name.
                  */
                 $rowIndex = array_search($name, array_column($nameIndex, 'name', 'index'));
-                if (false !== $rowIndex) {
+                if ($rowIndex !== false) {
                     /**
                      * Get the details of the row that was being imported.
                      */
@@ -262,7 +262,7 @@ class ImportController extends Controller
             ];
         }
 
-        throw new DuplicateContentException();
+        throw new DuplicateContentException;
     }
 
     /**
@@ -270,7 +270,7 @@ class ImportController extends Controller
      */
     public function importSpreadsheet(string $filePath)
     {
-        $spreadsheetParser = new SpreadsheetParser();
+        $spreadsheetParser = new SpreadsheetParser;
 
         $spreadsheetParser->import(Storage::disk('local')->path($filePath));
 
@@ -291,7 +291,7 @@ class ImportController extends Controller
                  * and add the meta fields to the Organisation row.
                  */
                 $organisationRow['name'] = preg_replace('/[^a-zA-Z0-9,\.\'\&\-" ]/', '', $organisationRow['name']);
-                $organisationRow['slug'] = Str::slug($organisationRow['name'] . ' ' . uniqid(), '-');
+                $organisationRow['slug'] = Str::slug($organisationRow['name'].' '.uniqid(), '-');
                 $organisationRow['created_at'] = Date::now();
                 $organisationRow['updated_at'] = Date::now();
 
@@ -329,8 +329,8 @@ class ImportController extends Controller
                  * If the batch array has reach the import batch size create the insert queries.
                  */
                 if (count($organisationRowBatch) === self::ROW_IMPORT_BATCH_SIZE) {
-                    DB::table((new Organisation())->getTable())->insert($organisationRowBatch);
-                    DB::table((new UserRole())->getTable())->insert($userRoleBatch);
+                    DB::table((new Organisation)->getTable())->insert($organisationRowBatch);
+                    DB::table((new UserRole)->getTable())->insert($userRoleBatch);
                     $importedRows += self::ROW_IMPORT_BATCH_SIZE;
                     $organisationRowBatch = $userRoleBatch = [];
                 }
@@ -340,8 +340,8 @@ class ImportController extends Controller
              * If there are a final batch that did not meet the import batch size, create queries for these.
              */
             if (count($organisationRowBatch) && count($organisationRowBatch) !== self::ROW_IMPORT_BATCH_SIZE) {
-                DB::table((new Organisation())->getTable())->insert($organisationRowBatch);
-                DB::table((new UserRole())->getTable())->insert($userRoleBatch);
+                DB::table((new Organisation)->getTable())->insert($organisationRowBatch);
+                DB::table((new UserRole)->getTable())->insert($userRoleBatch);
                 $importedRows += count($organisationRowBatch);
             }
 

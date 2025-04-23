@@ -10,7 +10,6 @@ use App\Models\UserRole;
 use App\Rules\FileIsMimeType;
 use App\Rules\FileIsPendingAssignment;
 use App\Rules\InformationPageCannotHaveCollection;
-use App\Rules\LandingPageCannotHaveParent;
 use App\Rules\PageContent;
 use App\Rules\Slug;
 use App\Rules\TopicPageCannotHaveParent;
@@ -51,7 +50,7 @@ class UpdateRequest extends FormRequest
                 'string',
                 'min:1',
                 'max:255',
-                new Slug(),
+                new Slug,
                 new UserHasRole(
                     $this->user('api'),
                     new UserRole([
@@ -72,7 +71,7 @@ class UpdateRequest extends FormRequest
                 'sometimes',
                 'integer',
                 'min:0',
-                'max:' . $maxOrder,
+                'max:'.$maxOrder,
             ],
             'enabled' => [
                 'sometimes',
@@ -97,7 +96,7 @@ class UpdateRequest extends FormRequest
                 'nullable',
                 'exists:files,id',
                 new FileIsMimeType(File::MIME_TYPE_PNG, File::MIME_TYPE_JPG, File::MIME_TYPE_JPEG, File::MIME_TYPE_SVG),
-                new FileIsPendingAssignment(),
+                new FileIsPendingAssignment,
             ],
             'collections' => [
                 'sometimes',

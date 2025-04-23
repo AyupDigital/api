@@ -36,12 +36,12 @@ class PageController extends Controller
      */
     public function index(IndexRequest $request): AnonymousResourceCollection
     {
-        $orderByCol = (new Page())->getLftName();
+        $orderByCol = (new Page)->getLftName();
         $baseQuery = Page::query()
             ->with('parent')
             ->orderBy($orderByCol);
 
-        if (!$request->user('api')) {
+        if (! $request->user('api')) {
             $baseQuery->where('enabled', true);
         }
 
@@ -51,7 +51,8 @@ class PageController extends Controller
                 'children',
                 'ancestors',
                 AllowedInclude::relationship('landingPageAncestors', 'landingPageAncestors'),
-                AllowedInclude::relationship('topicPageAncestors', 'topicPageAncestors')
+                AllowedInclude::relationship('topicPageAncestors', 'topicPageAncestors'),
+                'pendingUpdateRequests',
             ])
             ->allowedFilters([
                 AllowedFilter::scope('landing_page', 'pageDescendants'),

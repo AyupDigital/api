@@ -2,20 +2,20 @@
 
 namespace Tests\Unit\Models;
 
-use Tests\TestCase;
+use App\Models\Collection;
+use App\Models\OrganisationEvent;
 use App\Models\Service;
 use App\Models\Taxonomy;
-use App\Models\Collection;
-use Tests\UsesElasticsearch;
-use App\Models\OrganisationEvent;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Tests\TestCase;
+use Tests\UsesElasticsearch;
 
 class CollectionTest extends TestCase implements UsesElasticsearch
 {
     /**
      * @test
      */
-    public function updateCollectionTaxonomiesReIndexesRelatedServices()
+    public function update_collection_taxonomies_re_indexes_related_services()
     {
         $service1 = Service::factory()->create([
             'name' => 'Undeniable Giraffe',
@@ -107,7 +107,7 @@ class CollectionTest extends TestCase implements UsesElasticsearch
     /**
      * @test
      */
-    public function updateCollectionTaxonomiesReIndexesRelatedOrganisationEvents()
+    public function update_collection_taxonomies_re_indexes_related_organisation_events()
     {
         $event1 = OrganisationEvent::factory()->create([
             'title' => 'Undeniable Giraffe',

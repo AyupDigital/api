@@ -2,18 +2,18 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
+use App\Events\EndpointHit;
 use App\Models\Audit;
+use App\Models\Organisation;
 use App\Models\Service;
 use App\Models\Setting;
-use App\Events\EndpointHit;
-use Illuminate\Support\Arr;
-use App\Models\Organisation;
+use App\Models\User;
 use Illuminate\Http\Response;
-use Laravel\Passport\Passport;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class SettingsTest extends TestCase
 {
@@ -38,10 +38,6 @@ class SettingsTest extends TestCase
                         'twitter_handle' => 'data/cms/frontend/global/twitter_handle',
                     ],
                     'home' => [
-                        'search_title' => 'data/cms/frontend/home/search_title',
-                        'categories_title' => 'data/cms/frontend/home/categories_title',
-                        'personas_title' => 'data/cms/frontend/home/personas_title',
-                        'personas_content' => 'data/cms/frontend/home/personas_content',
                         'banners' => [
                             [
                                 'title' => 'data/cms/frontend/home/banners/title',
@@ -58,6 +54,10 @@ class SettingsTest extends TestCase
                     'privacy_policy' => [
                         'title' => 'data/cms/frontend/privacy_policy/title',
                         'content' => 'data/cms/frontend/privacy_policy/content',
+                    ],
+                    'cookie_policy' => [
+                        'title' => 'data/cms/frontend/cookie_policy/title',
+                        'content' => 'data/cms/frontend/cookie_policy/content',
                     ],
                     'accessibility_statement' => [
                         'title' => 'data/cms/frontend/accessibility_statement/title',
@@ -103,10 +103,6 @@ class SettingsTest extends TestCase
                             'twitter_handle',
                         ],
                         'home' => [
-                            'search_title',
-                            'categories_title',
-                            'personas_title',
-                            'personas_content',
                             'banners' => [
                                 [
                                     'title',
@@ -117,6 +113,10 @@ class SettingsTest extends TestCase
                             ],
                         ],
                         'terms_and_conditions' => [
+                            'title',
+                            'content',
+                        ],
+                        'cookie_policy' => [
                             'title',
                             'content',
                         ],
@@ -170,10 +170,6 @@ class SettingsTest extends TestCase
                             'twitter_handle' => 'data/cms/frontend/global/twitter_handle',
                         ],
                         'home' => [
-                            'search_title' => 'data/cms/frontend/home/search_title',
-                            'categories_title' => 'data/cms/frontend/home/categories_title',
-                            'personas_title' => 'data/cms/frontend/home/personas_title',
-                            'personas_content' => 'data/cms/frontend/home/personas_content',
                             'banners' => [
                                 [
                                     'title' => 'data/cms/frontend/home/banners/title',
@@ -186,6 +182,10 @@ class SettingsTest extends TestCase
                         'terms_and_conditions' => [
                             'title' => 'data/cms/frontend/terms_and_conditions/title',
                             'content' => 'data/cms/frontend/terms_and_conditions/content',
+                        ],
+                        'cookie_policy' => [
+                            'title' => 'data/cms/frontend/cookie_policy/title',
+                            'content' => 'data/cms/frontend/cookie_policy/content',
                         ],
                         'privacy_policy' => [
                             'title' => 'data/cms/frontend/privacy_policy/title',
@@ -259,10 +259,6 @@ class SettingsTest extends TestCase
                             'twitter_handle' => 'Twitter handle',
                         ],
                         'home' => [
-                            'search_title' => 'Search title',
-                            'categories_title' => 'Categories title',
-                            'personas_title' => 'Personas title',
-                            'personas_content' => 'Personas content',
                             'banners' => [
                                 [
                                     'title' => null,
@@ -277,6 +273,10 @@ class SettingsTest extends TestCase
                             'content' => 'Content',
                         ],
                         'privacy_policy' => [
+                            'title' => 'Title',
+                            'content' => 'Content',
+                        ],
+                        'cookie_policy' => [
                             'title' => 'Title',
                             'content' => 'Content',
                         ],
@@ -485,7 +485,7 @@ class SettingsTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,' . base64_encode($image),
+            'file' => 'data:image/png;base64,'.base64_encode($image),
         ]);
 
         $this->settingsData['cms']['frontend']['banner']['image_file_id'] = $this->getResponseContent($imageResponse, 'data.id');
@@ -549,7 +549,7 @@ class SettingsTest extends TestCase
         $this->json('POST', '/core/v1/files', [
             'is_private' => false,
             'mime_type' => 'image/png',
-            'file' => 'data:image/png;base64,' . base64_encode($image),
+            'file' => 'data:image/png;base64,'.base64_encode($image),
         ]);
 
         $this->settingsData['cms']['frontend']['banner'] = [
@@ -586,7 +586,7 @@ class SettingsTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,' . base64_encode($image),
+            'file' => 'data:image/png;base64,'.base64_encode($image),
         ]);
 
         $cmsValue = Setting::cms()->value;
@@ -615,7 +615,7 @@ class SettingsTest extends TestCase
         $imageResponse = $this->json('POST', '/core/v1/files', [
             'is_private' => false,
             'mime_type' => 'image/png',
-            'file' => 'data:image/png;base64,' . base64_encode($image),
+            'file' => 'data:image/png;base64,'.base64_encode($image),
         ]);
 
         $cmsValue = Setting::cms()->value;

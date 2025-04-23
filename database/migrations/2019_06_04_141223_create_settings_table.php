@@ -5,7 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class() extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -29,10 +30,6 @@ return new class() extends Migration {
                         'twitter_handle' => 'Twitter handle',
                     ],
                     'home' => [
-                        'search_title' => 'Search title',
-                        'categories_title' => 'Categories title',
-                        'personas_title' => 'Personas title',
-                        'personas_content' => 'Personas content',
                     ],
                     'terms_and_conditions' => [
                         'title' => 'Title',

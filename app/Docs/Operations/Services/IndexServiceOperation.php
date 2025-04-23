@@ -23,7 +23,7 @@ class IndexServiceOperation extends Operation
     /**
      * @throws \GoldSpecDigital\ObjectOrientedOAS\Exceptions\InvalidArgumentException
      */
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->action(static::ACTION_GET)
@@ -87,7 +87,7 @@ EOT
                 FilterParameter::create(null, 'has_permission')
                     ->description('Filter services to only ones they have permissions for')
                     ->schema(Schema::boolean()),
-                IncludeParameter::create(null, ['organisation']),
+                IncludeParameter::create(null, ['organisation', 'pendingUpdateRequests']),
                 SortParameter::create(null, [
                     'name',
                     'organisation_name',

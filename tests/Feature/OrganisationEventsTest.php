@@ -2,26 +2,26 @@
 
 namespace Tests\Feature;
 
-use DateTime;
-use Carbon\Carbon;
-use Tests\TestCase;
-use App\Models\File;
-use App\Models\User;
-use App\Models\Audit;
-use App\Models\Service;
-use App\Models\Location;
-use App\Models\Taxonomy;
-use App\Models\Collection;
 use App\Events\EndpointHit;
-use Carbon\CarbonImmutable;
+use App\Models\Audit;
+use App\Models\Collection;
+use App\Models\File;
+use App\Models\Location;
 use App\Models\Organisation;
-use App\Models\UpdateRequest;
-use Illuminate\Http\Response;
-use Laravel\Passport\Passport;
 use App\Models\OrganisationEvent;
+use App\Models\OrganisationEventTaxonomy;
+use App\Models\Service;
+use App\Models\Taxonomy;
+use App\Models\UpdateRequest;
+use App\Models\User;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+use DateTime;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
-use App\Models\OrganisationEventTaxonomy;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class OrganisationEventsTest extends TestCase
 {
@@ -32,7 +32,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function listOrganisationEventsAsGuest200(): void
+    public function list_organisation_events_as_guest200(): void
     {
         $organisationEvent = OrganisationEvent::factory()->withImage()->create();
 
@@ -108,7 +108,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function listOrganisationEventsFilterByOrganisationAsGuest200(): void
+    public function list_organisation_events_filter_by_organisation_as_guest200(): void
     {
         $organisationEvent1 = OrganisationEvent::factory()->create([
             'title' => 'Organisation Event 1',
@@ -129,7 +129,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function listOrganisationEventsFilterByHomepageAsGuest200(): void
+    public function list_organisation_events_filter_by_homepage_as_guest200(): void
     {
         $organisationEvent1 = OrganisationEvent::factory()->homepage()->create([
             'title' => 'Organisation Event 1',
@@ -150,7 +150,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function listOrganisationEventsOnlyPastEventsAsGuest200(): void
+    public function list_organisation_events_only_past_events_as_guest200(): void
     {
         $future = $this->faker->dateTimeBetween('+1 week', '+3 weeks')->format('Y-m-d');
         $past = $this->faker->dateTimeBetween('-1 week', '-1 day')->format('Y-m-d');
@@ -194,7 +194,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function listOrganisationEventsOnlyPastEventsAsOrganisationAdmin200(): void
+    public function list_organisation_events_only_past_events_as_organisation_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $user = User::factory()->create()->makeOrganisationAdmin($organisation);
@@ -242,7 +242,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function listOrganisationEventsDateOrderDescendingAsGuest200(): void
+    public function list_organisation_events_date_order_descending_as_guest200(): void
     {
         $date1 = $this->faker->dateTimeBetween('+2 weeks', '+3 weeks')->format('Y-m-d');
         $date2 = $this->faker->dateTimeBetween('+1 week', '+2 weeks')->format('Y-m-d');
@@ -292,7 +292,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function listOrganisationEventsFilterByDatesAsGuest200(): void
+    public function list_organisation_events_filter_by_dates_as_guest200(): void
     {
         $date1 = $this->faker->dateTimeBetween('+2 days', '+1 weeks');
         $date2 = $this->faker->dateTimeBetween('+2 week', '+3 weeks');
@@ -352,7 +352,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function listOrganisationEventsFilterByAccessibilityAsGuest200(): void
+    public function list_organisation_events_filter_by_accessibility_as_guest200(): void
     {
         $organisationEvent1 = OrganisationEvent::factory()->create([
             'title' => 'Organisation Event 1',
@@ -519,7 +519,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function listOrganisationEventsFilterByCollectionAsGuest200(): void
+    public function list_organisation_events_filter_by_collection_as_guest200(): void
     {
         $organisationEventCollection1 = Collection::factory()->typeOrganisationEvent()->create();
         $organisationEventCollection2 = Collection::factory()->typeOrganisationEvent()->create();
@@ -569,7 +569,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function listOrganisationEventsOnlyRelatedOrganisationsAsOrganisationAdmin200(): void
+    public function list_organisation_events_only_related_organisations_as_organisation_admin200(): void
     {
         $organisation1 = Organisation::factory()->create();
         $organisation2 = Organisation::factory()->create();
@@ -598,7 +598,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function listOrganisationEventsCreatesAuditAsGuest200(): void
+    public function list_organisation_events_creates_audit_as_guest200(): void
     {
         $this->fakeEvents();
 
@@ -618,7 +618,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventAsGuest401(): void
+    public function post_create_organisation_event_as_guest401(): void
     {
         $response = $this->json('POST', '/core/v1/organisation-events');
 
@@ -628,7 +628,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventAsServiceWorker403(): void
+    public function post_create_organisation_event_as_service_worker403(): void
     {
         $service = Service::factory()->create();
         $user = User::factory()->create()->makeServiceWorker($service);
@@ -643,7 +643,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventAsServiceAdmin403(): void
+    public function post_create_organisation_event_as_service_admin403(): void
     {
         $service = Service::factory()->create();
         $user = User::factory()->create()->makeServiceAdmin($service);
@@ -658,7 +658,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventAsOrganisationAdmin200(): void
+    public function post_create_organisation_event_as_organisation_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -670,7 +670,7 @@ class OrganisationEventsTest extends TestCase
         $imageResponse = $this->json('POST', '/core/v1/files', [
             'is_private' => false,
             'mime_type' => 'image/png',
-            'file' => 'data:image/png;base64,' . base64_encode($image),
+            'file' => 'data:image/png;base64,'.base64_encode($image),
         ]);
 
         $date = $this->faker->dateTimeBetween('tomorrow', '+6 weeks')->format('Y-m-d');
@@ -708,12 +708,12 @@ class OrganisationEventsTest extends TestCase
 
         $response->assertJsonFragment($payload);
 
-        //Then an update request should be created for the new event
+        // Then an update request should be created for the new event
         $updateRequest = UpdateRequest::findOrFail($response->json('id'));
 
         $this->assertEquals($updateRequest->data, $payload);
 
-        //And the organisation event should not yet be created
+        // And the organisation event should not yet be created
         $this->assertEmpty(OrganisationEvent::all());
 
         $this->approveUpdateRequest($updateRequest->id);
@@ -728,7 +728,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventAsGlobalAdmin200(): void
+    public function post_create_organisation_event_as_global_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -768,12 +768,12 @@ class OrganisationEventsTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        //Then an update request should be created for the new event
+        // Then an update request should be created for the new event
         $updateRequest = UpdateRequest::findOrFail($response->json('id'));
 
         $this->assertEquals($updateRequest->data, $payload);
 
-        //And the organisation event should not yet be created
+        // And the organisation event should not yet be created
         $this->assertEmpty(OrganisationEvent::all());
 
         $this->approveUpdateRequest($updateRequest->id);
@@ -783,13 +783,13 @@ class OrganisationEventsTest extends TestCase
         $payload['slug'] = 'a-new-organisation-event';
 
         // The organisation event is created
-        $this->assertDatabaseHas((new OrganisationEvent())->getTable(), $payload);
+        $this->assertDatabaseHas((new OrganisationEvent)->getTable(), $payload);
     }
 
     /**
      * @test
      */
-    public function postCreateOrganisationEventAsSuperAdmin201(): void
+    public function post_create_organisation_event_as_super_admin201(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -834,7 +834,7 @@ class OrganisationEventsTest extends TestCase
         $payload['slug'] = 'a-new-organisation-event';
 
         // The organisation event is created
-        $this->assertDatabaseHas((new OrganisationEvent())->getTable(), $payload);
+        $this->assertDatabaseHas((new OrganisationEvent)->getTable(), $payload);
 
         // And no update request was created
         $this->assertEmpty(UpdateRequest::all());
@@ -843,7 +843,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventAsOtherOrganisationAdmin403(): void
+    public function post_create_organisation_event_as_other_organisation_admin403(): void
     {
         $organisation1 = Organisation::factory()->create();
         $organisation2 = Organisation::factory()->create();
@@ -888,7 +888,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateHomepageOrganisationEventAsOrganisationAdmin422(): void
+    public function post_create_homepage_organisation_event_as_organisation_admin422(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -932,7 +932,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateHomepageOrganisationEventAsGlobalAdmin200(): void
+    public function post_create_homepage_organisation_event_as_global_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -972,7 +972,7 @@ class OrganisationEventsTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        //Then an update request should be created for the new event
+        // Then an update request should be created for the new event
         $updateRequest = UpdateRequest::findOrFail($response->json('id'));
 
         $this->assertEquals($updateRequest->data, $payload);
@@ -982,13 +982,13 @@ class OrganisationEventsTest extends TestCase
         unset($payload['category_taxonomies']);
 
         // The organisation event is created
-        $this->assertDatabaseHas((new OrganisationEvent())->getTable(), $payload);
+        $this->assertDatabaseHas((new OrganisationEvent)->getTable(), $payload);
     }
 
     /**
      * @test
      */
-    public function postCreateHomepageOrganisationEventAsSuperAdmin201(): void
+    public function post_create_homepage_organisation_event_as_super_admin201(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -1037,7 +1037,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventWithTaxonomiesAsOrganisationAdmin422(): void
+    public function post_create_organisation_event_with_taxonomies_as_organisation_admin422(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -1082,7 +1082,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventWithTaxonomiesAsGlobalAdmin200(): void
+    public function post_create_organisation_event_with_taxonomies_as_global_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -1123,7 +1123,7 @@ class OrganisationEventsTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        //Then an update request should be created for the new event
+        // Then an update request should be created for the new event
         $updateRequest = UpdateRequest::findOrFail($response->json('id'));
 
         $this->assertEquals($updateRequest->data, $payload);
@@ -1133,7 +1133,7 @@ class OrganisationEventsTest extends TestCase
         unset($payload['category_taxonomies']);
 
         // The organisation event is created
-        $this->assertDatabaseHas((new OrganisationEvent())->getTable(), $payload);
+        $this->assertDatabaseHas((new OrganisationEvent)->getTable(), $payload);
 
         $organisationEvent = OrganisationEvent::where('title', $payload['title'])->firstOrFail();
         $this->assertDatabaseHas(table(OrganisationEventTaxonomy::class), [
@@ -1145,7 +1145,7 @@ class OrganisationEventsTest extends TestCase
             'taxonomy_id' => $taxonomy->parent_id,
         ]);
 
-        $response = $this->getJson('/core/v1/organisation-events/' . $organisationEvent->id);
+        $response = $this->getJson('/core/v1/organisation-events/'.$organisationEvent->id);
 
         $response->assertStatus(Response::HTTP_OK);
 
@@ -1174,7 +1174,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventWithTaxonomiesAsSuperAdmin201(): void
+    public function post_create_organisation_event_with_taxonomies_as_super_admin201(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -1250,7 +1250,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventCreatesAuditAsOrganisationAdmin201(): void
+    public function post_create_organisation_event_creates_audit_as_organisation_admin201(): void
     {
         $this->fakeEvents();
 
@@ -1301,7 +1301,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventWithImageAsGlobalAdmin200(): void
+    public function post_create_organisation_event_with_image_as_global_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -1314,7 +1314,7 @@ class OrganisationEventsTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,' . base64_encode($image),
+            'file' => 'data:image/png;base64,'.base64_encode($image),
         ]);
         $imageResponse->assertStatus(Response::HTTP_CREATED);
 
@@ -1351,7 +1351,7 @@ class OrganisationEventsTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        //Then an update request should be created for the new event
+        // Then an update request should be created for the new event
         $updateRequest = UpdateRequest::findOrFail($response->json('id'));
 
         $this->assertEquals($updateRequest->data, $payload);
@@ -1361,7 +1361,7 @@ class OrganisationEventsTest extends TestCase
         unset($payload['category_taxonomies']);
 
         // The organisation event is created
-        $this->assertDatabaseHas((new OrganisationEvent())->getTable(), $payload);
+        $this->assertDatabaseHas((new OrganisationEvent)->getTable(), $payload);
 
         $organisationEvent = OrganisationEvent::where('title', $payload['title'])->firstOrFail();
 
@@ -1372,7 +1372,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventWithImageAsOrganisationAdmin200(): void
+    public function post_create_organisation_event_with_image_as_organisation_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -1385,7 +1385,7 @@ class OrganisationEventsTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,' . base64_encode($image),
+            'file' => 'data:image/png;base64,'.base64_encode($image),
         ]);
         $imageResponse->assertStatus(Response::HTTP_CREATED);
 
@@ -1426,7 +1426,7 @@ class OrganisationEventsTest extends TestCase
 
         $responseData = json_decode($response->getContent());
 
-        //Then an update request should be created for the new event
+        // Then an update request should be created for the new event
         $updateRequest = UpdateRequest::findOrFail($response->json('id'));
 
         $this->assertEquals($updateRequest->data, $payload);
@@ -1447,7 +1447,7 @@ class OrganisationEventsTest extends TestCase
         $updateRequestResponseData = json_decode($updateRequestCheckResponse->getContent(), true);
 
         $this->assertEquals($updateRequestResponseData['data'], $payload);
-        //And the organisation event should not yet be created
+        // And the organisation event should not yet be created
         $this->assertEmpty(OrganisationEvent::all());
 
         // Get the event image for the update request
@@ -1471,7 +1471,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventMinimumFieldsAsOrganisationAdmin200(): void
+    public function post_create_organisation_event_minimum_fields_as_organisation_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -1515,7 +1515,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventRequiredFieldsAsOrganisationAdmin422(): void
+    public function post_create_organisation_event_required_fields_as_organisation_admin422(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -1609,7 +1609,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventCreatesUniqueSlugAsOrganisationAdmin200(): void
+    public function post_create_organisation_event_creates_unique_slug_as_organisation_admin200(): void
     {
         $organisation = Organisation::factory()->create();
 
@@ -1694,7 +1694,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventCreatesUniqueSlugAsSuperAdmin201(): void
+    public function post_create_organisation_event_creates_unique_slug_as_super_admin201(): void
     {
         $organisation = Organisation::factory()->create();
 
@@ -1752,7 +1752,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventIfNotFreeRequiresFeeDataAsOrganisationAdmin200(): void
+    public function post_create_organisation_event_if_not_free_requires_fee_data_as_organisation_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -1814,7 +1814,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventWithOrganiserRequiresOrganiserContactAsOrganisationAdmin200(): void
+    public function post_create_organisation_event_with_organiser_requires_organiser_contact_as_organisation_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -1884,7 +1884,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventWithBookingDetailsRequiresAllBookingFieldsAsOrganisationAdmin200(): void
+    public function post_create_organisation_event_with_booking_details_requires_all_booking_fields_as_organisation_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -1952,7 +1952,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventStartsInPastAsOrganisationAdmin200(): void
+    public function post_create_organisation_event_starts_in_past_as_organisation_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -1998,7 +1998,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventEndsInPastAsOrganisationAdmin422(): void
+    public function post_create_organisation_event_ends_in_past_as_organisation_admin422(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -2044,7 +2044,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventEndsBeforeItStartsAsOrganisationAdmin422(): void
+    public function post_create_organisation_event_ends_before_it_starts_as_organisation_admin422(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -2090,7 +2090,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function postCreateOrganisationEventStartsTodayAsOrganisationAdmin200(): void
+    public function post_create_organisation_event_starts_today_as_organisation_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -2140,7 +2140,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function getSingleOrganisationEventAsGuest200(): void
+    public function get_single_organisation_event_as_guest200(): void
     {
         $organisationEvent = OrganisationEvent::factory()->withImage()->create();
 
@@ -2191,7 +2191,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function getSingleOrganisationEventBySlugAsGuest200(): void
+    public function get_single_organisation_event_by_slug_as_guest200(): void
     {
         $organisationEvent = OrganisationEvent::factory()->create();
 
@@ -2237,7 +2237,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function getSingleOrganisationEventAsGuestCreatesAudit200(): void
+    public function get_single_organisation_event_as_guest_creates_audit200(): void
     {
         $this->fakeEvents();
 
@@ -2256,7 +2256,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function getSingleOrganisationEventImagePngAsGuest200(): void
+    public function get_single_organisation_event_image_png_as_guest200(): void
     {
         $image = File::factory()->imagePng()->create();
         $organisationEvent = OrganisationEvent::factory([
@@ -2274,7 +2274,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function getSingleOrganisationEventImageJpgAsGuest200(): void
+    public function get_single_organisation_event_image_jpg_as_guest200(): void
     {
         $image = File::factory()->imageJpg()->create();
         $organisationEvent = OrganisationEvent::factory([
@@ -2292,7 +2292,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function getSingleOrganisationEventImageSvgAsGuest200(): void
+    public function get_single_organisation_event_image_svg_as_guest200(): void
     {
         $image = File::factory()->imageSvg()->create();
         $organisationEvent = OrganisationEvent::factory([
@@ -2310,7 +2310,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function getSingleOrganisationEventImageCreatesAuditAsGuest200(): void
+    public function get_single_organisation_event_image_creates_audit_as_guest200(): void
     {
         $this->fakeEvents();
 
@@ -2327,11 +2327,11 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function getSingleOrganisationEventIcalAsGuest200(): void
+    public function get_single_organisation_event_ical_as_guest200(): void
     {
         $organisationEvent = OrganisationEvent::factory()->notVirtual()->withOrganiser()->create();
 
-        $now = new DateTime();
+        $now = new DateTime;
         $start = new Carbon($organisationEvent->start_date);
         [$startHour, $startMinute, $startSecond] = explode(':', $organisationEvent->start_time);
         $start->setTime($startHour, $startMinute, $startSecond);
@@ -2347,24 +2347,24 @@ class OrganisationEventsTest extends TestCase
             'VERSION:2.0',
             'PRODID:-//hacksw/handcal//NONSGML v1.0//EN',
             'BEGIN:VEVENT',
-            'UID:' . $organisationEvent->id,
-            'DTSTAMP:' . $now->format('Ymd\\THis\\Z'),
-            'ORGANIZER;CN=' . $organisationEvent->organiser_name . ':MAILTO:' . $organisationEvent->organiser_email,
-            'DTSTART:' . $start->format('Ymd\\THis\\Z'),
-            'DTEND:' . $end->format('Ymd\\THis\\Z'),
-            'SUMMARY:' . $organisationEvent->title,
-            'DESCRIPTION:' . $organisationEvent->intro,
-            'GEO:' . $organisationEvent->location->lat . ';' . $organisationEvent->location->lon,
-            'LOCATION:' . str_ireplace(',', '\,', $organisationEvent->location->toAddress()->__toString()),
+            'UID:'.$organisationEvent->id,
+            'DTSTAMP:'.$now->format('Ymd\\THis\\Z'),
+            'ORGANIZER;CN='.$organisationEvent->organiser_name.':MAILTO:'.$organisationEvent->organiser_email,
+            'DTSTART:'.$start->format('Ymd\\THis\\Z'),
+            'DTEND:'.$end->format('Ymd\\THis\\Z'),
+            'SUMMARY:'.$organisationEvent->title,
+            'DESCRIPTION:'.$organisationEvent->intro,
+            'GEO:'.$organisationEvent->location->lat.';'.$organisationEvent->location->lon,
+            'LOCATION:'.str_ireplace(',', '\,', $organisationEvent->location->toAddress()->__toString()),
             'END:VEVENT',
             'END:VCALENDAR',
         ]);
 
-        $this->assertEquals('https://calendar.google.com/calendar/render?action=TEMPLATE&dates=' . urlencode($start->format('Ymd\\THis\\Z') . '/' . $end->format('Ymd\\THis\\Z')) . '&details=' . $urlsafeTitle . '&location=' . $urlsafeLocation . '&text=' . $urlsafeIntro, $organisationEvent->googleCalendarlink);
+        $this->assertEquals('https://calendar.google.com/calendar/render?action=TEMPLATE&dates='.urlencode($start->format('Ymd\\THis\\Z').'/'.$end->format('Ymd\\THis\\Z')).'&details='.$urlsafeTitle.'&location='.$urlsafeLocation.'&text='.$urlsafeIntro, $organisationEvent->googleCalendarlink);
 
-        $this->assertEquals('https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt=' . urlencode($start->format(DateTime::ATOM)) . '&enddt=' . urlencode($end->format(DateTime::ATOM)) . '&subject=' . $urlsafeTitle . '&location=' . $urlsafeLocation . '&body=' . $urlsafeIntro, $organisationEvent->microsoftCalendarLink);
+        $this->assertEquals('https://outlook.office.com/calendar/0/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&startdt='.urlencode($start->format(DateTime::ATOM)).'&enddt='.urlencode($end->format(DateTime::ATOM)).'&subject='.$urlsafeTitle.'&location='.$urlsafeLocation.'&body='.$urlsafeIntro, $organisationEvent->microsoftCalendarLink);
 
-        $this->assertEquals(secure_url('/core/v1/organisation-events/' . $organisationEvent->id . '/event.ics'), $organisationEvent->appleCalendarLink);
+        $this->assertEquals(secure_url('/core/v1/organisation-events/'.$organisationEvent->id.'/event.ics'), $organisationEvent->appleCalendarLink);
 
         $response = $this->get($organisationEvent->appleCalendarLink);
 
@@ -2381,7 +2381,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventAsGuest401(): void
+    public function put_update_organisation_event_as_guest401(): void
     {
         $organisationEvent = OrganisationEvent::factory()->create();
 
@@ -2393,7 +2393,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventAsServiceWorker403(): void
+    public function put_update_organisation_event_as_service_worker403(): void
     {
         $service = Service::factory()->create();
         $user = User::factory()->create()->makeServiceWorker($service);
@@ -2410,7 +2410,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventAsServiceAdmin403(): void
+    public function put_update_organisation_event_as_service_admin403(): void
     {
         $service = Service::factory()->create();
         $user = User::factory()->create()->makeServiceAdmin($service);
@@ -2427,7 +2427,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventAsOrganisationAdmin200(): void
+    public function put_update_organisation_event_as_organisation_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -2480,7 +2480,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventAsGlobalAdmin200(): void
+    public function put_update_organisation_event_as_global_admin200(): void
     {
         $location = Location::factory()->create();
         $user = User::factory()->create()->makeGlobalAdmin();
@@ -2529,13 +2529,13 @@ class OrganisationEventsTest extends TestCase
         $this->approveUpdateRequest($updateRequest->id);
 
         // The organisation event is updated
-        $this->assertDatabaseHas((new OrganisationEvent())->getTable(), array_merge(['id' => $organisationEvent->id], $payload));
+        $this->assertDatabaseHas((new OrganisationEvent)->getTable(), array_merge(['id' => $organisationEvent->id], $payload));
     }
 
     /**
      * @test
      */
-    public function putUpdateOrganisationEventAutoApprovedAsSuperAdmin200(): void
+    public function put_update_organisation_event_auto_approved_as_super_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -2576,7 +2576,7 @@ class OrganisationEventsTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
 
         // The organisation event is updated
-        $this->assertDatabaseHas((new OrganisationEvent())->getTable(), array_merge(['id' => $organisationEvent->id], $payload));
+        $this->assertDatabaseHas((new OrganisationEvent)->getTable(), array_merge(['id' => $organisationEvent->id], $payload));
 
         $updateRequest = UpdateRequest::query()
             ->where('updateable_type', UpdateRequest::EXISTING_TYPE_ORGANISATION_EVENT)
@@ -2591,7 +2591,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventAsOrganisationAdminCreatesAudit200(): void
+    public function put_update_organisation_event_as_organisation_admin_creates_audit200(): void
     {
         $this->fakeEvents();
 
@@ -2647,7 +2647,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventAsGlobalAdminAddImage200(): void
+    public function put_update_organisation_event_as_global_admin_add_image200(): void
     {
         $user = User::factory()->create()->makeGlobalAdmin();
         $image = Storage::disk('local')->get('/test-data/image.png');
@@ -2658,7 +2658,7 @@ class OrganisationEventsTest extends TestCase
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,' . base64_encode($image),
+            'file' => 'data:image/png;base64,'.base64_encode($image),
         ]);
 
         $imageResponse->assertStatus(Response::HTTP_CREATED);
@@ -2686,7 +2686,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventAsGlobalAdminRemoveImage200(): void
+    public function put_update_organisation_event_as_global_admin_remove_image200(): void
     {
         $user = User::factory()->create()->makeGlobalAdmin();
 
@@ -2715,7 +2715,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventAsOtherOrganisationAdmin403(): void
+    public function put_update_organisation_event_as_other_organisation_admin403(): void
     {
         $organisation1 = Organisation::factory()->create();
         $organisation2 = Organisation::factory()->create();
@@ -2763,7 +2763,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventAddToHomepageAsOrganisationAdmin422(): void
+    public function put_update_organisation_event_add_to_homepage_as_organisation_admin422(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -2810,7 +2810,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventAddToHomepageAsGlobalAdmin200(): void
+    public function put_update_organisation_event_add_to_homepage_as_global_admin200(): void
     {
         $user = User::factory()->create()->makeGlobalAdmin();
 
@@ -2835,7 +2835,7 @@ class OrganisationEventsTest extends TestCase
         $this->approveUpdateRequest($updateRequest->id);
 
         // The organisation event is updated
-        $this->assertDatabaseHas((new OrganisationEvent())->getTable(), [
+        $this->assertDatabaseHas((new OrganisationEvent)->getTable(), [
             'title' => 'New Event Title',
             'slug' => 'organisation-event-title',
         ]);
@@ -2854,7 +2854,7 @@ class OrganisationEventsTest extends TestCase
         $this->approveUpdateRequest($updateRequest->id);
 
         // The organisation event is updated
-        $this->assertDatabaseHas((new OrganisationEvent())->getTable(), [
+        $this->assertDatabaseHas((new OrganisationEvent)->getTable(), [
             'title' => 'New Event Title',
             'slug' => 'new-event-title',
         ]);
@@ -2863,7 +2863,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventUpdateSlugAsOrganisationAdmin200(): void
+    public function put_update_organisation_event_update_slug_as_organisation_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -2909,7 +2909,7 @@ class OrganisationEventsTest extends TestCase
         $this->approveUpdateRequest($updateRequest1->id);
 
         // The organisation event is updated
-        $this->assertDatabaseHas((new OrganisationEvent())->getTable(), [
+        $this->assertDatabaseHas((new OrganisationEvent)->getTable(), [
             'id' => $organisationEvent2->id,
             'slug' => 'event-slug-1',
         ]);
@@ -2917,7 +2917,7 @@ class OrganisationEventsTest extends TestCase
         $this->approveUpdateRequest($updateRequest2->id);
 
         // The organisation event is updated
-        $this->assertDatabaseHas((new OrganisationEvent())->getTable(), [
+        $this->assertDatabaseHas((new OrganisationEvent)->getTable(), [
             'id' => $organisationEvent3->id,
             'slug' => 'event-slug-2',
         ]);
@@ -2926,7 +2926,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventUpdateSlugAsSuperAdmin200(): void
+    public function put_update_organisation_event_update_slug_as_super_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -2975,7 +2975,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventUpdateTaxonomiesAsOrganisationAdmin200(): void
+    public function put_update_organisation_event_update_taxonomies_as_organisation_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -3051,7 +3051,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventUpdateTaxonomiesAsGlobalAdmin200(): void
+    public function put_update_organisation_event_update_taxonomies_as_global_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -3162,7 +3162,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function putUpdateOrganisationEventUpdateTaxonomiesAsSuperAdmin200(): void
+    public function put_update_organisation_event_update_taxonomies_as_super_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $location = Location::factory()->create();
@@ -3273,7 +3273,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function deleteRemoveOrganisationEventAsGuest401(): void
+    public function delete_remove_organisation_event_as_guest401(): void
     {
         $organisationEvent = OrganisationEvent::factory()->create();
 
@@ -3285,7 +3285,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function deleteRemoveOrganisationEventAsServiceWorker403(): void
+    public function delete_remove_organisation_event_as_service_worker403(): void
     {
         $service = Service::factory()->create();
         $user = User::factory()->create()->makeServiceWorker($service);
@@ -3302,7 +3302,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function deleteRemoveOrganisationEventAsServiceAdmin403(): void
+    public function delete_remove_organisation_event_as_service_admin403(): void
     {
         $service = Service::factory()->create();
         $user = User::factory()->create()->makeServiceAdmin($service);
@@ -3319,7 +3319,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function deleteRemoveOrganisationEventAsOrganisationAdmin403(): void
+    public function delete_remove_organisation_event_as_organisation_admin403(): void
     {
         $organisation = Organisation::factory()->create();
         $user = User::factory()->create()->makeOrganisationAdmin($organisation);
@@ -3333,13 +3333,13 @@ class OrganisationEventsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/organisation-events/{$organisationEvent->id}");
 
         $response->assertStatus(Response::HTTP_FORBIDDEN);
-        $this->assertDatabaseHas((new OrganisationEvent())->getTable(), ['id' => $organisationEvent->id]);
+        $this->assertDatabaseHas((new OrganisationEvent)->getTable(), ['id' => $organisationEvent->id]);
     }
 
     /**
      * @test
      */
-    public function deleteRemoveOrganisationEventAsGlobalAdmin403(): void
+    public function delete_remove_organisation_event_as_global_admin403(): void
     {
         $organisation = Organisation::factory()->create();
         $user = User::factory()->create()->makeGlobalAdmin($organisation);
@@ -3351,13 +3351,13 @@ class OrganisationEventsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/organisation-events/{$organisationEvent->id}");
 
         $response->assertStatus(Response::HTTP_FORBIDDEN);
-        $this->assertDatabaseHas((new OrganisationEvent())->getTable(), ['id' => $organisationEvent->id]);
+        $this->assertDatabaseHas((new OrganisationEvent)->getTable(), ['id' => $organisationEvent->id]);
     }
 
     /**
      * @test
      */
-    public function deleteRemoveOrganisationEventAsSuperAdmin200(): void
+    public function delete_remove_organisation_event_as_super_admin200(): void
     {
         $organisation = Organisation::factory()->create();
         $user = User::factory()->create()->makeSuperAdmin($organisation);
@@ -3369,13 +3369,13 @@ class OrganisationEventsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/organisation-events/{$organisationEvent->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new OrganisationEvent())->getTable(), ['id' => $organisationEvent->id]);
+        $this->assertDatabaseMissing((new OrganisationEvent)->getTable(), ['id' => $organisationEvent->id]);
     }
 
     /**
      * @test
      */
-    public function deleteRemoveOrganisationEventAsSuperAdminCreatesAudit200(): void
+    public function delete_remove_organisation_event_as_super_admin_creates_audit200(): void
     {
         $this->fakeEvents();
 
@@ -3402,7 +3402,7 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function deleteOrganisationEventWithUpdateRequestsAsSuperAdmin200(): void
+    public function delete_organisation_event_with_update_requests_as_super_admin200(): void
     {
         $user = User::factory()->create()->makeGlobalAdmin();
 
@@ -3430,7 +3430,7 @@ class OrganisationEventsTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        $this->assertDatabaseMissing((new OrganisationEvent())->getTable(), ['id' => $organisationEvent->id]);
+        $this->assertDatabaseMissing((new OrganisationEvent)->getTable(), ['id' => $organisationEvent->id]);
         $this->assertDatabaseMissing('update_requests', ['id' => $updateRequest->id, 'deleted_at' => null]);
     }
 }

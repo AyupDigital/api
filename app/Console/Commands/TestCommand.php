@@ -29,15 +29,15 @@ class TestCommand extends Command
     public function handle()
     {
         $collection = Collection::query()->with('children')->find('089e6f18-0985-4557-b766-eae842cdab9e');
-//        dd(Collection::query()
-//            ->whereIn('slug', ['jae-test-child'])
-//            ->with('children')
-//            ->get()
-//            ->flatMap(function ($collection) {
-//                return $collection->children->pluck('name')->prepend($collection->name);
-//            })
-//            ->unique()
-//            ->all());
+        //        dd(Collection::query()
+        //            ->whereIn('slug', ['jae-test-child'])
+        //            ->with('children')
+        //            ->get()
+        //            ->flatMap(function ($collection) {
+        //                return $collection->children->pluck('name')->prepend($collection->name);
+        //            })
+        //            ->unique()
+        //            ->all());
         $service = Service::query()->find('4dbe9bd1-2f2c-426f-a9f6-00510a46016d');
         $taxonomyIds = $service->serviceTaxonomies()
             ->pluck('taxonomy_id')
@@ -46,8 +46,8 @@ class TestCommand extends Command
             ->whereIn('taxonomy_id', $taxonomyIds)
             ->pluck('collection_id');
 
-//        dd($collectionIds);
-//        $collections = ;
+        //        dd($collectionIds);
+        //        $collections = ;
         $collections = Collection::query()->whereIn('id', $collectionIds->toArray())
             ->where('type', Collection::TYPE_CATEGORY)
             ->with('children') // Load only direct children
@@ -68,7 +68,7 @@ class TestCommand extends Command
             })
             ->filter(function ($name) {
                 // Ensure no null or empty names
-                return !empty($name);
+                return ! empty($name);
             })
             ->unique() // Remove duplicates
             ->values() // Reset array keys

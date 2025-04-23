@@ -46,23 +46,23 @@ class StoreRequest extends FormRequest
                 'required',
                 'exists:organisations,id',
                 function ($attribute, $value, $fail) {
-                    if (!$this->user('api')->isGlobalAdmin() && !$this->user('api')->isOrganisationAdmin(Organisation::findOrFail($value))) {
+                    if (! $this->user('api')->isGlobalAdmin() && ! $this->user('api')->isOrganisationAdmin(Organisation::findOrFail($value))) {
                         $fail('The organisation_id field must contain an ID for an organisation you are an organisation admin for.');
                     }
                 },
             ],
             'title' => ['required', 'string', 'min:1', 'max:255'],
-            'slug' => ['string', 'min:1', 'max:255', new Slug()],
+            'slug' => ['string', 'min:1', 'max:255', new Slug],
             'start_date' => ['required', 'date_format:Y-m-d', new DateSanity($this)],
             'end_date' => ['required', 'date_format:Y-m-d', new DateSanity($this)],
             'start_time' => ['required', 'date_format:H:i:s', new DateSanity($this)],
             'end_time' => ['required', 'date_format:H:i:s', new DateSanity($this)],
-            'intro' => ['required', 'string', 'min:1', 'max:300'],
+            'intro' => ['required', 'string', 'min:1', 'max:255'],
             'description' => [
                 'required',
                 'string',
                 new MarkdownMinLength(1),
-                new MarkdownMaxLength(config('local.event_description_max_chars'), 'Description tab - The long description must be ' . config('local.event_description_max_chars') . ' characters or fewer.'),
+                new MarkdownMaxLength(config('local.event_description_max_chars'), 'Description tab - The long description must be '.config('local.event_description_max_chars').' characters or fewer.'),
             ],
             'is_free' => ['required', 'boolean'],
             'fees_text' => [
@@ -84,7 +84,7 @@ class StoreRequest extends FormRequest
                 'min:1',
                 'max:255',
                 Rule::requiredIf(function () {
-                    return !empty($this->organiser_phone) || !empty($this->organiser_email) || !empty($this->organiser_url);
+                    return ! empty($this->organiser_phone) || ! empty($this->organiser_email) || ! empty($this->organiser_url);
                 }),
             ],
             'organiser_phone' => [
@@ -92,9 +92,9 @@ class StoreRequest extends FormRequest
                 'string',
                 'min:1',
                 'max:255',
-                new UkPhoneNumber(),
+                new UkPhoneNumber,
                 Rule::requiredIf(function () {
-                    return !empty($this->organiser_name) && empty($this->organiser_email) && empty($this->organiser_url);
+                    return ! empty($this->organiser_name) && empty($this->organiser_email) && empty($this->organiser_url);
                 }),
             ],
             'organiser_email' => [
@@ -102,7 +102,7 @@ class StoreRequest extends FormRequest
                 'email',
                 'max:255',
                 Rule::requiredIf(function () {
-                    return !empty($this->organiser_name) && empty($this->organiser_phone) && empty($this->organiser_url);
+                    return ! empty($this->organiser_name) && empty($this->organiser_phone) && empty($this->organiser_url);
                 }),
             ],
             'organiser_url' => [
@@ -110,7 +110,7 @@ class StoreRequest extends FormRequest
                 'url',
                 'max:255',
                 Rule::requiredIf(function () {
-                    return !empty($this->organiser_name) && empty($this->organiser_email) && empty($this->organiser_phone);
+                    return ! empty($this->organiser_name) && empty($this->organiser_email) && empty($this->organiser_phone);
                 }),
             ],
             'booking_title' => [
@@ -156,14 +156,14 @@ class StoreRequest extends FormRequest
             'is_virtual' => ['required', 'boolean'],
             'location_id' => [
                 'nullable',
-                Rule::requiredIf(!$this->is_virtual),
+                Rule::requiredIf(! $this->is_virtual),
                 'exists:locations,id',
             ],
             'image_file_id' => [
                 'nullable',
                 'exists:files,id',
                 new FileIsMimeType(File::MIME_TYPE_PNG, File::MIME_TYPE_JPG, File::MIME_TYPE_JPEG, File::MIME_TYPE_SVG),
-                new FileIsPendingAssignment(),
+                new FileIsPendingAssignment,
             ],
             'category_taxonomies' => [
                 'present',

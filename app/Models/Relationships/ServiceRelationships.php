@@ -47,7 +47,7 @@ trait ServiceRelationships
 
     public function locations(): BelongsToMany
     {
-        return $this->belongsToMany(Location::class, (new ServiceLocation())->getTable());
+        return $this->belongsToMany(Location::class, (new ServiceLocation)->getTable());
     }
 
     public function socialMedias(): MorphMany
@@ -72,7 +72,7 @@ trait ServiceRelationships
 
     public function taxonomies(): BelongsToMany
     {
-        return $this->belongsToMany(Taxonomy::class, (new ServiceTaxonomy())->getTable());
+        return $this->belongsToMany(Taxonomy::class, (new ServiceTaxonomy)->getTable());
     }
 
     public function serviceEligibilities()
@@ -82,7 +82,7 @@ trait ServiceRelationships
 
     public function eligibilities(): BelongsToMany
     {
-        return $this->belongsToMany(Taxonomy::class, (new ServiceEligibility())->getTable());
+        return $this->belongsToMany(Taxonomy::class, (new ServiceEligibility)->getTable());
     }
 
     public function userRoles(): HasMany

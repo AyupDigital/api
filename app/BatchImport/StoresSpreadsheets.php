@@ -47,13 +47,13 @@ trait StoresSpreadsheets
     {
         $filePath = $this->storeBase64FileString($spreadsheet, 'batch-upload');
 
-        if (!Storage::disk('local')->exists($filePath) || !is_readable(Storage::disk('local')->path($filePath))) {
+        if (! Storage::disk('local')->exists($filePath) || ! is_readable(Storage::disk('local')->path($filePath))) {
             throw new FileNotFoundException($filePath);
         }
 
         $this->rejected = $this->validateSpreadsheet($filePath);
 
-        if (!count($this->rejected)) {
+        if (! count($this->rejected)) {
             try {
                 $this->imported = $this->importSpreadsheet($filePath);
             } catch (\App\Exceptions\DuplicateContentException $e) {
@@ -62,7 +62,7 @@ trait StoresSpreadsheets
             } catch (\Exception $e) {
                 Storage::disk('local')->delete($filePath);
 
-                abort(500, $e->getMessage() . $e->getTraceAsString());
+                abort(500, $e->getMessage().$e->getTraceAsString());
             }
         }
 
@@ -80,7 +80,7 @@ trait StoresSpreadsheets
         if (count($matches) < 3) {
             throw ValidationException::withMessages(['spreadsheet' => 'Invalid Base64 Excel data']);
         }
-        if (!$file_blob = base64_decode(trim($matches[2]), true)) {
+        if (! $file_blob = base64_decode(trim($matches[2]), true)) {
             throw ValidationException::withMessages(['spreadsheet' => 'Invalid Base64 Excel data']);
         }
 
@@ -90,15 +90,15 @@ trait StoresSpreadsheets
     /**
      * Store a binary file blob and update the models properties.
      */
-    protected function storeBinaryUpload(string $blob, string $path, string $mime_type = null, string $ext = null): string
+    protected function storeBinaryUpload(string $blob, string $path, ?string $mime_type = null, ?string $ext = null): string
     {
-        $path = empty($path) ? '' : trim($path, '/') . '/';
+        $path = empty($path) ? '' : trim($path, '/').'/';
         $mime_type = $mime_type ?? $this->getFileStringMimeType($blob);
         $ext = $ext ?? $this->guessFileExtension($mime_type);
-        $filename = md5($blob) . '.' . $ext;
-        Storage::disk('local')->put($path . $filename, $blob);
+        $filename = md5($blob).'.'.$ext;
+        Storage::disk('local')->put($path.$filename, $blob);
 
-        return $path . $filename;
+        return $path.$filename;
     }
 
     /**
@@ -120,6 +120,6 @@ trait StoresSpreadsheets
      */
     protected function guessFileExtension(string $mime_type): string
     {
-        return (new MimeTypes())->getExtensions($mime_type)[0] ?? null;
+        return (new MimeTypes)->getExtensions($mime_type)[0] ?? null;
     }
 }

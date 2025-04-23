@@ -21,7 +21,7 @@ class MarkdownMinLength implements ValidationRule
     /**
      * MarkdownMaxLength constructor.
      */
-    public function __construct(int $minLength, string $message = null)
+    public function __construct(int $minLength, ?string $message = null)
     {
         $this->minLength = $minLength;
         $this->message = $message;
@@ -29,12 +29,10 @@ class MarkdownMinLength implements ValidationRule
 
     /**
      * Determine if the validation rule passes.
-     *
-     * @param mixed $value
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $html = (new Parsedown())->text(sanitize_markdown($value));
+        $html = (new Parsedown)->text(sanitize_markdown($value));
         $text = strip_tags($html);
 
         if (mb_strlen($text) < $this->minLength) {

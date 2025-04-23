@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\DB;
 
 class OrganisationPersistenceService implements DataPersistenceService
 {
-    use ResizesImages;
     use HasUniqueSlug;
+    use ResizesImages;
 
     /**
      * Store the model.
@@ -43,7 +43,7 @@ class OrganisationPersistenceService implements DataPersistenceService
         return DB::transaction(function () use ($request) {
             // Create the Organisation.
             $organisation = Organisation::create([
-                'slug' => $this->uniqueSlug($request->input('slug', $request->input('name')), (new Organisation())),
+                'slug' => $this->uniqueSlug($request->input('slug', $request->input('name')), (new Organisation)),
                 'name' => $request->name,
                 'description' => sanitize_markdown($request->description),
                 'url' => $request->url,
@@ -95,7 +95,7 @@ class OrganisationPersistenceService implements DataPersistenceService
             ]);
 
             $updateableType = UpdateRequest::EXISTING_TYPE_ORGANISATION;
-            if (!$organisation) {
+            if (! $organisation) {
                 $updateableType = UpdateRequest::NEW_TYPE_ORGANISATION_GLOBAL_ADMIN;
             }
 
@@ -109,7 +109,7 @@ class OrganisationPersistenceService implements DataPersistenceService
             // Only persist to the database if the user did not request a preview.
             if ($updateRequest->updateable_type === UpdateRequest::EXISTING_TYPE_ORGANISATION) {
                 // Preview currently only available for update operations
-                if (!$request->isPreview()) {
+                if (! $request->isPreview()) {
                     $updateRequest->save();
                 }
             } else {

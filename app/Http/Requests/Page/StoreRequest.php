@@ -8,7 +8,6 @@ use App\Models\Page;
 use App\Rules\FileIsMimeType;
 use App\Rules\FileIsPendingAssignment;
 use App\Rules\InformationPageCannotHaveCollection;
-use App\Rules\LandingPageCannotHaveParent;
 use App\Rules\PageContent;
 use App\Rules\Slug;
 use App\Rules\TopicPageCannotHaveParent;
@@ -42,7 +41,7 @@ class StoreRequest extends FormRequest
 
         return [
             'title' => ['required', 'string', 'min:1', 'max:255'],
-            'slug' => ['string', 'min:1', 'max:255', new Slug()],
+            'slug' => ['string', 'min:1', 'max:255', new Slug],
             'excerpt' => ['sometimes', 'nullable', 'string', 'min:1', 'max:150'],
             'content' => ['required_if:page_type,landing', 'array'],
             'content.introduction.content' => ['required_if:page_type,landing', 'array'],
@@ -62,7 +61,7 @@ class StoreRequest extends FormRequest
             'order' => [
                 'integer',
                 'min:0',
-                'max:' . $maxOrder,
+                'max:'.$maxOrder,
             ],
             'page_type' => [
                 'sometimes',
@@ -75,7 +74,7 @@ class StoreRequest extends FormRequest
                 'nullable',
                 'exists:files,id',
                 new FileIsMimeType(File::MIME_TYPE_PNG, File::MIME_TYPE_JPG, File::MIME_TYPE_JPEG, File::MIME_TYPE_SVG),
-                new FileIsPendingAssignment(),
+                new FileIsPendingAssignment,
             ],
             'collections' => [
                 'sometimes',

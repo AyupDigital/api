@@ -24,19 +24,14 @@ class UniqueSlugGenerator
     }
 
     /**
-     * @param string $string The string to slugify
+     * @param  string  $string  The string to slugify
      */
     /**
      * Find the first unique slug for the model using the provided slug
      * Unique slugs are created with a '-n' suffix.
      *
-     * @param string $string
-     * @param Model $model
-     * @param string $column
-     * @param int $index
      * @throws InvalidArgumentException
      * @throws RuntimeException
-     * @return string
      */
     public function generate(string $string, Model $model, string $column = 'slug', int $index = 0): string
     {
@@ -59,8 +54,8 @@ class UniqueSlugGenerator
     }
 
     /**
-     * @param string $string The string to slugify
-     * @param string $slug The existing slug to compare against
+     * @param  string  $string  The string to slugify
+     * @param  string  $slug  The existing slug to compare against
      * @return bool Check whether the input string would slugify into the provided slug
      */
     public function compareEquals(string $string, string $slug): bool

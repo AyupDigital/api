@@ -9,12 +9,12 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 class SortParameter extends Parameter
 {
     /**
-     * @param string[] $fields
+     * @param  string[]  $fields
      */
     public static function create(
-        string $objectId = null,
+        ?string $objectId = null,
         array $fields = ['N/A'],
-        string $default = null
+        ?string $default = null
     ): BaseObject {
         $fieldsMarkdown = sprintf('`%s`', implode('`, `', $fields));
 

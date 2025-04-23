@@ -7,7 +7,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 
 class UpdateSettingSchema extends Schema
 {
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         $global = Schema::object('global')
             ->required(
@@ -28,17 +28,7 @@ class UpdateSettingSchema extends Schema
             );
 
         $home = Schema::object('home')
-            ->required(
-                'search_title',
-                'categories_title',
-                'personas_title',
-                'personas_content'
-            )
             ->properties(
-                Schema::string('search_title'),
-                Schema::string('categories_title'),
-                Schema::string('personas_title'),
-                Schema::string('personas_content')->format('markdown'),
                 Schema::array('banners')->items(
                     Schema::object()
                         ->required(
@@ -67,6 +57,16 @@ class UpdateSettingSchema extends Schema
             );
 
         $privacyPolicy = Schema::object('privacy_policy')
+            ->required(
+                'title',
+                'content'
+            )
+            ->properties(
+                Schema::string('title'),
+                Schema::string('content')->format('markdown')
+            );
+
+        $cookiePolicy = Schema::object('cookie_policy')
             ->required(
                 'title',
                 'content'
@@ -158,6 +158,7 @@ class UpdateSettingSchema extends Schema
                                 'home',
                                 'terms_and_conditions',
                                 'privacy_policy',
+                                'cookie_policy',
                                 'accessibility_statement',
                                 'about',
                                 'contact',
@@ -170,6 +171,7 @@ class UpdateSettingSchema extends Schema
                                 $home,
                                 $termsAndConditions,
                                 $privacyPolicy,
+                                $cookiePolicy,
                                 $accessibilityStatement,
                                 $about,
                                 $contact,

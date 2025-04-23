@@ -169,7 +169,7 @@ trait ReportScopes
     /**
      * Referral Export Report query.
      */
-    public function getReferralExportResults(CarbonImmutable $startsAt = null, CarbonImmutable $endsAt = null): Collection
+    public function getReferralExportResults(?CarbonImmutable $startsAt = null, ?CarbonImmutable $endsAt = null): Collection
     {
         $statusUpdateQuery = DB::table('status_updates')
             ->selectRaw('referral_id, max(created_at) as last_update')
@@ -208,7 +208,7 @@ trait ReportScopes
     /**
      * Feedback Export Report query.
      */
-    public function getFeedbackExportResults(CarbonImmutable $startsAt = null, CarbonImmutable $endsAt = null): Collection
+    public function getFeedbackExportResults(?CarbonImmutable $startsAt = null, ?CarbonImmutable $endsAt = null): Collection
     {
         $query = DB::table('page_feedbacks')
             ->select([
@@ -227,7 +227,7 @@ trait ReportScopes
     /**
      * Audit Export Report query.
      */
-    public function getAuditExportResults(CarbonImmutable $startsAt = null, CarbonImmutable $endsAt = null): Collection
+    public function getAuditExportResults(?CarbonImmutable $startsAt = null, ?CarbonImmutable $endsAt = null): Collection
     {
         $query = DB::table('audits')
             ->select([
@@ -250,7 +250,7 @@ trait ReportScopes
     /**
      * Search Histories Export Report query.
      */
-    public function getSearchHistoriesExportResults(CarbonImmutable $startsAt = null, CarbonImmutable $endsAt = null): Collection
+    public function getSearchHistoriesExportResults(?CarbonImmutable $startsAt = null, ?CarbonImmutable $endsAt = null): Collection
     {
         $query = DB::table('search_histories')
             ->select([
@@ -258,7 +258,7 @@ trait ReportScopes
                 'search_histories.created_at as created_at',
             ])
             ->selectRaw('ifnull(json_unquote(search_histories.query->"$.body.query.function_score.query.bool.should[0].match.name.query"),ifnull(json_unquote(search_histories.query->"$.body.query.bool.must.should[0].match.title.query"),json_unquote(search_histories.query->"$.body.query.function_score.query.bool.should[0].match.title.query"))) as query')
-            ->selectRaw('json_unquote(search_histories.query->"$.body.sort[0]._geo_distance") as distance')
+            ->selectRaw('json_unquote(search_histories.query->"$.body.query.function_score.query.bool.must[0].nested.query.geo_distance") as distance')
             ->whereRaw('json_contains_path(search_histories.query, "one", "$.body.query.function_score.query.bool.should[0].match.name.query", "$.body.query.bool.must.should[0].match.title.query", "$.body.query.function_score.query.bool.should[0].match.title.query") = 1')
             ->when($startsAt && $endsAt, function ($query) use ($startsAt, $endsAt) {
                 // When date range provided, filter search histories which were created between the date range.
@@ -271,9 +271,9 @@ trait ReportScopes
     /**
      * Update Request Export Report query.
      */
-    public function getUpdateRequestExportResults(CarbonImmutable $startsAt = null, CarbonImmutable $endsAt = null): Collection
+    public function getUpdateRequestExportResults(?CarbonImmutable $startsAt = null, ?CarbonImmutable $endsAt = null): Collection
     {
-        $entrySql = (new UpdateRequest())->getEntrySql();
+        $entrySql = (new UpdateRequest)->getEntrySql();
 
         $query = DB::table('update_requests')
             ->select([

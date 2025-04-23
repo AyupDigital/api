@@ -42,7 +42,6 @@ class ServiceResource extends JsonResource
             'contact_name' => $this->contact_name,
             'contact_phone' => $this->contact_phone,
             'contact_email' => $this->contact_email,
-            'show_referral_disclaimer' => $this->show_referral_disclaimer,
             'referral_method' => $this->referral_method,
             'referral_button_text' => $this->referral_button_text,
             'referral_email' => $this->referral_email,
@@ -63,6 +62,7 @@ class ServiceResource extends JsonResource
             // Relationships.
             'service_locations' => ServiceLocationResource::collection($this->whenLoaded('serviceLocations')),
             'organisation' => new OrganisationResource($this->whenLoaded('organisation')),
+            'pending_update_requests' => UpdateRequestResource::collection($this->whenLoaded('pendingUpdateRequests')),
         ];
 
         /**

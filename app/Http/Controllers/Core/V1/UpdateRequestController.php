@@ -11,7 +11,14 @@ use App\Http\Requests\UpdateRequest\IndexRequest;
 use App\Http\Requests\UpdateRequest\ShowRequest;
 use App\Http\Resources\UpdateRequestResource;
 use App\Http\Responses\ResourceDeleted;
+use App\Models\Location;
+use App\Models\Organisation;
+use App\Models\OrganisationEvent;
+use App\Models\Page;
+use App\Models\Service;
+use App\Models\ServiceLocation;
 use App\Models\UpdateRequest;
+use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -44,8 +51,8 @@ class UpdateRequestController extends Controller
                 AllowedFilter::scope('service_location_id'),
                 AllowedFilter::scope('location_id'),
                 AllowedFilter::scope('organisation_id'),
-                AllowedFilter::custom('entry', new EntryFilter()),
-                AllowedFilter::custom('type', new TypeFilter()),
+                AllowedFilter::custom('entry', new EntryFilter),
+                AllowedFilter::custom('type', new TypeFilter),
             ])
             ->allowedIncludes(['user'])
             ->allowedSorts([
@@ -72,6 +79,57 @@ class UpdateRequestController extends Controller
 
         $updateRequest = QueryBuilder::for($baseQuery)
             ->firstOrFail();
+
+        $canView = false;
+
+        if (! $updateRequest->updatable_id) {
+            if ($request->user()->isGlobalAdmin()) {
+                event(EndpointHit::onRead($request, "Viewed update request [{$updateRequest->id}]", $updateRequest));
+
+                return new UpdateRequestResource($updateRequest);
+            }
+        }
+
+        try {
+            $updateRequest->load('updateable');
+            $updatable = $updateRequest->updateable;
+        } catch (Exception $e) {
+            if ($request->user()->isGlobalAdmin()) {
+                event(EndpointHit::onRead($request, "Viewed update request [{$updateRequest->id}]", $updateRequest));
+
+                return new UpdateRequestResource($updateRequest);
+            }
+        }
+
+        if ($updatable instanceof Service) {
+            $canView = $request->user()->isServiceAdmin($updatable->service);
+        }
+
+        if ($updatable instanceof ServiceLocation) {
+            $updateRequest->updatable->load('service');
+            $canView = $request->user()->isServiceAdmin($updateRequest->updatable->service);
+        }
+
+        if ($updatable instanceof Organisation) {
+            $canView = $request->user()->isOrganisationAdmin();
+        }
+
+        if ($updatable instanceof Location) {
+            $canView = $request->user()->isServiceAdmin();
+        }
+
+        if ($updatable instanceof OrganisationEvent) {
+            $updatable->load('organisation');
+            $canView = $request->user()->isOrganisationAdmin($updatable->organisation);
+        }
+
+        if ($updatable instanceof Page) {
+            $canView = $request->user()->isContentAdmin();
+        }
+
+        if (! $canView) {
+            return abort(401);
+        }
 
         event(EndpointHit::onRead($request, "Viewed update request [{$updateRequest->id}]", $updateRequest));
 

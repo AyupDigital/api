@@ -24,7 +24,7 @@ class SettingController extends Controller
     {
         event(EndpointHit::onRead($request, 'Viewed all settings'));
 
-        return new Setting();
+        return new Setting;
     }
 
     public function update(UpdateRequest $request): Setting
@@ -39,14 +39,10 @@ class SettingController extends Controller
                                 'footer_content' => sanitize_markdown($request->input('cms.frontend.global.footer_content')),
                                 'contact_phone' => $request->input('cms.frontend.global.contact_phone'),
                                 'contact_email' => $request->input('cms.frontend.global.contact_email'),
-                                'facebook_handle' => $request->input('cms.frontend.global.facebook_handle') ?? "",
-                                'twitter_handle' => $request->input('cms.frontend.global.twitter_handle') ?? "",
+                                'facebook_handle' => $request->input('cms.frontend.global.facebook_handle') ?? '',
+                                'twitter_handle' => $request->input('cms.frontend.global.twitter_handle') ?? '',
                             ],
                             'home' => [
-                                'search_title' => $request->input('cms.frontend.home.search_title'),
-                                'categories_title' => $request->input('cms.frontend.home.categories_title'),
-                                'personas_title' => $request->input('cms.frontend.home.personas_title'),
-                                'personas_content' => sanitize_markdown($request->input('cms.frontend.home.personas_content')),
                                 'banners' => array_map(function ($banner) {
                                     $banner['content'] = sanitize_markdown($banner['content']);
 
@@ -60,6 +56,10 @@ class SettingController extends Controller
                             'privacy_policy' => [
                                 'title' => $request->input('cms.frontend.privacy_policy.title'),
                                 'content' => sanitize_markdown($request->input('cms.frontend.privacy_policy.content')),
+                            ],
+                            'cookie_policy' => [
+                                'title' => $request->input('cms.frontend.cookie_policy.title'),
+                                'content' => sanitize_markdown($request->input('cms.frontend.cookie_policy.content')),
                             ],
                             'accessibility_statement' => [
                                 'title' => $request->input('cms.frontend.accessibility_statement.title'),
@@ -112,7 +112,7 @@ class SettingController extends Controller
 
             event(EndpointHit::onUpdate($request, 'Updated settings'));
 
-            return new Setting();
+            return new Setting;
         });
     }
 }

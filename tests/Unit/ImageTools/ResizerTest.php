@@ -16,7 +16,7 @@ class ResizerTest extends TestCase
     {
         $srcContent = Storage::disk('local')->get('test-data/image.png');
 
-        $resizer = new Resizer();
+        $resizer = new Resizer;
 
         $dstContent = $resizer->resize($srcContent, 300);
 

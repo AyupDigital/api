@@ -18,7 +18,7 @@ use Illuminate\Pagination\Paginator;
 
 class EventEloquentMapper implements EloquentMapper
 {
-    public function paginate(SearchRequestBuilder $esQuery, int $page = null, int $perPage = null): AnonymousResourceCollection
+    public function paginate(SearchRequestBuilder $esQuery, ?int $page = null, ?int $perPage = null): AnonymousResourceCollection
     {
         $page = page($page);
         $perPage = per_page($perPage);
@@ -64,7 +64,7 @@ class EventEloquentMapper implements EloquentMapper
 
         if (count($locations)) {
             return $events->filter(function (Event $event) {
-                return !$event->is_virtual;
+                return ! $event->is_virtual;
             })
                 ->sortBy(function (Event $event) use ($locations) {
                     $location = $locations[0]['_geo_distance']['event_location.location'];

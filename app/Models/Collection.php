@@ -13,186 +13,188 @@ use Kalnoy\Nestedset\NodeTrait;
 
 class Collection extends Model
 {
-  use HasFactory;
-  use CollectionMutators;
-  use CollectionRelationships;
-  use CollectionScopes;
-  use NodeTrait;
+    use CollectionMutators;
+    use CollectionRelationships;
+    use CollectionScopes;
+    use HasFactory;
+    use NodeTrait;
 
-  const TYPE_CATEGORY = 'category';
+    const TYPE_CATEGORY = 'category';
 
-  const TYPE_PERSONA = 'persona';
+    const TYPE_PERSONA = 'persona';
 
-  const TYPE_ORGANISATION_EVENT = 'organisation-event';
+    const TYPE_ORGANISATION_EVENT = 'organisation-event';
 
-  const PARENT_KEY = 'parent_uuid';
+    const PARENT_KEY = 'parent_uuid';
 
-  /**
-   * Attributes that need to be cast to native types.
-   *
-   * @var array
-   */
-  protected $casts = [
-    'enabled' => 'boolean',
-    'homepage' => 'boolean',
-    'meta' => 'array',
-  ];
+    /**
+     * Attributes that need to be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'enabled' => 'boolean',
+        'homepage' => 'boolean',
+        'meta' => 'array',
+    ];
 
-  /**
-   * The model's default values for attributes.
-   *
-   * @var array
-   */
-  protected $attributes = [
-    'homepage' => false,
-  ];
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'homepage' => false,
+    ];
 
-  public function touchServices(): Collection
-  {
-    static::services($this)->get()->searchable();
+    public function touchServices(): Collection
+    {
+        static::services($this)->get()->searchable();
 
-    return $this;
-  }
-
-  public function updateParent(?string $parentId = null): self
-  {
-    // If parent_id is null save as root node
-    if (is_null($parentId)) {
-      $this->saveAsRoot();
-    } elseif ($parentId && $parentId !== $this->parent_uuid) {
-      Collection::find($parentId)->appendNode($this);
+        return $this;
     }
 
-    return $this;
-  }
+    public function updateParent(?string $parentId = null): self
+    {
+        // If parent_id is null save as root node
+        if (is_null($parentId)) {
+            $this->saveAsRoot();
+        } elseif ($parentId && $parentId !== $this->parent_uuid) {
+            Collection::find($parentId)->appendNode($this);
+        }
 
-  public function syncCollectionTaxonomies(EloquentCollection $taxonomies): Collection
-  {
-    // Get the affected taxonomies if any
-    $existingTaxonomyIds = $this->collectionTaxonomies()->pluck('taxonomy_id');
-    $newTaxonomyIds = $taxonomies->pluck('id');
-    $removedTaxonomyIds = $existingTaxonomyIds->diff($newTaxonomyIds);
-    $addedTaxonomyIds = $newTaxonomyIds->diff($existingTaxonomyIds);
-    $affectedTaxonomyIds = $removedTaxonomyIds->concat($addedTaxonomyIds)->unique();
-
-    // If no taxonomies affected, return
-    if ($affectedTaxonomyIds->isEmpty()) {
-      return $this;
+        return $this;
     }
 
-    // Delete all existing collection taxonomies.
-    $this->collectionTaxonomies()->delete();
+    public function syncCollectionTaxonomies(EloquentCollection $taxonomies): Collection
+    {
+        // Get the affected taxonomies if any
+        $existingTaxonomyIds = $this->collectionTaxonomies()->pluck('taxonomy_id');
+        $newTaxonomyIds = $taxonomies->pluck('id');
+        $removedTaxonomyIds = $existingTaxonomyIds->diff($newTaxonomyIds);
+        $addedTaxonomyIds = $newTaxonomyIds->diff($existingTaxonomyIds);
+        $affectedTaxonomyIds = $removedTaxonomyIds->concat($addedTaxonomyIds)->unique();
 
-    // Create a collection taxonomy record for each taxonomy.
-    foreach ($taxonomies as $taxonomy) {
-      $this->collectionTaxonomies()->updateOrCreate(['taxonomy_id' => $taxonomy->id]);
+        // If no taxonomies affected, return
+        if ($affectedTaxonomyIds->isEmpty()) {
+            return $this;
+        }
+
+        // Delete all existing collection taxonomies.
+        $this->collectionTaxonomies()->delete();
+
+        // Create a collection taxonomy record for each taxonomy.
+        foreach ($taxonomies as $taxonomy) {
+            $this->collectionTaxonomies()->updateOrCreate(['taxonomy_id' => $taxonomy->id]);
+        }
+
+        Taxonomy::query()
+            ->whereIn('id', $affectedTaxonomyIds)
+            ->get()
+            ->each(function ($taxonomy) {
+                $taxonomy->services()->searchable();
+                $taxonomy->organisationEvents()->searchable();
+            });
+
+        return $this;
     }
 
-    Taxonomy::query()
-      ->whereIn('id', $affectedTaxonomyIds)
-      ->get()
-      ->each(function ($taxonomy) {
-        $taxonomy->services()->searchable();
-        $taxonomy->organisationEvents()->searchable();
-      });
+    /**
+     * @return File|Response|\Illuminate\Contracts\Support\Responsable
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
+     */
+    public static function personaPlaceholderLogo(?int $maxDimension = null)
+    {
+        if ($maxDimension !== null) {
+            return File::resizedPlaceholder($maxDimension, File::META_PLACEHOLDER_FOR_COLLECTION_PERSONA);
+        }
 
-    return $this;
-  }
-
-  /**
-   * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
-   * @return File|Response|\Illuminate\Contracts\Support\Responsable
-   */
-  public static function personaPlaceholderLogo(int $maxDimension = null)
-  {
-    if ($maxDimension !== null) {
-      return File::resizedPlaceholder($maxDimension, File::META_PLACEHOLDER_FOR_COLLECTION_PERSONA);
+        return response()->make(
+            Storage::disk('local')->get('/placeholders/collection_persona.png'),
+            Response::HTTP_OK,
+            ['Content-Type' => File::MIME_TYPE_PNG]
+        );
     }
 
-    return response()->make(
-      Storage::disk('local')->get('/placeholders/collection_persona.png'),
-      Response::HTTP_OK,
-      ['Content-Type' => File::MIME_TYPE_PNG]
-    );
-  }
+    /**
+     * @return File|Response|\Illuminate\Contracts\Support\Responsable
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
+     */
+    public static function categoryPlaceholderLogo(?int $maxDimension = null)
+    {
+        if ($maxDimension !== null) {
+            return File::resizedPlaceholder($maxDimension, File::META_PLACEHOLDER_FOR_COLLECTION_CATEGORY);
+        }
 
-  /**
-   * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
-   * @return File|Response|\Illuminate\Contracts\Support\Responsable
-   */
-  public static function categoryPlaceholderLogo(int $maxDimension = null)
-  {
-    if ($maxDimension !== null) {
-      return File::resizedPlaceholder($maxDimension, File::META_PLACEHOLDER_FOR_COLLECTION_CATEGORY);
+        return response()->make(
+            Storage::disk('local')->get('/placeholders/collection_category.png'),
+            Response::HTTP_OK,
+            ['Content-Type' => File::MIME_TYPE_PNG]
+        );
     }
 
-    return response()->make(
-      Storage::disk('local')->get('/placeholders/collection_category.png'),
-      Response::HTTP_OK,
-      ['Content-Type' => File::MIME_TYPE_PNG]
-    );
-  }
+    /**
+     * @return File|Response|\Illuminate\Contracts\Support\Responsable
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
+     */
+    public static function organisationEventPlaceholderLogo(?int $maxDimension = null)
+    {
+        if ($maxDimension !== null) {
+            return File::resizedPlaceholder($maxDimension, File::META_PLACEHOLDER_FOR_ORGANISATION_EVENT);
+        }
 
-  /**
-   * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
-   * @return File|Response|\Illuminate\Contracts\Support\Responsable
-   */
-  public static function organisationEventPlaceholderLogo(int $maxDimension = null)
-  {
-    if ($maxDimension !== null) {
-      return File::resizedPlaceholder($maxDimension, File::META_PLACEHOLDER_FOR_ORGANISATION_EVENT);
+        return response()->make(
+            Storage::disk('local')->get('/placeholders/organisation_event.png'),
+            Response::HTTP_OK,
+            ['Content-Type' => File::MIME_TYPE_PNG]
+        );
     }
 
-    return response()->make(
-      Storage::disk('local')->get('/placeholders/organisation_event.png'),
-      Response::HTTP_OK,
-      ['Content-Type' => File::MIME_TYPE_PNG]
-    );
-  }
+    /**
+     * Enable the Collection.
+     */
+    public function enable(): Collection
+    {
+        $this->enabled = true;
 
-  /**
-   * Enable the Collection.
-   */
-  public function enable(): Collection
-  {
-    $this->enabled = true;
+        return $this;
+    }
 
-    return $this;
-  }
+    /**
+     * Disable the Collection.
+     */
+    public function disable(): Collection
+    {
+        $this->enabled = false;
 
-  /**
-   * Disable the Collection.
-   */
-  public function disable(): Collection
-  {
-    $this->enabled = false;
+        return $this;
+    }
 
-    return $this;
-  }
+    /**
+     * Add the Collection to the homepage.
+     */
+    public function addToHomepage(): Collection
+    {
+        $this->homepage = true;
 
-  /**
-   * Add the Collection to the homepage.
-   */
-  public function addToHomepage(): Collection
-  {
-    $this->homepage = true;
+        return $this;
+    }
 
-    return $this;
-  }
+    /**
+     * Remove the Collection from the homepage.
+     */
+    public function removeFromHomepage(): Collection
+    {
+        $this->homepage = false;
 
-  /**
-   * Remove the Collection from the homepage.
-   */
-  public function removeFromHomepage(): Collection
-  {
-    $this->homepage = false;
+        return $this;
+    }
 
-    return $this;
-  }
-
-
-  public function getParentIdName(): string
-  {
-    return static::PARENT_KEY;
-  }
+    public function getParentIdName(): string
+    {
+        return static::PARENT_KEY;
+    }
 }

@@ -2,16 +2,16 @@
 
 namespace Tests\Feature\Search;
 
-use Carbon\Carbon;
-use Tests\TestCase;
-use App\Models\Service;
-use App\Models\Taxonomy;
 use App\Models\Collection;
 use App\Models\Organisation;
-use Tests\UsesElasticsearch;
-use Illuminate\Http\Response;
+use App\Models\Service;
 use App\Models\ServiceLocation;
+use App\Models\Taxonomy;
+use Carbon\Carbon;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Tests\TestCase;
+use Tests\UsesElasticsearch;
 
 class ServiceTest extends TestCase implements UsesElasticsearch
 {
@@ -68,7 +68,6 @@ class ServiceTest extends TestCase implements UsesElasticsearch
                     'contact_name',
                     'contact_phone',
                     'contact_email',
-                    'show_referral_disclaimer',
                     'referral_method',
                     'referral_button_text',
                     'referral_email',
@@ -1464,7 +1463,7 @@ class ServiceTest extends TestCase implements UsesElasticsearch
     /**
      * @test
      */
-    public function freshnessOfServiceDoesNotAffectSearchResult()
+    public function freshness_of_service_does_not_affect_search_result()
     {
         $organisation = \App\Models\Organisation::factory()->create();
         $serviceParams = [

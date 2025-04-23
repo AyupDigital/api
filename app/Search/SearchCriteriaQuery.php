@@ -137,7 +137,7 @@ class SearchCriteriaQuery
     }
 
     /**
-     * @param string[]|null $categories
+     * @param  string[]|null  $categories
      */
     public function setCategories(?array $categories): void
     {
@@ -158,7 +158,7 @@ class SearchCriteriaQuery
     }
 
     /**
-     * @param string[]|null $personas
+     * @param  string[]|null  $personas
      */
     public function setPersonas(?array $personas): void
     {
@@ -344,7 +344,7 @@ class SearchCriteriaQuery
     }
 
     /**
-     * @param string[]|null $eligibilities
+     * @param  string[]|null  $eligibilities
      */
     public function setEligibilities(?array $eligibilities): void
     {

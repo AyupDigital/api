@@ -2,17 +2,17 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Audit;
-use App\Models\Service;
 use App\Events\EndpointHit;
-use App\Models\SocialMedia;
+use App\Models\Audit;
 use App\Models\Organisation;
+use App\Models\Service;
+use App\Models\SocialMedia;
 use App\Models\UpdateRequest;
+use App\Models\User;
 use Illuminate\Http\Response;
-use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Event;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class OrganisationSignUpFormTest extends TestCase
 {

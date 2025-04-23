@@ -2,18 +2,18 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
+use App\Events\EndpointHit;
 use App\Models\Audit;
+use App\Models\Organisation;
 use App\Models\Service;
 use App\Models\Taxonomy;
-use App\Events\EndpointHit;
+use App\Models\User;
 use Carbon\CarbonImmutable;
-use App\Models\Organisation;
-use Illuminate\Http\Response;
-use Laravel\Passport\Passport;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Event;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class TaxonomyCategoriesTest extends TestCase
 {
@@ -208,7 +208,7 @@ class TaxonomyCategoriesTest extends TestCase
         $response->assertJsonFragment($payload);
         foreach ($topLevelCategories as $category) {
             $this->assertDatabaseHas(
-                (new Taxonomy())->getTable(),
+                (new Taxonomy)->getTable(),
                 ['id' => $category->id, 'order' => $category->order + 1]
             );
         }
@@ -243,12 +243,12 @@ class TaxonomyCategoriesTest extends TestCase
         foreach ($topLevelCategories as $category) {
             if ($category->order < 2) {
                 $this->assertDatabaseHas(
-                    (new Taxonomy())->getTable(),
+                    (new Taxonomy)->getTable(),
                     ['id' => $category->id, 'order' => $category->order]
                 );
             } else {
                 $this->assertDatabaseHas(
-                    (new Taxonomy())->getTable(),
+                    (new Taxonomy)->getTable(),
                     ['id' => $category->id, 'order' => $category->order + 1]
                 );
             }
@@ -283,7 +283,7 @@ class TaxonomyCategoriesTest extends TestCase
         $response->assertJsonFragment($payload);
         foreach ($topLevelCategories as $category) {
             $this->assertDatabaseHas(
-                (new Taxonomy())->getTable(),
+                (new Taxonomy)->getTable(),
                 ['id' => $category->id, 'order' => $category->order]
             );
         }
@@ -329,7 +329,7 @@ class TaxonomyCategoriesTest extends TestCase
     /**
      * @test
      */
-    public function createTaxonomyCategoryWithUniqueSlugAsSuperAdmin201(): void
+    public function create_taxonomy_category_with_unique_slug_as_super_admin201(): void
     {
         $user = User::factory()->create()->makeSuperAdmin();
         $siblingCount = Taxonomy::category()->children()->count();
@@ -614,9 +614,9 @@ class TaxonomyCategoriesTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $categoryOne->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $categoryTwo->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $categoryThree->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $categoryOne->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $categoryTwo->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $categoryThree->id, 'order' => 3]);
     }
 
     /**
@@ -654,9 +654,9 @@ class TaxonomyCategoriesTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $categoryOne->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $categoryTwo->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $categoryThree->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $categoryOne->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $categoryTwo->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $categoryThree->id, 'order' => 3]);
     }
 
     /**
@@ -694,9 +694,9 @@ class TaxonomyCategoriesTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $categoryOne->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $categoryTwo->id, 'order' => 3]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $categoryThree->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $categoryOne->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $categoryTwo->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $categoryThree->id, 'order' => 2]);
     }
 
     /**
@@ -758,12 +758,12 @@ class TaxonomyCategoriesTest extends TestCase
         /*
          * Old parent.
          */
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $oldParentCategory->id,
             'id' => $oldCategoryOne->id,
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $oldParentCategory->id,
             'id' => $oldCategoryThree->id,
             'order' => 2,
@@ -772,22 +772,22 @@ class TaxonomyCategoriesTest extends TestCase
         /*
          * New parent.
          */
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentCategory->id,
             'id' => $oldCategoryTwo->id,
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentCategory->id,
             'id' => $newCategoryOne->id,
             'order' => 2,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentCategory->id,
             'id' => $newCategoryTwo->id,
             'order' => 3,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentCategory->id,
             'id' => $newCategoryThree->id,
             'order' => 4,
@@ -853,12 +853,12 @@ class TaxonomyCategoriesTest extends TestCase
         /*
          * Old parent.
          */
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $oldParentCategory->id,
             'id' => $oldCategoryTwo->id,
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $oldParentCategory->id,
             'id' => $oldCategoryThree->id,
             'order' => 2,
@@ -867,22 +867,22 @@ class TaxonomyCategoriesTest extends TestCase
         /*
          * New parent.
          */
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentCategory->id,
             'id' => $newCategoryOne->id,
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentCategory->id,
             'id' => $oldCategoryOne->id,
             'order' => 2,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentCategory->id,
             'id' => $newCategoryTwo->id,
             'order' => 3,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentCategory->id,
             'id' => $newCategoryThree->id,
             'order' => 4,
@@ -948,12 +948,12 @@ class TaxonomyCategoriesTest extends TestCase
         /*
          * Old parent.
          */
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $oldParentCategory->id,
             'id' => $oldCategoryOne->id,
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $oldParentCategory->id,
             'id' => $oldCategoryThree->id,
             'order' => 2,
@@ -962,22 +962,22 @@ class TaxonomyCategoriesTest extends TestCase
         /*
          * New parent.
          */
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentCategory->id,
             'id' => $newCategoryOne->id,
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentCategory->id,
             'id' => $newCategoryTwo->id,
             'order' => 2,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentCategory->id,
             'id' => $newCategoryThree->id,
             'order' => 3,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentCategory->id,
             'id' => $oldCategoryTwo->id,
             'order' => 4,
@@ -1026,7 +1026,7 @@ class TaxonomyCategoriesTest extends TestCase
     /**
      * @test
      */
-    public function updateTaxonomyCategoryWithUniqueSlugAsSuperAdmin200(): void
+    public function update_taxonomy_category_with_unique_slug_as_super_admin200(): void
     {
         $user = User::factory()->create()->makeSuperAdmin();
         $category1 = Taxonomy::factory()->create([
@@ -1178,7 +1178,7 @@ class TaxonomyCategoriesTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/taxonomies/categories/{$category->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Taxonomy())->getTable(), ['id' => $category->id]);
+        $this->assertDatabaseMissing((new Taxonomy)->getTable(), ['id' => $category->id]);
     }
 
     /**
@@ -1227,7 +1227,7 @@ class TaxonomyCategoriesTest extends TestCase
         return Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
     }
 
-    protected function createTopLevelCategory(int $index = null): Taxonomy
+    protected function createTopLevelCategory(?int $index = null): Taxonomy
     {
         $topLevelCount = Taxonomy::category()->children()->count();
 

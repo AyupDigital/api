@@ -774,7 +774,7 @@ class ReferralsTest extends TestCase
                 'created_at' => $referral->created_at->format(CarbonImmutable::ISO8601),
             ],
         ]);
-        $this->assertDatabaseHas((new StatusUpdate())->getTable(), [
+        $this->assertDatabaseHas((new StatusUpdate)->getTable(), [
             'user_id' => $user->id,
             'referral_id' => $referral->id,
             'from' => Referral::STATUS_NEW,

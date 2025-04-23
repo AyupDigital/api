@@ -22,7 +22,7 @@ class UserCreatedTest extends TestCase
             return User::factory()->create();
         });
         $event = EndpointHit::onCreate($request, '', $user);
-        $listener = new UserCreated();
+        $listener = new UserCreated;
         $listener->handle($event);
 
         Queue::assertPushedOn(config('queue.queues.notifications', 'default'), NotifyUserEmail::class);

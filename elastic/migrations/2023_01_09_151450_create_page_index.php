@@ -103,7 +103,7 @@ final class CreatePageIndex implements MigrationInterface
      */
     public function up(): void
     {
-        $settings = (new PagesIndexSettings())->getSettings();
+        $settings = (new PagesIndexSettings)->getSettings();
         Index::dropIfExists('pages');
         Index::createRaw('pages', $this->mapping, $settings);
     }

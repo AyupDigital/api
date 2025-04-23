@@ -41,7 +41,7 @@ class CollectionCategoryController extends Controller
         $categoryQuery = QueryBuilder::for($baseQuery)
             ->with('taxonomies')->allowedIncludes([
                 'parent',
-                'children'
+                'children',
             ]);
         if ($request->is('*/all')) {
             $categories = $categoryQuery->get();
@@ -76,7 +76,7 @@ class CollectionCategoryController extends Controller
             // Create the collection record.
             $category = Collection::create([
                 'type' => Collection::TYPE_CATEGORY,
-                'slug' => $request->slug ?? $slugGenerator->generate($request->name, (new Collection())),
+                'slug' => $request->slug ?? $slugGenerator->generate($request->name, (new Collection)),
                 'name' => $request->name,
                 'meta' => [
                     'intro' => $request->intro,

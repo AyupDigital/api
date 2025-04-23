@@ -21,7 +21,7 @@ class IndexPageOperation extends Operation
     /**
      * @throws \GoldSpecDigital\ObjectOrientedOAS\Exceptions\InvalidArgumentException
      */
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->action(static::ACTION_GET)
@@ -48,7 +48,7 @@ class IndexPageOperation extends Operation
                             Page::PAGE_TYPE_LANDING
                         )),
                 SortParameter::create(null, ['title'], 'title'),
-                IncludeParameter::create(null, ['parent', 'children', 'landingPageAncestors'])
+                IncludeParameter::create(null, ['parent', 'children', 'landingPageAncestors', 'pendingUpdateRequests'])
             )
             ->responses(
                 Response::ok()->content(

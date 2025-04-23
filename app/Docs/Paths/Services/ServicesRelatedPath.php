@@ -13,7 +13,7 @@ class ServicesRelatedPath extends PathItem
     /**
      * @throws \GoldSpecDigital\ObjectOrientedOAS\Exceptions\InvalidArgumentException
      */
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->route('/services/{service}/related')

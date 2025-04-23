@@ -18,7 +18,7 @@ trait LocationRelationships
 
     public function services(): BelongsToMany
     {
-        return $this->belongsToMany(Service::class, (new ServiceLocation())->getTable());
+        return $this->belongsToMany(Service::class, (new ServiceLocation)->getTable());
     }
 
     public function imageFile(): BelongsTo

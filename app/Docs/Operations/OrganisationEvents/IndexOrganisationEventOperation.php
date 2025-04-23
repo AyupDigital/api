@@ -25,7 +25,7 @@ class IndexOrganisationEventOperation extends Operation
     /**
      * @throws \GoldSpecDigital\ObjectOrientedOAS\Exceptions\InvalidArgumentException
      */
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->action(static::ACTION_GET)
@@ -85,7 +85,7 @@ EOT
                     ->schema(
                         Schema::boolean()
                     ),
-                IncludeParameter::create(null, ['organisation'])
+                IncludeParameter::create(null, ['organisation', 'pendingUpdateRequests'])
             )
             ->responses(
                 Response::ok()->content(

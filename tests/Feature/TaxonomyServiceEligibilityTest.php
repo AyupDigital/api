@@ -2,18 +2,18 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Audit;
-use App\Models\Service;
-use App\Models\Taxonomy;
 use App\Events\EndpointHit;
-use Carbon\CarbonImmutable;
+use App\Models\Audit;
 use App\Models\Organisation;
-use Illuminate\Http\Response;
-use Laravel\Passport\Passport;
+use App\Models\Service;
 use App\Models\ServiceEligibility;
+use App\Models\Taxonomy;
+use App\Models\User;
+use Carbon\CarbonImmutable;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class TaxonomyServiceEligibilityTest extends TestCase
 {
@@ -207,7 +207,7 @@ class TaxonomyServiceEligibilityTest extends TestCase
         $response->assertJsonFragment($payload);
         foreach ($testEligibilityTypeTaxonomies as $eligibility) {
             $this->assertDatabaseHas(
-                (new Taxonomy())->getTable(),
+                (new Taxonomy)->getTable(),
                 ['id' => $eligibility->id, 'order' => $eligibility->order + 1]
             );
         }
@@ -242,12 +242,12 @@ class TaxonomyServiceEligibilityTest extends TestCase
         foreach ($testEligibilityTypeTaxonomies as $eligibility) {
             if ($eligibility->order < 2) {
                 $this->assertDatabaseHas(
-                    (new Taxonomy())->getTable(),
+                    (new Taxonomy)->getTable(),
                     ['id' => $eligibility->id, 'order' => $eligibility->order]
                 );
             } else {
                 $this->assertDatabaseHas(
-                    (new Taxonomy())->getTable(),
+                    (new Taxonomy)->getTable(),
                     ['id' => $eligibility->id, 'order' => $eligibility->order + 1]
                 );
             }
@@ -282,7 +282,7 @@ class TaxonomyServiceEligibilityTest extends TestCase
         $response->assertJsonFragment($payload);
         foreach ($testEligibilityTypeTaxonomies as $eligibility) {
             $this->assertDatabaseHas(
-                (new Taxonomy())->getTable(),
+                (new Taxonomy)->getTable(),
                 ['id' => $eligibility->id, 'order' => $eligibility->order]
             );
         }
@@ -328,7 +328,7 @@ class TaxonomyServiceEligibilityTest extends TestCase
     /**
      * @test
      */
-    public function createTaxonomyServiceEligibilityWithUniqueSlugAsSuperAdmin201(): void
+    public function create_taxonomy_service_eligibility_with_unique_slug_as_super_admin201(): void
     {
         $user = User::factory()->create()->makeSuperAdmin();
         $siblingCount = Taxonomy::serviceEligibility()->children()->count();
@@ -600,9 +600,9 @@ class TaxonomyServiceEligibilityTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $eligibilityOne->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $eligibilityTwo->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $eligibilityThree->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $eligibilityOne->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $eligibilityTwo->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $eligibilityThree->id, 'order' => 3]);
     }
 
     /**
@@ -639,9 +639,9 @@ class TaxonomyServiceEligibilityTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $eligibilityOne->id, 'order' => 2]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $eligibilityTwo->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $eligibilityThree->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $eligibilityOne->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $eligibilityTwo->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $eligibilityThree->id, 'order' => 3]);
     }
 
     /**
@@ -678,9 +678,9 @@ class TaxonomyServiceEligibilityTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $eligibilityOne->id, 'order' => 1]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $eligibilityTwo->id, 'order' => 3]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), ['id' => $eligibilityThree->id, 'order' => 2]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $eligibilityOne->id, 'order' => 1]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $eligibilityTwo->id, 'order' => 3]);
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), ['id' => $eligibilityThree->id, 'order' => 2]);
     }
 
     /**
@@ -746,12 +746,12 @@ class TaxonomyServiceEligibilityTest extends TestCase
         /*
          * Old parent.
          */
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $this->testserviceEligibilityType->id,
             'id' => $oldEligibilityOne->id,
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $this->testserviceEligibilityType->id,
             'id' => $oldEligibilityThree->id,
             'order' => 2,
@@ -760,22 +760,22 @@ class TaxonomyServiceEligibilityTest extends TestCase
         /*
          * New parent.
          */
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentEligibility->id,
             'id' => $oldEligibilityTwo->id,
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentEligibility->id,
             'id' => $newEligibilityOne->id,
             'order' => 2,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentEligibility->id,
             'id' => $newEligibilityTwo->id,
             'order' => 3,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentEligibility->id,
             'id' => $newEligibilityThree->id,
             'order' => 4,
@@ -845,12 +845,12 @@ class TaxonomyServiceEligibilityTest extends TestCase
         /*
          * Old parent.
          */
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $this->testserviceEligibilityType->id,
             'id' => $oldEligibilityTwo->id,
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $this->testserviceEligibilityType->id,
             'id' => $oldEligibilityThree->id,
             'order' => 2,
@@ -859,22 +859,22 @@ class TaxonomyServiceEligibilityTest extends TestCase
         /*
          * New parent.
          */
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentEligibility->id,
             'id' => $newEligibilityOne->id,
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentEligibility->id,
             'id' => $oldEligibilityOne->id,
             'order' => 2,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentEligibility->id,
             'id' => $newEligibilityTwo->id,
             'order' => 3,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentEligibility->id,
             'id' => $newEligibilityThree->id,
             'order' => 4,
@@ -944,12 +944,12 @@ class TaxonomyServiceEligibilityTest extends TestCase
         /*
          * Old parent.
          */
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $this->testserviceEligibilityType->id,
             'id' => $oldEligibilityOne->id,
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $this->testserviceEligibilityType->id,
             'id' => $oldEligibilityThree->id,
             'order' => 2,
@@ -958,22 +958,22 @@ class TaxonomyServiceEligibilityTest extends TestCase
         /*
          * New parent.
          */
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentEligibility->id,
             'id' => $newEligibilityOne->id,
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentEligibility->id,
             'id' => $newEligibilityTwo->id,
             'order' => 2,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentEligibility->id,
             'id' => $newEligibilityThree->id,
             'order' => 3,
         ]);
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'parent_id' => $newParentEligibility->id,
             'id' => $oldEligibilityTwo->id,
             'order' => 4,
@@ -1025,7 +1025,7 @@ class TaxonomyServiceEligibilityTest extends TestCase
     /**
      * @test
      */
-    public function updateTaxonomyServiceEligibilityWithUniqueSlugAsSuperAdmin200(): void
+    public function update_taxonomy_service_eligibility_with_unique_slug_as_super_admin200(): void
     {
         $user = User::factory()->create()->makeSuperAdmin();
         $category1 = Taxonomy::factory()->create([
@@ -1196,9 +1196,9 @@ class TaxonomyServiceEligibilityTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/taxonomies/service-eligibilities/{$newParentEligibility->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Taxonomy())->getTable(), ['id' => $newParentEligibility->id]);
+        $this->assertDatabaseMissing((new Taxonomy)->getTable(), ['id' => $newParentEligibility->id]);
         foreach ($childEligibilities as $childEligibility) {
-            $this->assertDatabaseMissing((new Taxonomy())->getTable(), ['id' => $childEligibility->id]);
+            $this->assertDatabaseMissing((new Taxonomy)->getTable(), ['id' => $childEligibility->id]);
         }
     }
 
@@ -1245,7 +1245,7 @@ class TaxonomyServiceEligibilityTest extends TestCase
             'taxonomy_id' => $testEligibilityTypeTaxonomy->id,
         ]);
 
-        $this->assertDatabaseHas((new ServiceEligibility())->getTable(), [
+        $this->assertDatabaseHas((new ServiceEligibility)->getTable(), [
             'service_id' => $service->id,
             'taxonomy_id' => $testEligibilityTypeTaxonomy->id,
         ]);
@@ -1255,7 +1255,7 @@ class TaxonomyServiceEligibilityTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        $this->assertDatabaseMissing((new ServiceEligibility())->getTable(), [
+        $this->assertDatabaseMissing((new ServiceEligibility)->getTable(), [
             'service_id' => $service->id,
             'taxonomy_id' => $testEligibilityTypeTaxonomy->id,
         ]);

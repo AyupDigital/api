@@ -15,7 +15,7 @@ class ShowOrganisationOperation extends Operation
     /**
      * @throws \GoldSpecDigital\ObjectOrientedOAS\Exceptions\InvalidArgumentException
      */
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->action(static::ACTION_GET)

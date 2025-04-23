@@ -2,27 +2,27 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\Role;
-use App\Models\User;
+use App\Events\EndpointHit;
 use App\Models\Audit;
-use App\Models\Service;
 use App\Models\Location;
 use App\Models\Offering;
-use App\Models\Taxonomy;
-use App\Models\UserRole;
-use App\Models\UsefulInfo;
-use App\Events\EndpointHit;
-use App\Models\SocialMedia;
 use App\Models\Organisation;
-use App\Models\UpdateRequest;
-use Illuminate\Http\Response;
-use Laravel\Passport\Passport;
+use App\Models\Role;
+use App\Models\Service;
 use App\Models\ServiceLocation;
+use App\Models\SocialMedia;
+use App\Models\Taxonomy;
+use App\Models\UpdateRequest;
+use App\Models\UsefulInfo;
+use App\Models\User;
+use App\Models\UserRole;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class UpdateRequestsTest extends TestCase
 {
@@ -253,7 +253,7 @@ class UpdateRequestsTest extends TestCase
     /**
      * @test
      */
-    public function getFilterUpdateRequestsByTypeAsSuperAdmin200(): void
+    public function get_filter_update_requests_by_type_as_super_admin200(): void
     {
         $organisation = Organisation::factory()->create([
             'name' => 'Name with, comma',
@@ -288,7 +288,7 @@ class UpdateRequestsTest extends TestCase
 
         $superAdminUser = User::factory()->create()->makeSuperAdmin();
         Passport::actingAs($superAdminUser);
-        $response = $this->json('GET', '/core/v1/update-requests?filter[type]=' . UpdateRequest::EXISTING_TYPE_ORGANISATION);
+        $response = $this->json('GET', '/core/v1/update-requests?filter[type]='.UpdateRequest::EXISTING_TYPE_ORGANISATION);
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonMissing(['id' => $locationUpdateRequest->id]);
@@ -632,7 +632,7 @@ class UpdateRequestsTest extends TestCase
         $response = $this->json('PUT', "/core/v1/update-requests/{$updateRequest->id}/reject");
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'id' => $updateRequest->id,
             'actioning_user_id' => null,
         ]);
@@ -655,7 +655,7 @@ class UpdateRequestsTest extends TestCase
         $response = $this->json('PUT', "/core/v1/update-requests/{$updateRequest->id}/reject", ['message' => 'Rejection Message']);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertSoftDeleted((new UpdateRequest())->getTable(), [
+        $this->assertSoftDeleted((new UpdateRequest)->getTable(), [
             'id' => $updateRequest->id,
             'actioning_user_id' => $user->id,
         ]);
@@ -732,7 +732,7 @@ class UpdateRequestsTest extends TestCase
         $response = $this->json('PUT', "/core/v1/update-requests/{$updateRequest->id}/reject", ['message' => 'Rejection Message']);
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertSoftDeleted((new UpdateRequest())->getTable(), [
+        $this->assertSoftDeleted((new UpdateRequest)->getTable(), [
             'id' => $updateRequest->id,
             'actioning_user_id' => $user->id,
         ]);
@@ -886,13 +886,13 @@ class UpdateRequestsTest extends TestCase
         $response = $this->json('PUT', "/core/v1/update-requests/{$updateRequest->id}/approve");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'id' => $updateRequest->id,
             'actioning_user_id' => $user->id,
             'approved_at' => $now->toDateTimeString(),
         ]);
         $this->assertDatabaseHas(
-            (new ServiceLocation())->getTable(),
+            (new ServiceLocation)->getTable(),
             ['id' => $serviceLocation->id, 'name' => 'Test Name']
         );
     }
@@ -924,12 +924,12 @@ class UpdateRequestsTest extends TestCase
         $response = $this->json('PUT', "/core/v1/update-requests/{$updateRequest->id}/approve");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'id' => $updateRequest->id,
             'actioning_user_id' => $user->id,
             'approved_at' => $now->toDateTimeString(),
         ]);
-        $this->assertDatabaseHas((new Organisation())->getTable(), [
+        $this->assertDatabaseHas((new Organisation)->getTable(), [
             'id' => $organisation->id,
             'slug' => $updateRequest->data['slug'],
             'name' => $updateRequest->data['name'],
@@ -971,12 +971,12 @@ class UpdateRequestsTest extends TestCase
         $response = $this->json('PUT', "/core/v1/update-requests/{$updateRequest->id}/approve");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'id' => $updateRequest->id,
             'actioning_user_id' => $user->id,
             'approved_at' => $now->toDateTimeString(),
         ]);
-        $this->assertDatabaseHas((new Location())->getTable(), [
+        $this->assertDatabaseHas((new Location)->getTable(), [
             'id' => $location->id,
             'address_line_1' => $updateRequest->data['address_line_1'],
             'address_line_2' => $updateRequest->data['address_line_2'],
@@ -1025,7 +1025,6 @@ class UpdateRequestsTest extends TestCase
                 'contact_name' => $service->contact_name,
                 'contact_phone' => $service->contact_phone,
                 'contact_email' => $service->contact_email,
-                'show_referral_disclaimer' => $service->show_referral_disclaimer,
                 'referral_method' => $service->referral_method,
                 'referral_button_text' => $service->referral_button_text,
                 'referral_email' => $service->referral_email,
@@ -1039,12 +1038,12 @@ class UpdateRequestsTest extends TestCase
         $response = $this->json('PUT', "/core/v1/update-requests/{$updateRequest->id}/approve");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'id' => $updateRequest->id,
             'actioning_user_id' => $user->id,
             'approved_at' => $now->toDateTimeString(),
         ]);
-        $this->assertDatabaseHas((new Service())->getTable(), [
+        $this->assertDatabaseHas((new Service)->getTable(), [
             'id' => $service->id,
             'name' => 'Test Name',
         ]);
@@ -1061,14 +1060,14 @@ class UpdateRequestsTest extends TestCase
         $organisation = Organisation::factory()->create();
         $user = User::factory()->create()->makeOrganisationAdmin($organisation);
 
-        //Given an organisation admin is logged in
+        // Given an organisation admin is logged in
         Passport::actingAs($user);
 
         $imagePayload = [
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,' . self::BASE64_ENCODED_PNG,
+            'file' => 'data:image/png;base64,'.self::BASE64_ENCODED_PNG,
         ];
 
         $response = $this->json('POST', '/core/v1/files', $imagePayload);
@@ -1099,7 +1098,7 @@ class UpdateRequestsTest extends TestCase
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
             'cqc_location_id' => $this->faker->numerify('#-#########'),
-            'show_referral_disclaimer' => false,
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1132,13 +1131,13 @@ class UpdateRequestsTest extends TestCase
             'category_taxonomies' => [],
         ];
 
-        //When they create a service
+        // When they create a service
         $response = $this->json('POST', '/core/v1/services', $payload);
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonFragment($payload);
 
-        //Then an update request should be created for the new service
+        // Then an update request should be created for the new service
         $updateRequest = UpdateRequest::query()
             ->where('updateable_type', UpdateRequest::NEW_TYPE_SERVICE_ORG_ADMIN)
             ->where('updateable_id', null)
@@ -1151,7 +1150,7 @@ class UpdateRequestsTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'id' => $updateRequest->id,
             'actioning_user_id' => $superAdminUser->id,
             'approved_at' => $now,
@@ -1164,7 +1163,7 @@ class UpdateRequestsTest extends TestCase
     /**
      * @test
      */
-    public function putApproveAndEditNewServiceUpdateRequestAsSuperAdmin200(): void
+    public function put_approve_and_edit_new_service_update_request_as_super_admin200(): void
     {
         $now = Date::now();
         Date::setTestNow($now);
@@ -1173,14 +1172,14 @@ class UpdateRequestsTest extends TestCase
         $taxonomy = Taxonomy::factory()->create();
         $user = User::factory()->create()->makeGlobalAdmin();
 
-        //Given an organisation admin is logged in
+        // Given an organisation admin is logged in
         Passport::actingAs($user);
 
         $imagePayload = [
             'is_private' => false,
             'mime_type' => 'image/png',
             'alt_text' => 'image description',
-            'file' => 'data:image/png;base64,' . self::BASE64_ENCODED_PNG,
+            'file' => 'data:image/png;base64,'.self::BASE64_ENCODED_PNG,
         ];
 
         $response = $this->json('POST', '/core/v1/files', $imagePayload);
@@ -1211,7 +1210,7 @@ class UpdateRequestsTest extends TestCase
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
             'cqc_location_id' => $this->faker->numerify('#-#########'),
-            'show_referral_disclaimer' => false,
+
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'referral_button_text' => null,
             'referral_email' => null,
@@ -1246,13 +1245,13 @@ class UpdateRequestsTest extends TestCase
             ],
         ];
 
-        //When they create a service
+        // When they create a service
         $response = $this->json('POST', '/core/v1/services', $payload);
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonFragment($payload);
 
-        //Then an update request should be created for the new service
+        // Then an update request should be created for the new service
         $updateRequest = UpdateRequest::query()
             ->where('updateable_type', UpdateRequest::NEW_TYPE_SERVICE_GLOBAL_ADMIN)
             ->where('updateable_id', null)
@@ -1266,7 +1265,7 @@ class UpdateRequestsTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
 
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'id' => $updateRequest->id,
             'actioning_user_id' => $superAdminUser->id,
             'approved_at' => $now,
@@ -1354,18 +1353,18 @@ class UpdateRequestsTest extends TestCase
         $response = $this->json('PUT', "/core/v1/update-requests/{$updateRequest->id}/approve");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'id' => $updateRequest->id,
             'actioning_user_id' => $user->id,
             'approved_at' => $now->toDateTimeString(),
         ]);
-        $this->assertDatabaseHas((new User())->getTable(), [
+        $this->assertDatabaseHas((new User)->getTable(), [
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
             'phone' => '07700000000',
         ]);
-        $this->assertDatabaseHas((new Organisation())->getTable(), [
+        $this->assertDatabaseHas((new Organisation)->getTable(), [
             'slug' => 'test-org',
             'name' => 'Test Org',
             'description' => 'Test description',
@@ -1373,7 +1372,7 @@ class UpdateRequestsTest extends TestCase
             'email' => 'info@test-org.example.com',
             'phone' => '07700000000',
         ]);
-        $this->assertDatabaseHas((new Service())->getTable(), [
+        $this->assertDatabaseHas((new Service)->getTable(), [
             'slug' => 'test-service',
             'name' => 'Test Service',
             'type' => Service::TYPE_SERVICE,
@@ -1390,16 +1389,16 @@ class UpdateRequestsTest extends TestCase
             'contact_phone' => '01130000000',
             'contact_email' => 'foo.bar@example.com',
         ]);
-        $this->assertDatabaseHas((new UsefulInfo())->getTable(), [
+        $this->assertDatabaseHas((new UsefulInfo)->getTable(), [
             'title' => 'Did you know?',
             'description' => 'Lorem ipsum',
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new Offering())->getTable(), [
+        $this->assertDatabaseHas((new Offering)->getTable(), [
             'offering' => 'Weekly club',
             'order' => 1,
         ]);
-        $this->assertDatabaseHas((new SocialMedia())->getTable(), [
+        $this->assertDatabaseHas((new SocialMedia)->getTable(), [
             'type' => SocialMedia::TYPE_INSTAGRAM,
             'url' => 'https://www.instagram.com/ayupdigital',
         ]);
@@ -1441,18 +1440,18 @@ class UpdateRequestsTest extends TestCase
         $response = $this->json('PUT', "/core/v1/update-requests/{$updateRequest->id}/approve");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'id' => $updateRequest->id,
             'actioning_user_id' => $user->id,
             'approved_at' => $now->toDateTimeString(),
         ]);
-        $this->assertDatabaseHas((new User())->getTable(), [
+        $this->assertDatabaseHas((new User)->getTable(), [
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
             'phone' => '07700000000',
         ]);
-        $this->assertDatabaseHas((new Organisation())->getTable(), [
+        $this->assertDatabaseHas((new Organisation)->getTable(), [
             'slug' => 'test-org',
             'name' => 'Test Org',
             'description' => 'Test description',
@@ -1464,7 +1463,7 @@ class UpdateRequestsTest extends TestCase
         $user = User::where('email', 'john.doe@example.com')->first();
         $organisation = Organisation::where('email', 'info@test-org.example.com')->first();
 
-        $this->assertDatabaseHas((new UserRole())->getTable(), [
+        $this->assertDatabaseHas((new UserRole)->getTable(), [
             'user_id' => $user->id,
             'organisation_id' => $organisation->id,
             'role_id' => Role::organisationAdmin()->id,
@@ -1504,12 +1503,12 @@ class UpdateRequestsTest extends TestCase
         $response = $this->json('PUT', "/core/v1/update-requests/{$updateRequest->id}/approve");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'id' => $updateRequest->id,
             'actioning_user_id' => $user->id,
             'approved_at' => $now->toDateTimeString(),
         ]);
-        $this->assertDatabaseHas((new User())->getTable(), [
+        $this->assertDatabaseHas((new User)->getTable(), [
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john.doe@example.com',
@@ -1518,7 +1517,7 @@ class UpdateRequestsTest extends TestCase
 
         $user = User::where('email', 'john.doe@example.com')->first();
 
-        $this->assertDatabaseHas((new UserRole())->getTable(), [
+        $this->assertDatabaseHas((new UserRole)->getTable(), [
             'user_id' => $user->id,
             'organisation_id' => $organisation->id,
             'role_id' => Role::organisationAdmin()->id,
@@ -1640,7 +1639,7 @@ class UpdateRequestsTest extends TestCase
     /**
      * @test
      */
-    public function lastModifiedAtIsUpdatedWhenServiceUpdatedByUpdateRequest()
+    public function last_modified_at_is_updated_when_service_updated_by_update_request()
     {
         $oldNow = Date::now()->subMonths(6);
         $newNow = Date::now();

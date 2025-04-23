@@ -7,7 +7,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 
 class AllSchema extends Schema
 {
-    public static function create(string $objectId = null, Schema $schema = null): BaseObject
+    public static function create(?string $objectId = null, ?Schema $schema = null): BaseObject
     {
         return parent::create($objectId)
             ->type(static::TYPE_OBJECT)

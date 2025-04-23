@@ -2,20 +2,20 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\File;
-use App\Models\User;
-use App\Models\Audit;
-use App\Models\Service;
-use App\Models\Location;
 use App\Events\EndpointHit;
-use Carbon\CarbonImmutable;
+use App\Models\Audit;
+use App\Models\File;
+use App\Models\Location;
 use App\Models\Organisation;
+use App\Models\Service;
 use App\Models\UpdateRequest;
+use App\Models\User;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\Response;
-use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Passport\Passport;
+use Tests\TestCase;
 
 class LocationsTest extends TestCase
 {
@@ -474,7 +474,7 @@ class LocationsTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonFragment(['data' => $payload]);
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'user_id' => $user->id,
             'updateable_type' => UpdateRequest::EXISTING_TYPE_LOCATION,
             'updateable_id' => $location->id,
@@ -516,7 +516,7 @@ class LocationsTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonFragment(['data' => $payload]);
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'user_id' => $user->id,
             'updateable_type' => UpdateRequest::EXISTING_TYPE_LOCATION,
             'updateable_id' => $location->id,
@@ -595,7 +595,7 @@ class LocationsTest extends TestCase
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonFragment(['data' => $payload]);
-        $this->assertDatabaseHas((new UpdateRequest())->getTable(), [
+        $this->assertDatabaseHas((new UpdateRequest)->getTable(), [
             'user_id' => $user->id,
             'updateable_type' => UpdateRequest::EXISTING_TYPE_LOCATION,
             'updateable_id' => $location->id,
@@ -877,7 +877,7 @@ class LocationsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/locations/{$location->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Location())->getTable(), ['id' => $location->id]);
+        $this->assertDatabaseMissing((new Location)->getTable(), ['id' => $location->id]);
     }
 
     /**
@@ -908,7 +908,7 @@ class LocationsTest extends TestCase
     /**
      * @test
      */
-    public function deleteLocationWithUpdateRequestsAsSuperAdmin200(): void
+    public function delete_location_with_update_requests_as_super_admin200(): void
     {
         $service = Service::factory()->create();
         $user = User::factory()->create()->makeGlobalAdmin();
@@ -941,7 +941,7 @@ class LocationsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/locations/{$location->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Location())->getTable(), ['id' => $location->id]);
+        $this->assertDatabaseMissing((new Location)->getTable(), ['id' => $location->id]);
         $this->assertDatabaseMissing('update_requests', ['id' => $updateRequest->id, 'deleted_at' => null]);
     }
 

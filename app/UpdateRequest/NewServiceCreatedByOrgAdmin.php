@@ -25,7 +25,7 @@ class NewServiceCreatedByOrgAdmin implements AppliesUpdateRequests
     public function validateUpdateRequest(UpdateRequest $updateRequest): Validator
     {
         $user = Auth::user();
-        $rules = (new StoreRequest())
+        $rules = (new StoreRequest)
             ->merge($updateRequest->data)
             ->setUserResolver(function () use ($updateRequest) {
                 return $updateRequest->user;
@@ -44,7 +44,7 @@ class NewServiceCreatedByOrgAdmin implements AppliesUpdateRequests
 
         $insert = [
             'organisation_id' => $data->get('organisation_id'),
-            'slug' => $this->uniqueSlug($data->get('slug', $data->get('name')), (new Service())),
+            'slug' => $this->uniqueSlug($data->get('slug', $data->get('name')), (new Service)),
             'name' => $data->get('name'),
             'type' => $data->get('type'),
             'status' => $data->get('status'),
@@ -62,7 +62,6 @@ class NewServiceCreatedByOrgAdmin implements AppliesUpdateRequests
             'contact_name' => $data->get('contact_name'),
             'contact_phone' => $data->get('contact_phone'),
             'contact_email' => $data->get('contact_email'),
-            'show_referral_disclaimer' => $data->get('show_referral_disclaimer'),
             'referral_method' => $data->get('referral_method'),
             'referral_button_text' => $data->get('referral_button_text'),
             'referral_email' => $data->get('referral_email'),
@@ -76,7 +75,7 @@ class NewServiceCreatedByOrgAdmin implements AppliesUpdateRequests
         if ($data->has('eligibility_types') && $data['eligibility_types']['custom'] ?? null) {
             // Create the custom fields
             foreach ($data['eligibility_types']['custom'] as $customEligibilityType => $value) {
-                $fieldName = 'eligibility_' . $customEligibilityType . '_custom';
+                $fieldName = 'eligibility_'.$customEligibilityType.'_custom';
                 $insert[$fieldName] = $value;
             }
         }

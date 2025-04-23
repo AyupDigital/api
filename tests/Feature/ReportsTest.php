@@ -222,7 +222,7 @@ class ReportsTest extends TestCase
         $response->assertJsonFragment([
             'report_type' => ReportType::usersExport()->name,
         ]);
-        $this->assertDatabaseHas((new Report())->getTable(), [
+        $this->assertDatabaseHas((new Report)->getTable(), [
             'report_type_id' => ReportType::usersExport()->id,
         ]);
         $response->assertJsonStructure([
@@ -280,7 +280,7 @@ class ReportsTest extends TestCase
             'starts_at' => Date::today()->startOfMonth()->toDateString(),
             'ends_at' => Date::today()->endOfMonth()->toDateString(),
         ]);
-        $this->assertDatabaseHas((new Report())->getTable(), [
+        $this->assertDatabaseHas((new Report)->getTable(), [
             'report_type_id' => ReportType::referralsExport()->id,
             'starts_at' => Date::today()->startOfMonth()->toDateString(),
             'ends_at' => Date::today()->endOfMonth()->toDateString(),
@@ -498,8 +498,8 @@ class ReportsTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/reports/{$report->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new Report())->getTable(), ['id' => $report->id]);
-        $this->assertDatabaseMissing((new File())->getTable(), ['id' => $report->file_id]);
+        $this->assertDatabaseMissing((new Report)->getTable(), ['id' => $report->id]);
+        $this->assertDatabaseMissing((new File)->getTable(), ['id' => $report->file_id]);
     }
 
     /**

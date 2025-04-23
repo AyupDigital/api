@@ -15,24 +15,22 @@ class UkPhoneNumber implements ValidationRule
     /**
      * UkPhoneNumber constructor.
      */
-    public function __construct(string $message = null)
+    public function __construct(?string $message = null)
     {
         $this->message = $message;
     }
 
     /**
      * Determine if the validation rule passes.
-     *
-     * @param mixed $value
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         // Immediately fail if the value is not a string.
-        if (!is_string($value)) {
+        if (! is_string($value)) {
             $fail(__('validation.string'));
         }
 
-        if (preg_match('/^0([1-6][0-9]{8,10}|7[0-9]{9}|8[0-9]{9})$/', $value) !== 1) {
+        if (preg_match('/^\(?(\+44|0)?[\s-]?(?:\d{2}|\d{3}|\d{4})[\s-]?\d{3}[\s-]?\d{3}$|^\(?(\+44|0)?[\s-]?\d{6}$|^\(?(\+44|0)?[\s-]?\d{10}$/', $value) !== 1) {
             $fail($this->message());
         }
     }

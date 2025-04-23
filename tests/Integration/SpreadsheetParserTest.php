@@ -40,7 +40,7 @@ class SpreadsheetParserTest extends TestCase
     public static function createSpreadsheets(array $rows, array $headers)
     {
         /** Create a new Spreadsheet Object **/
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new Spreadsheet;
         $columns = [];
 
         foreach ($headers as $key => $value) {
@@ -95,7 +95,7 @@ class SpreadsheetParserTest extends TestCase
      */
     public function it_can_import_a_xls_spreadsheet(): void
     {
-        $spreadsheetParser = new SpreadsheetParser();
+        $spreadsheetParser = new SpreadsheetParser;
 
         $spreadsheetParser->Import(Storage::disk('local')->path($this->xlsFilepath));
 
@@ -109,7 +109,7 @@ class SpreadsheetParserTest extends TestCase
      */
     public function it_can_import_a_xlsx_spreadsheet(): void
     {
-        $spreadsheetParser = new SpreadsheetParser();
+        $spreadsheetParser = new SpreadsheetParser;
 
         $spreadsheetParser->Import(Storage::disk('local')->path($this->xlsxFilepath));
 
@@ -123,7 +123,7 @@ class SpreadsheetParserTest extends TestCase
      */
     public function it_can_read_rows_from_a_xls_spreadsheet(): void
     {
-        $spreadsheetParser = new SpreadsheetParser();
+        $spreadsheetParser = new SpreadsheetParser;
 
         $spreadsheetParser->Import(Storage::disk('local')->path($this->xlsFilepath));
 

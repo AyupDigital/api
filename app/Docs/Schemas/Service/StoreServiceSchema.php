@@ -10,7 +10,7 @@ class StoreServiceSchema extends UpdateServiceSchema
     /**
      * @throws \GoldSpecDigital\ObjectOrientedOAS\Exceptions\InvalidArgumentException
      */
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         $instance = parent::create($objectId);
 

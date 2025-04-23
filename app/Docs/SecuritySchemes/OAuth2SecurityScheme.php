@@ -8,7 +8,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\SecurityScheme;
 
 class OAuth2SecurityScheme extends SecurityScheme
 {
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create('OAuth2')
             ->type(static::TYPE_OAUTH2)

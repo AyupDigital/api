@@ -74,7 +74,7 @@ class StoreRequest extends FormRequest
                 'max:255',
                 Rule::unique(table(Organisation::class), 'slug')
                     ->ignore($this->input('organisation.id')),
-                new Slug(),
+                new Slug,
             ],
             'organisation.name' => ['required_without:organisation.id', 'nullable', 'string', 'min:1', 'max:255'],
             'organisation.description' => [
@@ -82,7 +82,7 @@ class StoreRequest extends FormRequest
                 'nullable',
                 'string',
                 new MarkdownMinLength(1),
-                new MarkdownMaxLength(config('local.organisation_description_max_chars'), 'Description tab - The long description must be ' . config('local.organisation_description_max_chars') . ' characters or fewer.'),
+                new MarkdownMaxLength(config('local.organisation_description_max_chars'), 'Description tab - The long description must be '.config('local.organisation_description_max_chars').' characters or fewer.'),
             ],
             'organisation.url' => ['sometimes', 'nullable', 'url', 'max:255'],
             'organisation.email' => [
@@ -107,8 +107,8 @@ class StoreRequest extends FormRequest
                 'string',
                 'min:1',
                 'max:255',
-                'unique:' . table(Service::class) . ',slug',
-                new Slug(),
+                'unique:'.table(Service::class).',slug',
+                new Slug,
             ],
             'service.name' => ['sometimes', 'required', 'string', 'min:1', 'max:255'],
             'service.type' => [
@@ -127,7 +127,7 @@ class StoreRequest extends FormRequest
                 'required',
                 'string',
                 new MarkdownMinLength(1),
-                new MarkdownMaxLength(config('local.service_description_max_chars'), 'Description tab - The long description must be ' . config('local.service_description_max_chars') . ' characters or fewer.'),
+                new MarkdownMaxLength(config('local.service_description_max_chars'), 'Description tab - The long description must be '.config('local.service_description_max_chars').' characters or fewer.'),
             ],
             'service.wait_time' => ['sometimes', 'present', 'nullable', Rule::in([
                 Service::WAIT_TIME_ONE_WEEK,
@@ -140,7 +140,7 @@ class StoreRequest extends FormRequest
             'service.fees_text' => ['sometimes', 'present', 'nullable', 'string', 'min:1', 'max:255'],
             'service.fees_url' => ['sometimes', 'present', 'nullable', 'url', 'max:255'],
             'service.testimonial' => ['sometimes', 'present', 'nullable', 'string', 'min:1', 'max:255'],
-            'service.video_embed' => ['sometimes', 'present', 'nullable', 'url', 'max:255', new VideoEmbed()],
+            'service.video_embed' => ['sometimes', 'present', 'nullable', 'url', 'max:255', new VideoEmbed],
             'service.url' => ['sometimes', 'present', 'nullable', 'url', 'max:255'],
             'service.contact_name' => ['sometimes', 'present', 'nullable', 'string', 'min:1', 'max:255'],
             'service.contact_phone' => ['sometimes', 'present', 'nullable', 'string', 'min:1', 'max:255'],
@@ -213,7 +213,7 @@ class StoreRequest extends FormRequest
             'user.password.min' => '2. User account - Please create a password that is at least eight characters long.',
 
             'organisation.slug.required' => '3. Organisation - Please enter the organisation slug.',
-            'organisation.slug.unique' => '3. Organisation - The organisation is already listed. Please contact us for help logging in ' . config('local.global_admin.email') . '.',
+            'organisation.slug.unique' => '3. Organisation - The organisation is already listed. Please contact us for help logging in '.config('local.global_admin.email').'.',
             'organisation.name.required' => '3. Organisation - Please enter the organisation name.',
             'organisation.description.required' => '3. Organisation - Please enter a one-line summary of the organisation.',
             'organisation.url.url' => '3. Organisation - Please enter a valid web address in the correct format (starting with https:// or http://).',

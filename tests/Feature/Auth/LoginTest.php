@@ -2,19 +2,19 @@
 
 namespace Tests\Feature\Auth;
 
-use Tests\TestCase;
 use App\Models\User;
-use Illuminate\Http\Response;
 use App\Sms\OtpLoginCode\UserSms;
-use Illuminate\Support\Facades\Queue;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Queue;
+use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
     /**
      * @test
      */
-    public function userCanLogin200(): void
+    public function user_can_login200(): void
     {
         Config::set('local.otp_enabled', false);
 

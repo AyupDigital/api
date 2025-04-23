@@ -17,13 +17,13 @@ class ServiceFactory extends Factory
      */
     public function definition(): array
     {
-        $name = $this->faker->company() . ' ' . $this->faker->word() . ' ' . mt_rand(1, 100000);
+        $name = $this->faker->company().' '.$this->faker->word().' '.mt_rand(1, 100000);
 
         return [
             'organisation_id' => function () {
                 return \App\Models\Organisation::factory()->create()->id;
             },
-            'slug' => Str::slug($name) . '-' . mt_rand(1, 1000),
+            'slug' => Str::slug($name).'-'.mt_rand(1, 1000),
             'name' => $name,
             'type' => Service::TYPE_SERVICE,
             'status' => Service::STATUS_ACTIVE,
@@ -34,7 +34,6 @@ class ServiceFactory extends Factory
             'contact_name' => $this->faker->name(),
             'contact_phone' => random_uk_phone(),
             'contact_email' => $this->faker->safeEmail(),
-            'show_referral_disclaimer' => false,
             'referral_method' => Service::REFERRAL_METHOD_NONE,
             'cqc_location_id' => $this->faker->numerify('#-#########'),
             'score' => 1,

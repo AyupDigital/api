@@ -58,11 +58,11 @@ class SpreadsheetParser
     /**
      * Constructor.
      *
-     * @param mixed $chunkSize
+     * @param  mixed  $chunkSize
      */
     public function __construct($chunkSize = 2048)
     {
-        $this->chunkFilter = new ChunkReadFilter();
+        $this->chunkFilter = new ChunkReadFilter;
         $this->chunkSize = $chunkSize;
 
         return $this;

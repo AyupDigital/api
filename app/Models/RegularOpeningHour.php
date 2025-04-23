@@ -64,7 +64,7 @@ class RegularOpeningHour extends Model
         $isOpenNow = Time::now()->between($this->opens_at, $this->closes_at);
 
         // If not, then no further checks needed.
-        if (!$isOpenNow) {
+        if (! $isOpenNow) {
             return false;
         }
 
@@ -107,9 +107,6 @@ class RegularOpeningHour extends Model
 
     /**
      * Get the next open times.
-     *
-     * @param DateTimeInterface $from
-     * @return DateTime
      */
     public function nextOpenDate(?DateTimeInterface $from = null): DateTime
     {

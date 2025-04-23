@@ -8,7 +8,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\Components as BaseComponents;
 
 class Components extends BaseComponents
 {
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->securitySchemes(OAuth2SecurityScheme::create());

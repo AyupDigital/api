@@ -7,7 +7,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 
 class SettingSchema extends Schema
 {
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         $global = Schema::object('global')->properties(
             Schema::string('footer_title'),
@@ -19,10 +19,6 @@ class SettingSchema extends Schema
         );
 
         $home = Schema::object('home')->properties(
-            Schema::string('search_title'),
-            Schema::string('categories_title'),
-            Schema::string('personas_title'),
-            Schema::string('personas_content')->format('markdown'),
             Schema::array('banners')
                 ->items(
                     Schema::object()
@@ -41,6 +37,11 @@ class SettingSchema extends Schema
         );
 
         $privacyPolicy = Schema::object('privacy_policy')->properties(
+            Schema::string('title'),
+            Schema::string('content')->format('markdown')
+        );
+
+        $cookiePolicy = Schema::object('cookie_policy')->properties(
             Schema::string('title'),
             Schema::string('content')->format('markdown')
         );
@@ -90,6 +91,7 @@ class SettingSchema extends Schema
                                 $home,
                                 $termsAndConditions,
                                 $privacyPolicy,
+                                $cookiePolicy,
                                 $accessibilityStatement,
                                 $about,
                                 $contact,

@@ -135,7 +135,7 @@ class ImportTaxonomiesCommandTest extends TestCase
             ],
         ];
 
-        $cmd = new ImportTaxonomiesCommand();
+        $cmd = new ImportTaxonomiesCommand;
 
         $recordsWithDepth = $cmd->calculateTaxonomyDepth(['level-0-0'], $records, 1);
 
@@ -179,7 +179,7 @@ class ImportTaxonomiesCommandTest extends TestCase
      */
     public function it_can_delete_all_taxonomies(): void
     {
-        $cmd = new ImportTaxonomiesCommand();
+        $cmd = new ImportTaxonomiesCommand;
 
         $currentTaxonomyCount = count($cmd->getDescendantTaxonomyIds([Taxonomy::category()->id]));
 
@@ -232,7 +232,7 @@ class ImportTaxonomiesCommandTest extends TestCase
 
         $cmd->importTaxonomyRecords($taxonomyRecords, false, false);
 
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'name' => $taxonomyRecords[10][1],
         ]);
 
@@ -275,7 +275,7 @@ class ImportTaxonomiesCommandTest extends TestCase
 
         $cmd->importTaxonomyRecords($taxonomyRecords, true, false);
 
-        $this->assertDatabaseHas((new Taxonomy())->getTable(), [
+        $this->assertDatabaseHas((new Taxonomy)->getTable(), [
             'name' => $taxonomyRecords[10][1],
         ]);
 

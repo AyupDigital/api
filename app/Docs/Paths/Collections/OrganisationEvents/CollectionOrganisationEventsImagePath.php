@@ -13,7 +13,7 @@ class CollectionOrganisationEventsImagePath extends PathItem
     /**
      * @throws \GoldSpecDigital\ObjectOrientedOAS\Exceptions\InvalidArgumentException
      */
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->route('/collections/organisation-events/{collection}/image.svg')

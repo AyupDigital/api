@@ -48,7 +48,7 @@ class UpdateRequest extends FormRequest
                 'string',
                 'min:1',
                 'max:255',
-                new Slug(),
+                new Slug,
                 new UserHasRole(
                     $this->user('api'),
                     new UserRole([
@@ -62,11 +62,11 @@ class UpdateRequest extends FormRequest
             'end_date' => ['date_format:Y-m-d', new DateSanity($this)],
             'start_time' => ['date_format:H:i:s', new DateSanity($this)],
             'end_time' => ['date_format:H:i:s', new DateSanity($this)],
-            'intro' => ['string', 'min:1', 'max:300'],
+            'intro' => ['string', 'min:1', 'max:255'],
             'description' => [
                 'string',
                 new MarkdownMinLength(1),
-                new MarkdownMaxLength(config('local.event_description_max_chars'), 'Description tab - The long description must be ' . config('local.event_description_max_chars') . ' characters or fewer.'),
+                new MarkdownMaxLength(config('local.event_description_max_chars'), 'Description tab - The long description must be '.config('local.event_description_max_chars').' characters or fewer.'),
             ],
             'is_free' => ['boolean'],
             'fees_text' => ['nullable', 'string', 'min:1', 'max:255', 'required_if:is_free,false'],
@@ -76,7 +76,7 @@ class UpdateRequest extends FormRequest
                 'min:1',
                 'max:255',
                 Rule::requiredIf(function () {
-                    return !empty($this->organiser_phone) || !empty($this->organiser_email) || !empty($this->organiser_url);
+                    return ! empty($this->organiser_phone) || ! empty($this->organiser_email) || ! empty($this->organiser_url);
                 }),
                 new NullableIf(function () {
                     return empty($this->organiser_phone) && empty($this->organiser_email) && empty($this->organiser_url);
@@ -86,9 +86,9 @@ class UpdateRequest extends FormRequest
                 'string',
                 'min:1',
                 'max:255',
-                new UkPhoneNumber(),
+                new UkPhoneNumber,
                 Rule::requiredIf(function () {
-                    return !empty($this->organiser_name) && empty($this->organiser_email) && empty($this->organiser_url);
+                    return ! empty($this->organiser_name) && empty($this->organiser_email) && empty($this->organiser_url);
                 }),
                 new NullableIf(function () {
                     return empty($this->organiser_name);
@@ -98,7 +98,7 @@ class UpdateRequest extends FormRequest
                 'email',
                 'max:255',
                 Rule::requiredIf(function () {
-                    return !empty($this->organiser_name) && empty($this->organiser_phone) && empty($this->organiser_url);
+                    return ! empty($this->organiser_name) && empty($this->organiser_phone) && empty($this->organiser_url);
                 }),
                 new NullableIf(function () {
                     return empty($this->organiser_name);
@@ -108,7 +108,7 @@ class UpdateRequest extends FormRequest
                 'url',
                 'max:255',
                 Rule::requiredIf(function () {
-                    return !empty($this->organiser_name) && empty($this->organiser_email) && empty($this->organiser_phone);
+                    return ! empty($this->organiser_name) && empty($this->organiser_email) && empty($this->organiser_phone);
                 }),
                 new NullableIf(function () {
                     return empty($this->organiser_name);
@@ -119,28 +119,24 @@ class UpdateRequest extends FormRequest
                 'string',
                 'min:1',
                 'max:255',
-                'required_with:booking_summary,booking_url,booking_cta',
             ],
             'booking_summary' => [
                 'nullable',
                 'string',
                 'min:1',
                 'max:255',
-                'required_with:booking_title,booking_url,booking_cta',
             ],
             'booking_url' => [
                 'nullable',
                 'url',
                 'min:1',
                 'max:255',
-                'required_with:booking_summary,booking_title,booking_cta',
             ],
             'booking_cta' => [
                 'nullable',
                 'string',
                 'min:1',
                 'max:255',
-                'required_with:booking_summary,booking_url,booking_title',
             ],
             'homepage' => [
                 'boolean',
@@ -156,7 +152,7 @@ class UpdateRequest extends FormRequest
             'is_virtual' => ['boolean'],
             'location_id' => [
                 Rule::requiredIf(function () {
-                    return !empty($this->is_virtual) && $this->is_virtual == false;
+                    return ! empty($this->is_virtual) && $this->is_virtual == false;
                 }),
                 'exists:locations,id',
             ],
@@ -164,7 +160,7 @@ class UpdateRequest extends FormRequest
                 'nullable',
                 'exists:files,id',
                 new FileIsMimeType(File::MIME_TYPE_PNG, File::MIME_TYPE_JPG, File::MIME_TYPE_JPEG, File::MIME_TYPE_SVG),
-                new FileIsPendingAssignment(),
+                new FileIsPendingAssignment,
             ],
             'category_taxonomies' => [
                 'array',

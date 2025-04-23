@@ -16,9 +16,9 @@ class FileIsPendingAssignment implements ValidationRule
     /**
      * FileIsPendingAssignment constructor.
      *
-     * @param callable|null $callback Called if the file is not pending assignment
+     * @param  callable|null  $callback  Called if the file is not pending assignment
      */
-    public function __construct(callable $callback = null)
+    public function __construct(?callable $callback = null)
     {
         $this->callback = $callback;
     }
@@ -26,8 +26,8 @@ class FileIsPendingAssignment implements ValidationRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param mixed $fileId
-     * @param mixed $fail
+     * @param  mixed  $fileId
+     * @param  mixed  $fail
      */
     public function validate(string $attribute, $fileId, $fail): void
     {
@@ -35,13 +35,13 @@ class FileIsPendingAssignment implements ValidationRule
 
         $passed = Arr::get($file->meta, 'type') === File::META_TYPE_PENDING_ASSIGNMENT;
 
-        if (!$passed) {
+        if (! $passed) {
 
             if ($this->callback !== null) {
                 $passed = call_user_func($this->callback, $file);
             }
 
-            if (!$passed) {
+            if (! $passed) {
                 $fail($this->message());
             }
 

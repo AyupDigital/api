@@ -173,7 +173,7 @@ class ReportSchedulesTest extends TestCase
             'report_type' => ReportType::usersExport()->name,
             'repeat_type' => ReportSchedule::REPEAT_TYPE_WEEKLY,
         ]);
-        $this->assertDatabaseHas((new ReportSchedule())->getTable(), [
+        $this->assertDatabaseHas((new ReportSchedule)->getTable(), [
             'report_type_id' => ReportType::usersExport()->id,
             'repeat_type' => ReportSchedule::REPEAT_TYPE_WEEKLY,
         ]);
@@ -488,7 +488,7 @@ class ReportSchedulesTest extends TestCase
         $response = $this->json('DELETE', "/core/v1/report-schedules/{$reportSchedule->id}");
 
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertDatabaseMissing((new ReportSchedule())->getTable(), ['id' => $reportSchedule->id]);
+        $this->assertDatabaseMissing((new ReportSchedule)->getTable(), ['id' => $reportSchedule->id]);
     }
 
     public function test_audit_created_when_deleted(): void

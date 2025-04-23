@@ -8,7 +8,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 
 class ImportServicesResponseSchema extends Schema
 {
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->type(static::TYPE_OBJECT)
@@ -58,7 +58,6 @@ class ImportServicesResponseSchema extends Schema
                                 Schema::string('contact_name'),
                                 Schema::string('contact_phone'),
                                 Schema::string('contact_email'),
-                                Schema::boolean('show_referral_disclaimer'),
                                 Schema::string('referral_method')
                                     ->enum(
                                         Service::REFERRAL_METHOD_INTERNAL,
@@ -106,7 +105,6 @@ class ImportServicesResponseSchema extends Schema
                                 Schema::string('contact_name'),
                                 Schema::string('contact_phone'),
                                 Schema::string('contact_email'),
-                                Schema::boolean('show_referral_disclaimer'),
                                 Schema::string('referral_method')
                                     ->enum(
                                         Service::REFERRAL_METHOD_INTERNAL,

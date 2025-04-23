@@ -37,14 +37,10 @@ class UpdateRequest extends FormRequest
             'cms.frontend.global.twitter_handle' => ['nullable', 'string'],
 
             'cms.frontend.home' => ['required', 'array'],
-            'cms.frontend.home.search_title' => ['required', 'string'],
-            'cms.frontend.home.categories_title' => ['required', 'string'],
-            'cms.frontend.home.personas_title' => ['required', 'string'],
-            'cms.frontend.home.personas_content' => ['required', 'string'],
             'cms.frontend.home.banners' => ['nullable', 'array'],
             'cms.frontend.home.banners.*' => ['nullable', 'array'],
             'cms.frontend.home.banners.*.title' => [
-                'required_with:' . implode(',', [
+                'required_with:'.implode(',', [
                     'cms.frontend.home.banners.*.content',
                     'cms.frontend.home.banners.*.button_text',
                     'cms.frontend.home.banners.*.button_url',
@@ -54,7 +50,7 @@ class UpdateRequest extends FormRequest
                 'max:70',
             ],
             'cms.frontend.home.banners.*.content' => [
-                'required_with:' . implode(',', [
+                'required_with:'.implode(',', [
                     'cms.frontend.home.banners.*.title',
                     'cms.frontend.home.banners.*.button_text',
                     'cms.frontend.home.banners.*.button_url',
@@ -64,7 +60,7 @@ class UpdateRequest extends FormRequest
                 'max:200',
             ],
             'cms.frontend.home.banners.*.button_text' => [
-                'required_with:' . implode(',', [
+                'required_with:'.implode(',', [
                     'cms.frontend.home.banners.*.title',
                     'cms.frontend.home.banners.*.content',
                     'cms.frontend.home.banners.*.button_url',
@@ -74,7 +70,7 @@ class UpdateRequest extends FormRequest
                 'max:30',
             ],
             'cms.frontend.home.banners.*.button_url' => [
-                'required_with:' . implode(',', [
+                'required_with:'.implode(',', [
                     'cms.frontend.home.banners.*.title',
                     'cms.frontend.home.banners.*.content',
                     'cms.frontend.home.banners.*.button_text',
@@ -90,6 +86,10 @@ class UpdateRequest extends FormRequest
             'cms.frontend.privacy_policy.title' => ['required', 'string'],
             'cms.frontend.privacy_policy.content' => ['required', 'string'],
 
+            'cms.frontend.cookie_policy' => ['required', 'array'],
+            'cms.frontend.cookie_policy.title' => ['required', 'string'],
+            'cms.frontend.cookie_policy.content' => ['nullable', 'string'],
+
             'cms.frontend.accessibility_statement' => ['required', 'array'],
             'cms.frontend.accessibility_statement.title' => ['required', 'string'],
             'cms.frontend.accessibility_statement.content' => ['nullable', 'string'],
@@ -97,7 +97,7 @@ class UpdateRequest extends FormRequest
             'cms.frontend.about' => ['required', 'array'],
             'cms.frontend.about.title' => ['required', 'string'],
             'cms.frontend.about.content' => ['required', 'string'],
-            'cms.frontend.about.video_url' => ['nullable', 'string', 'url', new VideoEmbed()],
+            'cms.frontend.about.video_url' => ['nullable', 'string', 'url', new VideoEmbed],
 
             'cms.frontend.contact' => ['required', 'array'],
             'cms.frontend.contact.title' => ['required', 'string'],
@@ -113,7 +113,7 @@ class UpdateRequest extends FormRequest
 
             'cms.frontend.banner' => ['required', 'array'],
             'cms.frontend.banner.title' => [
-                'required_with:' . implode(',', [
+                'required_with:'.implode(',', [
                     'cms.frontend.banner.content',
                     'cms.frontend.banner.button_text',
                     'cms.frontend.banner.button_url',
@@ -125,7 +125,7 @@ class UpdateRequest extends FormRequest
                 'max:70',
             ],
             'cms.frontend.banner.content' => [
-                'required_with:' . implode(',', [
+                'required_with:'.implode(',', [
                     'cms.frontend.banner.title',
                     'cms.frontend.banner.button_text',
                     'cms.frontend.banner.button_url',
@@ -137,7 +137,7 @@ class UpdateRequest extends FormRequest
                 'max:200',
             ],
             'cms.frontend.banner.button_text' => [
-                'required_with:' . implode(',', [
+                'required_with:'.implode(',', [
                     'cms.frontend.banner.title',
                     'cms.frontend.banner.content',
                     'cms.frontend.banner.button_url',
@@ -149,7 +149,7 @@ class UpdateRequest extends FormRequest
                 'max:30',
             ],
             'cms.frontend.banner.button_url' => [
-                'required_with:' . implode(',', [
+                'required_with:'.implode(',', [
                     'cms.frontend.banner.title',
                     'cms.frontend.banner.content',
                     'cms.frontend.banner.button_text',
@@ -163,7 +163,7 @@ class UpdateRequest extends FormRequest
                 'nullable',
                 'exists:files,id',
                 new FileIsMimeType(File::MIME_TYPE_PNG),
-                new FileIsPendingAssignment(),
+                new FileIsPendingAssignment,
             ],
         ];
     }

@@ -24,19 +24,19 @@ class IsServiceAdmin implements ValidationRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param mixed $value
-     * @param mixed $fail
+     * @param  mixed  $value
+     * @param  mixed  $fail
      */
     public function validate(string $attribute, $value, $fail): void
     {
         // Immediately fail if the value is not a string.
-        if (!is_string($value)) {
+        if (! is_string($value)) {
             $fail(__('validation.string'));
         }
 
         $service = Service::query()->find($value);
 
-        if (!$service || !$this->user->isServiceAdmin($service)) {
+        if (! $service || ! $this->user->isServiceAdmin($service)) {
             $fail($this->message());
         }
     }

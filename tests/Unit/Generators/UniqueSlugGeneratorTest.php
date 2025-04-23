@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Generators;
 
-use Tests\TestCase;
-use App\Models\Model;
-use Illuminate\Database\Query\Builder;
 use App\Generators\UniqueSlugGenerator;
+use App\Models\Model;
 use Illuminate\Database\DatabaseManager;
+use Illuminate\Database\Query\Builder;
+use Tests\TestCase;
 
 class UniqueSlugGeneratorTest extends TestCase
 {
@@ -89,7 +89,7 @@ class UniqueSlugGeneratorTest extends TestCase
      *
      * @dataProvider compareEqualsDataProvider
      */
-    public function compareEquals_works(string $string, string $slug, bool $expected): void
+    public function compare_equals_works(string $string, string $slug, bool $expected): void
     {
         $dbMock = $this->createMock(DatabaseManager::class);
 

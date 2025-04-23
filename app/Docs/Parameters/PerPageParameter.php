@@ -8,7 +8,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 
 class PerPageParameter extends Parameter
 {
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->in(static::IN_QUERY)
@@ -17,8 +17,8 @@ class PerPageParameter extends Parameter
             ->schema(
                 Schema::integer()
                     ->minimum(1)
-                    ->maximum((int)config('local.max_pagination_results'))
-                    ->default((int)config('local.pagination_results'))
+                    ->maximum((int) config('local.max_pagination_results'))
+                    ->default((int) config('local.pagination_results'))
             );
     }
 }

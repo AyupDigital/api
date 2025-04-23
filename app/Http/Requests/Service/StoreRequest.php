@@ -15,6 +15,7 @@ use App\Rules\FileIsPendingAssignment;
 use App\Rules\InOrder;
 use App\Rules\MarkdownMaxLength;
 use App\Rules\MarkdownMinLength;
+use App\Rules\MaxDateSupported;
 use App\Rules\RootTaxonomyIs;
 use App\Rules\Slug;
 use App\Rules\UkPhoneNumber;
@@ -50,12 +51,12 @@ class StoreRequest extends FormRequest
                 'required',
                 'exists:organisations,id',
                 function ($attribute, $value, $fail) {
-                    if (!$this->user('api')->isGlobalAdmin() && !$this->user('api')->isOrganisationAdmin(Organisation::findOrFail($value))) {
+                    if (! $this->user('api')->isGlobalAdmin() && ! $this->user('api')->isOrganisationAdmin(Organisation::findOrFail($value))) {
                         $fail('The organisation_id field must contain an ID for an organisation you are an organisation admin for.');
                     }
                 },
             ],
-            'slug' => ['string', 'min:1', 'max:255', new Slug()],
+            'slug' => ['string', 'min:1', 'max:255', new Slug],
             'name' => ['required', 'string', 'min:1', 'max:255'],
             'type' => [
                 'required',
@@ -86,7 +87,7 @@ class StoreRequest extends FormRequest
                 'required',
                 'string',
                 new MarkdownMinLength(1),
-                new MarkdownMaxLength(config('local.service_description_max_chars'), 'Description tab - The long description must be ' . config('local.service_description_max_chars') . ' characters or fewer.'),
+                new MarkdownMaxLength(config('local.service_description_max_chars'), 'Description tab - The long description must be '.config('local.service_description_max_chars').' characters or fewer.'),
             ],
             'wait_time' => ['present', 'nullable', Rule::in([
                 Service::WAIT_TIME_ONE_WEEK,
@@ -118,7 +119,7 @@ class StoreRequest extends FormRequest
             'fees_text' => ['present', 'nullable', 'string', 'min:1', 'max:255'],
             'fees_url' => ['present', 'nullable', 'url', 'max:255'],
             'testimonial' => ['present', 'nullable', 'string', 'min:1', 'max:255'],
-            'video_embed' => ['present', 'nullable', 'url', 'max:255', new VideoEmbed()],
+            'video_embed' => ['present', 'nullable', 'url', 'max:255', new VideoEmbed],
             'url' => ['present', 'nullable', 'url', 'max:255'],
             'contact_name' => ['present', 'nullable', 'string', 'min:1', 'max:255'],
             'contact_phone' => [
@@ -131,18 +132,6 @@ class StoreRequest extends FormRequest
             ],
             'contact_email' => ['present', 'nullable', 'email', 'max:255'],
             'cqc_location_id' => ['present_if_flagged', 'nullable', 'string', 'regex:/^\d\-\d+$/'],
-            'show_referral_disclaimer' => [
-                'required',
-                'boolean',
-                new UserHasRole(
-                    $this->user('api'),
-                    new UserRole([
-                        'user_id' => $this->user('api')->id,
-                        'role_id' => Role::superAdmin()->id,
-                    ]),
-                    ($this->referral_method === Service::REFERRAL_METHOD_NONE) ? false : true
-                ),
-            ],
             'referral_method' => [
                 'required',
                 Rule::in([
@@ -175,7 +164,7 @@ class StoreRequest extends FormRequest
                 ),
             ],
             'referral_email' => [
-                'required_if:referral_method,' . Service::REFERRAL_METHOD_INTERNAL,
+                'required_if:referral_method,'.Service::REFERRAL_METHOD_INTERNAL,
                 'present',
                 'nullable',
                 'email',
@@ -190,7 +179,7 @@ class StoreRequest extends FormRequest
                 ),
             ],
             'referral_url' => [
-                'required_if:referral_method,' . Service::REFERRAL_METHOD_EXTERNAL,
+                'required_if:referral_method,'.Service::REFERRAL_METHOD_EXTERNAL,
                 'present',
                 'nullable',
                 'url',
@@ -204,7 +193,7 @@ class StoreRequest extends FormRequest
                     null
                 ),
             ],
-            'ends_at' => ['present', 'nullable', 'date_format:' . CarbonImmutable::ISO8601],
+            'ends_at' => ['present', 'nullable', 'date_format:'.CarbonImmutable::ISO8601, new MaxDateSupported($this->input('ends_at'))],
             'useful_infos' => ['present', 'array'],
             'useful_infos.*' => ['array'],
             'useful_infos.*.title' => ['required_with:useful_infos.*', 'string', 'min:1', 'max:255'],
@@ -229,13 +218,13 @@ class StoreRequest extends FormRequest
             ])],
             'social_medias.*.url' => ['required_with:social_medias.*', 'url', 'max:255'],
 
-            'gallery_items' => ['present', 'array', 'max:' . config('local.max_gallery_images')],
+            'gallery_items' => ['present', 'array', 'max:'.config('local.max_gallery_images')],
             'gallery_items.*' => ['array'],
             'gallery_items.*.file_id' => [
                 'required_with:gallery_items.*',
                 'exists:files,id',
                 new FileIsMimeType(File::MIME_TYPE_PNG, File::MIME_TYPE_SVG, File::MIME_TYPE_JPG, File::MIME_TYPE_JPEG),
-                new FileIsPendingAssignment(),
+                new FileIsPendingAssignment,
             ],
 
             'tags' => [
@@ -251,7 +240,7 @@ class StoreRequest extends FormRequest
                 ),
             ],
             'tags.*' => ['array'],
-            'tags.*.slug' => ['required_with:tags.*', 'string', 'min:1', 'max:255', new Slug()],
+            'tags.*.slug' => ['required_with:tags.*', 'string', 'min:1', 'max:255', new Slug],
             'tags.*.label' => ['required_with:tags.*', 'string', 'min:1', 'max:255'],
 
             'category_taxonomies' => $this->categoryTaxonomiesRules(),
@@ -260,7 +249,7 @@ class StoreRequest extends FormRequest
                 'nullable',
                 'exists:files,id',
                 new FileIsMimeType(File::MIME_TYPE_PNG, File::MIME_TYPE_SVG, File::MIME_TYPE_JPG, File::MIME_TYPE_JPEG),
-                new FileIsPendingAssignment(),
+                new FileIsPendingAssignment,
             ],
             'score' => [
                 'nullable',

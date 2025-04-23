@@ -13,7 +13,7 @@ class OpenApi extends BaseOpenApi implements Responsable
     /**
      * @throws \GoldSpecDigital\ObjectOrientedOAS\Exceptions\InvalidArgumentException
      */
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->openapi(static::OPENAPI_3_0_2)
@@ -128,15 +128,18 @@ class OpenApi extends BaseOpenApi implements Responsable
             ->tags(
                 Tags\AuditsTag::create(),
                 Tags\CollectionCategoriesTag::create(),
+                Tags\CollectionOrganisationEventsTag::create(),
                 Tags\CollectionPersonasTag::create(),
+
                 Tags\FilesTag::create(),
-                Tags\PagesTag::create(),
                 Tags\LocationsTag::create(),
                 Tags\NotificationsTag::create(),
-                Tags\OrganisationSignUpFormsTag::create(),
+
                 Tags\OrganisationsTag::create(),
-                Tags\PageFeedbacksTag::create(),
+                Tags\OrganisationEventsTag::create(),
+                Tags\OrganisationSignUpFormsTag::create(),
                 Tags\PagesTag::create(),
+                Tags\PageFeedbacksTag::create(),
                 Tags\ReferralsTag::create(),
                 Tags\ReportSchedulesTag::create(),
                 Tags\ReportsTag::create(),
@@ -146,16 +149,20 @@ class OpenApi extends BaseOpenApi implements Responsable
                 Tags\ServicesTag::create(),
                 Tags\SettingsTag::create(),
                 Tags\StatusUpdatesTag::create(),
+
+                Tags\TagsTag::create(),
                 Tags\TaxonomyCategoriesTag::create(),
                 Tags\TaxonomyOrganisationsTag::create(),
+                Tags\TaxonomyServiceEligibilitiesTag::create(),
                 Tags\UpdateRequestsTag::create(),
-                Tags\UsersTag::create()
+                Tags\UsersTag::create(),
             );
     }
 
     /**
      * Create an HTTP response that represents the object.
-     * @param mixed $request
+     *
+     * @param  mixed  $request
      */
     public function toResponse($request): JsonResponse
     {

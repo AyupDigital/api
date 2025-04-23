@@ -15,7 +15,7 @@ class OrganisationEventsNestedPath extends PathItem
     /**
      * @throws \GoldSpecDigital\ObjectOrientedOAS\Exceptions\InvalidArgumentException
      */
-    public static function create(string $objectId = null): BaseObject
+    public static function create(?string $objectId = null): BaseObject
     {
         return parent::create($objectId)
             ->route('/organisation-events/{organisation_event}')

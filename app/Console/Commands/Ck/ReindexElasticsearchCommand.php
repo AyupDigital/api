@@ -46,15 +46,15 @@ class ReindexElasticsearchCommand extends Command
             return;
         }
 
-        if (Schema::hasTable((new Service())->getTable())) {
+        if (Schema::hasTable((new Service)->getTable())) {
             $this->import(Service::class);
         }
 
-        if (Schema::hasTable((new OrganisationEvent())->getTable())) {
+        if (Schema::hasTable((new OrganisationEvent)->getTable())) {
             $this->import(OrganisationEvent::class);
         }
 
-        if (Schema::hasTable((new Page())->getTable())) {
+        if (Schema::hasTable((new Page)->getTable())) {
             $this->import(Page::class);
         }
     }

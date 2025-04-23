@@ -3,12 +3,7 @@
 namespace App\Console\Commands\Ck;
 
 use App\Models\Collection;
-use App\Models\OrganisationEvent;
-use App\Models\Page;
-use App\Models\Service;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Schema;
 
 class FixCollectionsTableTreeCommand extends Command
 {

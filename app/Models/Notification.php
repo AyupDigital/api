@@ -33,7 +33,7 @@ class Notification extends Model
         'updated_at' => 'datetime',
     ];
 
-    public static function sendEmail(Email $email, Notifiable $notifiable = null)
+    public static function sendEmail(Email $email, ?Notifiable $notifiable = null)
     {
         DB::transaction(function () use ($email, $notifiable) {
             $query = $notifiable ? $notifiable->notifications() : static::query();
@@ -52,7 +52,7 @@ class Notification extends Model
         });
     }
 
-    public static function sendSms(Sms $sms, Notifiable $notifiable = null)
+    public static function sendSms(Sms $sms, ?Notifiable $notifiable = null)
     {
         DB::transaction(function () use ($sms, $notifiable) {
             $query = $notifiable ? $notifiable->notifications() : static::query();

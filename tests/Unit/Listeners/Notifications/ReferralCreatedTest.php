@@ -37,7 +37,7 @@ class ReferralCreatedTest extends TestCase
             return User::factory()->create();
         });
         $event = EndpointHit::onCreate($request, '', $referral);
-        $listener = new ReferralCreated();
+        $listener = new ReferralCreated;
         $listener->handle($event);
 
         Queue::assertPushedOn(config('queue.queues.notifications', 'default'), NotifyRefereeEmail::class);
@@ -109,7 +109,7 @@ class ReferralCreatedTest extends TestCase
             return User::factory()->create();
         });
         $event = EndpointHit::onCreate($request, '', $referral);
-        $listener = new ReferralCreated();
+        $listener = new ReferralCreated;
         $listener->handle($event);
 
         Queue::assertPushedOn(config('queue.queues.notifications', 'default'), NotifyRefereeSms::class);
@@ -147,7 +147,7 @@ class ReferralCreatedTest extends TestCase
             return User::factory()->create();
         });
         $event = EndpointHit::onCreate($request, '', $referral);
-        $listener = new ReferralCreated();
+        $listener = new ReferralCreated;
         $listener->handle($event);
 
         Queue::assertPushedOn(config('queue.queues.notifications', 'default'), NotifyClientEmail::class);

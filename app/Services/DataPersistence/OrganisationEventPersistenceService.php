@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\DB;
 
 class OrganisationEventPersistenceService implements DataPersistenceService
 {
-    use ResizesImages;
     use HasUniqueSlug;
+    use ResizesImages;
 
     /**
      * Unique Slug Generator.
@@ -57,7 +57,7 @@ class OrganisationEventPersistenceService implements DataPersistenceService
             // Create the OrganisationEvent.
             $organisationEvent = OrganisationEvent::create([
                 'title' => $request->title,
-                'slug' => $this->uniqueSlug($request->input('slug', $request->input('title')), (new OrganisationEvent())),
+                'slug' => $this->uniqueSlug($request->input('slug', $request->input('title')), (new OrganisationEvent)),
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'start_time' => $request->start_time,
@@ -140,7 +140,7 @@ class OrganisationEventPersistenceService implements DataPersistenceService
 
             $updateableType = UpdateRequestModel::EXISTING_TYPE_ORGANISATION_EVENT;
 
-            if (!$event) {
+            if (! $event) {
                 $updateableType = UpdateRequestModel::NEW_TYPE_ORGANISATION_EVENT;
             }
             /** @var UpdateRequestModel $updateRequest */
@@ -154,7 +154,7 @@ class OrganisationEventPersistenceService implements DataPersistenceService
             // Only persist to the database if the user did not request a preview.
             if ($updateRequest->updateable_type === UpdateRequestModel::EXISTING_TYPE_ORGANISATION_EVENT) {
                 // Preview currently only available for update operations
-                if (!$request->isPreview()) {
+                if (! $request->isPreview()) {
                     $updateRequest->save();
                 }
             } else {

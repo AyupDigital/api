@@ -36,7 +36,7 @@ class Taxonomy extends Model
         return static::whereNull('parent_id')->where('name', static::NAME_SERVICE_ELIGIBILITY)->firstOrFail();
     }
 
-    public function getRootTaxonomy(Taxonomy $taxonomy = null): Taxonomy
+    public function getRootTaxonomy(?Taxonomy $taxonomy = null): Taxonomy
     {
         $taxonomy = $taxonomy ?? $this;
 
@@ -82,11 +82,11 @@ class Taxonomy extends Model
     /**
      * Return an array of all Taxonomies below the provided Taxonomy root.
      *
-     * @param mixed $allTaxonomies
+     * @param  mixed  $allTaxonomies
      */
     public function getAllDescendantTaxonomies(self $taxonomy, &$allTaxonomies = []): Collection
     {
-        if (!$taxonomy) {
+        if (! $taxonomy) {
             $taxonomy = self::serviceEligibility();
         }
 

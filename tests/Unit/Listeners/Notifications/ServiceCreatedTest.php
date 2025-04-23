@@ -28,7 +28,7 @@ class ServiceCreatedTest extends TestCase
         $service = Service::factory()->create(['organisation_id' => $organisation->id]);
 
         $event = EndpointHit::onCreate($request, "Created service [{$service->id}]", $service);
-        $listener = new ServiceCreated();
+        $listener = new ServiceCreated;
         $listener->handle($event);
 
         Queue::assertPushedOn(config('queue.queues.notifications', 'default'), NotifyGlobalAdminEmail::class);
@@ -69,7 +69,7 @@ class ServiceCreatedTest extends TestCase
         $service = Service::factory()->create(['organisation_id' => $organisation->id]);
 
         $event = EndpointHit::onCreate($request, "Created service [{$service->id}]", $service);
-        $listener = new ServiceCreated();
+        $listener = new ServiceCreated;
         $listener->handle($event);
 
         Queue::assertNotPushed(NotifyGlobalAdminEmail::class);

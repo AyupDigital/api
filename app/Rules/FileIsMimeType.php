@@ -23,12 +23,12 @@ class FileIsMimeType implements ValidationRule
     /**
      * Determine if the validation rule passes.
      *
-     * @param mixed $fileId
-     * @param mixed $fail
+     * @param  mixed  $fileId
+     * @param  mixed  $fail
      */
     public function validate(string $attribute, $fileId, $fail): void
     {
-        if (!in_array(
+        if (! in_array(
             File::findOrFail($fileId)->mime_type,
             $this->mimeTypes
         )

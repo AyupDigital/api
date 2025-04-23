@@ -4,102 +4,100 @@ declare(strict_types=1);
 
 namespace Modules\Kiosk\App\Http\Controllers\KioskNotification;
 
-use App\Models\Service;
 // use Barryvdh\DomPDF\Facade\Pdf;
 use Barryvdh\DomPDF\PDF as Pdf;
 use Dompdf\CanvasFactory;
 use Dompdf\Dompdf;
-use Dompdf\FontMetrics;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Modules\Kiosk\App\Helpers\OpeningTimesHelper;
 use Modules\Kiosk\App\Models\KioskNotification;
-use Modules\Kiosk\App\Services\ClickSendService;
 
 class PrintController
 {
-  public function __invoke(Request $request)
-  {
-    //TODO: Remove all the janky stuff modifying DOMPDF canvas... if you run into any sizing issues when printing, it's always... always the print driver.
-    // Fetch Services
-    $baseUrl = config('kiosk.apiBaseUrl');
-    $services = Http::get($baseUrl . '/core/v1/services', ['filter[id]' => $request->input('service_ids'), 'include' => 'organisation'])->json()['data'];
+    public function __invoke(Request $request)
+    {
+        // TODO: Remove all the janky stuff modifying DOMPDF canvas... if you run into any sizing issues when printing, it's always... always the print driver.
+        // Fetch Services
+        $baseUrl = config('kiosk.apiBaseUrl');
+        $services = Http::get($baseUrl.'/core/v1/services', ['filter[id]' => $request->input('service_ids'), 'include' => 'organisation'])->json()['data'];
 
-    $locations = Http::get($baseUrl . '/core/v1/service-locations', ['filter[service_id]' => $request->input('service_ids'), 'include' => 'location'])->json()['data'];
-    $locations = collect($locations)->map(function ($location) {
-      if ($location['regular_opening_hours'] && sizeof($location['regular_opening_hours']) > 0) {
-        $hours = [];
-        foreach ($location['regular_opening_hours'] as $day => $times) {
-          $hours[$day] = OpeningTimesHelper::formattedOpeningTimes($times);
-        }
-        $location['formatted_opening_hours'] = $hours;
-      }
-      return $location;
-    });
+        $locations = Http::get($baseUrl.'/core/v1/service-locations', ['filter[service_id]' => $request->input('service_ids'), 'include' => 'location'])->json()['data'];
+        $locations = collect($locations)->map(function ($location) {
+            if ($location['regular_opening_hours'] && count($location['regular_opening_hours']) > 0) {
+                $hours = [];
+                foreach ($location['regular_opening_hours'] as $day => $times) {
+                    $hours[$day] = OpeningTimesHelper::formattedOpeningTimes($times);
+                }
+                $location['formatted_opening_hours'] = $hours;
+            }
 
-    $services = collect($services)->map(function ($service) use ($locations) {
-      $service['locations'] = collect($locations)->where('service_id', $service['id']);
-      return $service;
-    });
+            return $location;
+        });
 
-    $domPdf = new Dompdf();
-    $domPdf->setCanvas(CanvasFactory::get_instance($domPdf, [0, 0, 226, 708], 'portrait'));
-    $domPdf->setPaper([0, 0, 226, 708], 'portrait');
+        $services = collect($services)->map(function ($service) use ($locations) {
+            $service['locations'] = collect($locations)->where('service_id', $service['id']);
 
-    $initialPdf = new Pdf($domPdf, app('config'), app('files'), app('view'));
+            return $service;
+        });
 
-    $initialPdf->loadView('kiosk::print', compact('services'));
+        $domPdf = new Dompdf;
+        $domPdf->setCanvas(CanvasFactory::get_instance($domPdf, [0, 0, 226, 708], 'portrait'));
+        $domPdf->setPaper([0, 0, 226, 708], 'portrait');
 
+        $initialPdf = new Pdf($domPdf, app('config'), app('files'), app('view'));
 
-    // $bodyHeight = 0;
+        $initialPdf->loadView('kiosk::print', compact('services'));
 
-    // $initialPdf->setCallbacks([
-    //     'myCallbacks' => [
-    //         'event' => 'end_frame',
-    //         'f' => function ($frame) use (&$bodyHeight) {
-    //             $node = $frame->get_node();
-    //             if (strtolower($node->nodeName) === "body") {
-    //                 $padding_box = $frame->get_padding_box();
-    //                 $bodyHeight += $padding_box['h'];
-    //             }
-    //         }
-    //     ]
-    // ]);
+        // $bodyHeight = 0;
 
-    // $initialPdf->render();
+        // $initialPdf->setCallbacks([
+        //     'myCallbacks' => [
+        //         'event' => 'end_frame',
+        //         'f' => function ($frame) use (&$bodyHeight) {
+        //             $node = $frame->get_node();
+        //             if (strtolower($node->nodeName) === "body") {
+        //                 $padding_box = $frame->get_padding_box();
+        //                 $bodyHeight += $padding_box['h'];
+        //             }
+        //         }
+        //     ]
+        // ]);
 
-    // unset($initialPdf);
-    // unset($domPdf);
+        // $initialPdf->render();
 
-    // $domPdf = new Dompdf();
-    // $domPdf->setCanvas(CanvasFactory::get_instance($domPdf, [0, 0, 580, $bodyHeight + 120], 'portrait'));
-    // $domPdf->setPaper([0, 0, 580, $bodyHeight + 80], 'portrait');
-    // $pdf = new Pdf($domPdf, app('config'), app('files'), app('view'));
+        // unset($initialPdf);
+        // unset($domPdf);
 
-    // $pdf->loadView('kiosk::print', compact('services'));
-    // $initialPdf->save(storage_path('app/print.pdf'));
-    $output = $initialPdf->output();
+        // $domPdf = new Dompdf();
+        // $domPdf->setCanvas(CanvasFactory::get_instance($domPdf, [0, 0, 580, $bodyHeight + 120], 'portrait'));
+        // $domPdf->setPaper([0, 0, 580, $bodyHeight + 80], 'portrait');
+        // $pdf = new Pdf($domPdf, app('config'), app('files'), app('view'));
 
-    $success = Http::withBasicAuth(config('kiosk.printnode.api_key'), '')->post(
-      'https://api.printnode.com/printjobs',
-      [
-        'printerId' => $request->input('printer_id'),
-        // 'printerId' => 74092902,
-        'contentType' => 'pdf_base64',
-        'content' => base64_encode($output),
-      ]
-    );
+        // $pdf->loadView('kiosk::print', compact('services'));
+        // $initialPdf->save(storage_path('app/print.pdf'));
+        $output = $initialPdf->output();
 
-    KioskNotification::query()
-      ->create([
-        'type' => 'print',
-        'service_ids' => $request->input('service_ids'),
-        'device_id' => $request->input('device_id'),
-        'data' => [
-          'printer_id' => $request->input('printer_id'),
-          'service_ids' => $request->input('service_ids'),
-        ],
-        'success' => $success->ok(),
-      ]);
-  }
+        $success = Http::withBasicAuth(config('kiosk.printnode.api_key'), '')->post(
+            'https://api.printnode.com/printjobs',
+            [
+                'printerId' => $request->input('printer_id'),
+                // 'printerId' => 74092902,
+                'contentType' => 'pdf_base64',
+                'content' => base64_encode($output),
+            ]
+        );
+
+        KioskNotification::query()
+            ->create([
+                'type' => 'print',
+                'service_ids' => $request->input('service_ids'),
+                'device_id' => $request->input('device_id'),
+                'data' => [
+                    'printer_id' => $request->input('printer_id'),
+                    'service_ids' => $request->input('service_ids'),
+                ],
+                'success' => $success->ok(),
+            ]);
+    }
 }

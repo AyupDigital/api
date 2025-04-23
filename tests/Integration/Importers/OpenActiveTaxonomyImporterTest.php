@@ -122,7 +122,7 @@ class OpenActiveTaxonomyImporterTest extends TestCase
      */
     public function it_can_format_open_activity_taxonomies(): void
     {
-        $importer = new OpenActiveTaxonomyImporter();
+        $importer = new OpenActiveTaxonomyImporter;
         $importer->getOpenActiveCategory();
 
         $importTaxonomies = $importer->mapOpenActiveTaxonomyImport($this->openActiveCategory, $this->openActiveTaxonomyImport);
@@ -183,8 +183,8 @@ class OpenActiveTaxonomyImporterTest extends TestCase
      */
     public function it_can_import_formatted_taxonomies_into_the_database(): void
     {
-        $taxonomyTable = (new Taxonomy())->getTable();
-        $importer = new OpenActiveTaxonomyImporter();
+        $taxonomyTable = (new Taxonomy)->getTable();
+        $importer = new OpenActiveTaxonomyImporter;
         $importer->getOpenActiveCategory();
 
         $importTaxonomies = $importer->mapOpenActiveTaxonomyImport($this->openActiveCategory, $this->openActiveTaxonomyImport);

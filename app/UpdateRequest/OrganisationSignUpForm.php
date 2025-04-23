@@ -20,7 +20,7 @@ class OrganisationSignUpForm implements AppliesUpdateRequests
      */
     public function validateUpdateRequest(UpdateRequest $updateRequest): Validator
     {
-        $rules = (new StoreOrganisationSignUpFormRequest())
+        $rules = (new StoreOrganisationSignUpFormRequest)
             ->merge($updateRequest->data)
             ->rules();
 
@@ -88,7 +88,6 @@ class OrganisationSignUpForm implements AppliesUpdateRequests
                 'contact_name' => Arr::get($data, 'service.contact_name'),
                 'contact_phone' => Arr::get($data, 'service.contact_phone'),
                 'contact_email' => Arr::get($data, 'service.contact_email'),
-                'show_referral_disclaimer' => false,
                 'referral_method' => Service::REFERRAL_METHOD_NONE,
                 'referral_button_text' => null,
                 'referral_email' => null,

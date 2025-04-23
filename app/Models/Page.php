@@ -20,19 +20,19 @@ use Kalnoy\Nestedset\NodeTrait;
 class Page extends Model implements AppliesUpdateRequests
 {
     use HasFactory;
-    use PageRelationships;
-    use PageMutators;
-    use PageScopes;
-    use NodeTrait;
-    use UpdateRequests;
     use HasUniqueSlug;
-
+    use NodeTrait;
+    use PageMutators;
+    use PageRelationships;
+    use PageScopes;
     /**
      * NodeTrait::usesSoftDelete and Laravel\Scout\Searchable::usesSoftDelete clash.
      */
     use Searchable {
         Searchable::usesSoftDelete insteadof NodeTrait;
     }
+
+    use UpdateRequests;
 
     const DISABLED = false;
 
@@ -81,7 +81,7 @@ class Page extends Model implements AppliesUpdateRequests
                         $content[] = $this->makeSearchable($contentBlock['value']);
                         break;
                     case 'cta':
-                        $content[] = $this->makeSearchable($contentBlock['title'] . ' ' . $contentBlock['description']);
+                        $content[] = $this->makeSearchable($contentBlock['title'].' '.$contentBlock['description']);
                         break;
                     case 'video':
                         $content[] = $this->makeSearchable($contentBlock['title']);
@@ -170,13 +170,13 @@ class Page extends Model implements AppliesUpdateRequests
      * and pass on to descendants (if disabled).
      * Children do not inherit enabled status, but must be enabled individually.
      *
-     * @param mixed $status
+     * @param  mixed  $status
      */
     public function updateStatus($status): self
     {
         if ($this->parent && $this->parent->enabled === self::DISABLED) {
             $this->enabled = self::DISABLED;
-        } elseif (!is_null($status) && $status !== $this->enabled) {
+        } elseif (! is_null($status) && $status !== $this->enabled) {
             $this->enabled = $status;
         }
 
@@ -210,7 +210,7 @@ class Page extends Model implements AppliesUpdateRequests
      */
     public function updateOrder(?int $order): self
     {
-        if (!is_null($order) && $order !== $this->order) {
+        if (! is_null($order) && $order !== $this->order) {
             $siblingAtIndex = $this->siblingAtIndex($order)->first();
             $this->beforeOrAfterNode($siblingAtIndex, $siblingAtIndex->getLft() > $this->getLft());
         }
@@ -254,7 +254,7 @@ class Page extends Model implements AppliesUpdateRequests
     /**
      * Update the collections relationship.
      *
-     * @param mixed $collections
+     * @param  mixed  $collections
      */
     public function updateCollections(?array $collectionIds): Page
     {
@@ -271,7 +271,7 @@ class Page extends Model implements AppliesUpdateRequests
      */
     public function validateUpdateRequest(UpdateRequest $updateRequest): Validator
     {
-        $rules = (new UpdatePageRequest())
+        $rules = (new UpdatePageRequest)
             ->setUserResolver(function () use ($updateRequest) {
                 return $updateRequest->user;
             })

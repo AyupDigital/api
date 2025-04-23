@@ -23,13 +23,13 @@ use Illuminate\Support\Facades\Validator as ValidatorFacade;
 class OrganisationEvent extends Model implements AppliesUpdateRequests, HasTaxonomyRelationships
 {
     use HasFactory;
+    use HasUniqueSlug;
     use OrganisationEventMutators;
     use OrganisationEventRelationships;
     use OrganisationEventScopes;
+    use Searchable;
     use UpdateRequests;
     use UpdateTaxonomyRelationships;
-    use Searchable;
-    use HasUniqueSlug;
 
     /**
      * The attributes that should be cast to native types.
@@ -51,7 +51,7 @@ class OrganisationEvent extends Model implements AppliesUpdateRequests, HasTaxon
      */
     public function searchableAs(): string
     {
-        return config('scout.prefix') . 'events';
+        return config('scout.prefix').'events';
     }
 
     /**
@@ -74,7 +74,7 @@ class OrganisationEvent extends Model implements AppliesUpdateRequests, HasTaxon
             'event_location' => null,
         ];
 
-        if (!$this->is_virtual) {
+        if (! $this->is_virtual) {
             $organisationEvent['event_location'] = [
                 'id' => $this->location->id,
                 'location' => [
@@ -95,7 +95,7 @@ class OrganisationEvent extends Model implements AppliesUpdateRequests, HasTaxon
      */
     public function validateUpdateRequest(UpdateRequest $updateRequest): Validator
     {
-        $rules = (new UpdateOrganisationEventRequest())
+        $rules = (new UpdateOrganisationEventRequest)
             ->setUserResolver(function () use ($updateRequest) {
                 return $updateRequest->user;
             })
@@ -121,7 +121,7 @@ class OrganisationEvent extends Model implements AppliesUpdateRequests, HasTaxon
         $data = $updateRequest->data;
 
         // Update the Image File entity if new
-        if (Arr::get($data, 'image_file_id', $this->image_file_id) !== $this->image_file_id && !empty($data['image_file_id'])) {
+        if (Arr::get($data, 'image_file_id', $this->image_file_id) !== $this->image_file_id && ! empty($data['image_file_id'])) {
             /** @var File $file */
             $file = File::findOrFail($data['image_file_id'])->assigned();
 
@@ -214,10 +214,11 @@ class OrganisationEvent extends Model implements AppliesUpdateRequests, HasTaxon
     }
 
     /**
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
      * @return File|Response|\Illuminate\Contracts\Support\Responsable
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException|\InvalidArgumentException
      */
-    public static function placeholderImage(int $maxDimension = null)
+    public static function placeholderImage(?int $maxDimension = null)
     {
         if ($maxDimension !== null) {
             return File::resizedPlaceholder($maxDimension, File::META_PLACEHOLDER_FOR_ORGANISATION_EVENT);

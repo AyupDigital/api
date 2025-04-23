@@ -11,6 +11,6 @@ trait HasMissingValues
      */
     public function missingValue(string $key)
     {
-        return $this->missing($key) ? new MissingValue() : $this->input($key);
+        return $this->missing($key) ? new MissingValue : $this->input($key);
     }
 }

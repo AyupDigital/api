@@ -23,7 +23,7 @@ class VideoEmbedTest extends TestCase
             'https://player.vimeo.com',
         ];
 
-        $videoEmbedRule = new VideoEmbed();
+        $videoEmbedRule = new VideoEmbed;
 
         foreach ($badUrls as $badUrl) {
             $passes = true;

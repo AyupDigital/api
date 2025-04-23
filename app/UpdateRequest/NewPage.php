@@ -21,7 +21,7 @@ class NewPage implements AppliesUpdateRequests
      */
     public function validateUpdateRequest(UpdateRequest $updateRequest): Validator
     {
-        $rules = (new StoreRequest())
+        $rules = (new StoreRequest)
             ->merge($updateRequest->data)
             ->setUserResolver(function () use ($updateRequest) {
                 return $updateRequest->user;
@@ -48,7 +48,7 @@ class NewPage implements AppliesUpdateRequests
 
         $page = Page::make([
             'title' => $data->get('title'),
-            'slug' => $this->uniqueSlug($data->get('slug', $data->get('title')), (new Page())),
+            'slug' => $this->uniqueSlug($data->get('slug', $data->get('title')), (new Page)),
             'excerpt' => $data->get('excerpt'),
             'page_type' => $data->get('page_type', Page::PAGE_TYPE_INFORMATION),
             'content' => $data->get('content', []),
