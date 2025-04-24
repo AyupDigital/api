@@ -627,8 +627,6 @@ class CollectionCategoriesTest extends TestCase
         $response->assertStatus(Response::HTTP_CREATED);
 
         $collectionArray = $this->getResponseContent($response)['data'];
-        $content = $this->get("/core/v1/collections/categories/{$collectionArray['id']}/image.png")->content();
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.png'), $content);
 
         $this->assertEquals($image->id, $collectionArray['image_file_id']);
 
@@ -665,9 +663,6 @@ class CollectionCategoriesTest extends TestCase
         $response->assertStatus(Response::HTTP_CREATED);
 
         $collectionArray = $this->getResponseContent($response)['data'];
-        $content = $this->get("/core/v1/collections/categories/{$collectionArray['id']}/image.jpg")->content();
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.jpg'), $content);
-
         $this->assertEquals($image->id, $collectionArray['image_file_id']);
 
         $response->assertJsonFragment([

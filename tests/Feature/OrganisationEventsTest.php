@@ -1365,8 +1365,7 @@ class OrganisationEventsTest extends TestCase
 
         $organisationEvent = OrganisationEvent::where('title', $payload['title'])->firstOrFail();
 
-        $content = $this->get("/core/v1/organisation-events/{$organisationEvent->id}/image.png")->content();
-        $this->assertEquals($image, $content);
+        $this->assertEquals($organisationEvent->image_file_id, $this->getResponseContent($imageResponse, 'data.id'));
     }
 
     /**
@@ -2252,77 +2251,6 @@ class OrganisationEventsTest extends TestCase
     /**
      * @test
      */
-    public function get_single_organisation_event_image_png_as_guest200(): void
-    {
-        $image = File::factory()->imagePng()->create();
-        $organisationEvent = OrganisationEvent::factory([
-            'image_file_id' => $image->id,
-        ])->create();
-
-        $response = $this->get("/core/v1/organisation-events/{$organisationEvent->id}/image.png");
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertHeader('Content-Type', 'image/png');
-
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.png'), $response->content());
-    }
-
-    /**
-     * @test
-     */
-    public function get_single_organisation_event_image_jpg_as_guest200(): void
-    {
-        $image = File::factory()->imageJpg()->create();
-        $organisationEvent = OrganisationEvent::factory([
-            'image_file_id' => $image->id,
-        ])->create();
-
-        $response = $this->get("/core/v1/organisation-events/{$organisationEvent->id}/image.jpg");
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertHeader('Content-Type', 'image/jpeg');
-
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.jpg'), $response->content());
-    }
-
-    /**
-     * @test
-     */
-    public function get_single_organisation_event_image_svg_as_guest200(): void
-    {
-        $image = File::factory()->imageSvg()->create();
-        $organisationEvent = OrganisationEvent::factory([
-            'image_file_id' => $image->id,
-        ])->create();
-
-        $response = $this->get("/core/v1/organisation-events/{$organisationEvent->id}/image.svg");
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertHeader('Content-Type', 'image/svg+xml');
-
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.svg'), $response->content());
-    }
-
-    /**
-     * @test
-     */
-    public function get_single_organisation_event_image_creates_audit_as_guest200(): void
-    {
-        $this->fakeEvents();
-
-        $organisationEvent = OrganisationEvent::factory()->withImage()->create();
-
-        $response = $this->get("/core/v1/organisation-events/{$organisationEvent->id}/image.png");
-
-        Event::assertDispatched(EndpointHit::class, function (EndpointHit $event) use ($organisationEvent) {
-            return ($event->getAction() === Audit::ACTION_READ) &&
-                ($event->getModel()->id === $organisationEvent->id);
-        });
-    }
-
-    /**
-     * @test
-     */
     public function get_single_organisation_event_ical_as_guest200(): void
     {
         $organisationEvent = OrganisationEvent::factory()->notVirtual()->withOrganiser()->create();
@@ -2675,8 +2603,7 @@ class OrganisationEventsTest extends TestCase
 
         $this->approveUpdateRequest($updateRequest->id);
 
-        $content = $this->get("/core/v1/organisation-events/{$organisationEvent->id}/image.png")->content();
-        $this->assertEquals($image, $content);
+        $this->assertEquals($this->getResponseContent($imageResponse, 'data.id'), $response->json('data.image_file_id'));
     }
 
     /**

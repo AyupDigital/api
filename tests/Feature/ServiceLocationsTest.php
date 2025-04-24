@@ -706,10 +706,7 @@ class ServiceLocationsTest extends TestCase
         $this->approveUpdateRequest($updateRequest->id);
 
         // Get the event image for the service location
-        $content = $this->get("/core/v1/service-locations/$serviceLocation->id/image.svg")->content();
-
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.svg'), $content);
-
+        $this->assertEquals($image->id, $response['data']['image_file_id']);
         // PNG
         $image = File::factory()->pendingAssignment()->imagePng()->create();
 
@@ -728,10 +725,7 @@ class ServiceLocationsTest extends TestCase
 
         $this->approveUpdateRequest($updateRequest->id);
 
-        // Get the event image for the service location
-        $content = $this->get("/core/v1/service-locations/$serviceLocation->id/image.png")->content();
-
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.png'), $content);
+        $this->assertEquals($image->id, $response['data']['image_file_id']);
 
         // JPG
         $image = File::factory()->pendingAssignment()->imageJpg()->create();
@@ -751,10 +745,7 @@ class ServiceLocationsTest extends TestCase
 
         $this->approveUpdateRequest($updateRequest->id);
 
-        // Get the event image for the service location
-        $content = $this->get("/core/v1/service-locations/$serviceLocation->id/image.jpg")->content();
-
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.jpg'), $content);
+        $this->assertEquals($image->id, $response['data']['image_file_id']);
     }
 
     public function test_audit_created_when_updated(): void
@@ -910,34 +901,6 @@ class ServiceLocationsTest extends TestCase
         Event::assertDispatched(EndpointHit::class, function (EndpointHit $event) use ($user, $serviceLocation) {
             return ($event->getAction() === Audit::ACTION_DELETE) &&
                 ($event->getUser()->id === $user->id) &&
-                ($event->getModel()->id === $serviceLocation->id);
-        });
-    }
-
-    /*
-     * Get a specific service location's image.
-     */
-
-    public function test_guest_can_view_image(): void
-    {
-        $serviceLocation = ServiceLocation::factory()->create();
-
-        $response = $this->get("/core/v1/service-locations/{$serviceLocation->id}/image.png");
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertHeader('Content-Type', 'image/png');
-    }
-
-    public function test_audit_created_when_image_viewed(): void
-    {
-        $this->fakeEvents();
-
-        $serviceLocation = ServiceLocation::factory()->create();
-
-        $this->get("/core/v1/service-locations/{$serviceLocation->id}/image.png");
-
-        Event::assertDispatched(EndpointHit::class, function (EndpointHit $event) use ($serviceLocation) {
-            return ($event->getAction() === Audit::ACTION_READ) &&
                 ($event->getModel()->id === $serviceLocation->id);
         });
     }

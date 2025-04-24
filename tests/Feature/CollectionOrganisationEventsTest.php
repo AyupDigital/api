@@ -775,8 +775,6 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $collectionArray = $this->getResponseContent($response)['data'];
-        $response = $this->get("/core/v1/collections/organisation-events/{$collectionArray['id']}/image.png");
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.png'), $response->content());
 
         $this->assertEquals($image->id, $collectionArray['image_file_id']);
 
@@ -807,8 +805,6 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $collectionArray = $this->getResponseContent($response)['data'];
-        $response = $this->get("/core/v1/collections/organisation-events/{$collectionArray['id']}/image.jpg");
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.jpg'), $response->content());
 
         $this->assertEquals($image->id, $collectionArray['image_file_id']);
 
@@ -1541,9 +1537,6 @@ class CollectionOrganisationEventsTest extends TestCase
         $organisationEvent = $organisationEvent->fresh();
         $this->assertEquals($image->id, $organisationEvent->meta['image_file_id']);
 
-        $content = $this->get("/core/v1/collections/organisation-events/{$organisationEvent->id}/image.png")->content();
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.png'), $content);
-
         $response->assertJsonFragment([
             'image' => [
                 'id' => $image->id,
@@ -1572,9 +1565,6 @@ class CollectionOrganisationEventsTest extends TestCase
 
         $organisationEvent = $organisationEvent->fresh();
         $this->assertEquals($image->id, $organisationEvent->meta['image_file_id']);
-
-        $content = $this->get("/core/v1/collections/organisation-events/{$organisationEvent->id}/image.jpg")->content();
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.jpg'), $content);
 
         $response->assertJsonFragment([
             'image' => [
@@ -1977,9 +1967,6 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
-        $collectionArray = $this->getResponseContent($response)['data'];
-        $content = $this->get("/core/v1/collections/organisation-events/{$collectionArray['id']}/image.png")->content();
-        $this->assertEquals($image, $content);
 
         $response->assertJsonFragment([
             'image' => [

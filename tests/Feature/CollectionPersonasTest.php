@@ -2006,40 +2006,6 @@ class CollectionPersonasTest extends TestCase
     }
 
     /*
-     * Get a specific persona collection's image.
-     */
-
-    /**
-     * @test
-     */
-    public function guest_can_view_image(): void
-    {
-        $persona = Collection::personas()->inRandomOrder()->firstOrFail();
-
-        $response = $this->get("/core/v1/collections/personas/{$persona->id}/image.png");
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertHeader('Content-Type', 'image/png');
-    }
-
-    /**
-     * @test
-     */
-    public function audit_created_when_image_viewed(): void
-    {
-        $this->fakeEvents();
-
-        $persona = Collection::personas()->inRandomOrder()->firstOrFail();
-
-        $this->get("/core/v1/collections/personas/{$persona->id}/image.png");
-
-        Event::assertDispatched(EndpointHit::class, function (EndpointHit $event) use ($persona) {
-            return ($event->getAction() === Audit::ACTION_READ) &&
-                ($event->getModel()->id === $persona->id);
-        });
-    }
-
-    /*
      * Upload a specific persona collection's image.
      */
 
@@ -2090,9 +2056,6 @@ class CollectionPersonasTest extends TestCase
                 'url' => $file->url(),
             ],
         ]);
-        $collectionArray = $this->getResponseContent($response)['data'];
-        $content = $this->get("/core/v1/collections/personas/{$collectionArray['id']}/image.png")->content();
-        $this->assertEquals($image, $content);
     }
 
     /*
