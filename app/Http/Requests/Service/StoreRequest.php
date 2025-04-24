@@ -97,9 +97,9 @@ class StoreRequest extends FormRequest
                 Service::WAIT_TIME_LONGER,
             ])],
             'is_free' => ['required', 'boolean'],
-            'national' => ['required', 'boolean'],
+            'national' => ['sometimes', 'boolean'],
             'attending_type' => [
-                'required',
+                'sometimes',
                 Rule::in([
                     Service::ATTENDING_TYPE_PHONE,
                     Service::ATTENDING_TYPE_ONLINE,
@@ -108,7 +108,7 @@ class StoreRequest extends FormRequest
                 ]),
             ],
             'attending_access' => [
-                'required',
+                'sometimes',
                 Rule::in([
                     Service::ATTENDING_ACCESS_REFERRAL,
                     Service::ATTENDING_ACCESS_APPOINTMENT,
