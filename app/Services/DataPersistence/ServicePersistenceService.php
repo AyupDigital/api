@@ -275,7 +275,7 @@ class ServicePersistenceService implements DataPersistenceService
             $eligibilityTypes = Taxonomy::whereIn('id', $request->input('eligibility_types.taxonomies', []))->get();
             $service->syncEligibilityRelationships($eligibilityTypes);
 
-            foreach ($request->service_locations as $serviceLocation) {
+            foreach ($request->get('service_locations', []) as $serviceLocation) {
                 $serviceLocationRequestObject = new ServiceLocationRequestObject(
                     name: $serviceLocation['name'],
                     locationId: $serviceLocation['location_id'],

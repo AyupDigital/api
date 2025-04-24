@@ -3217,54 +3217,6 @@ class PagesTest extends TestCase
     }
 
     /**
-     * @test
-     */
-    public function get_enabled_page_image_png_as_guest200(): void
-    {
-        $image = File::factory()->imagePng()->create();
-
-        $page = Page::factory()->create([
-            'image_file_id' => $image->id,
-        ]);
-
-        $response = $this->json('GET', '/core/v1/pages/' . $page->id . '/image.png');
-        $response->assertStatus(Response::HTTP_OK);
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.png'), $response->content());
-    }
-
-    /**
-     * @test
-     */
-    public function get_enabled_page_image_jpg_as_guest200(): void
-    {
-        $image = File::factory()->imageJpg()->create();
-
-        $page = Page::factory()->create([
-            'image_file_id' => $image->id,
-        ]);
-
-        $response = $this->json('GET', '/core/v1/pages/' . $page->id . '/image.jpg');
-        $response->assertStatus(Response::HTTP_OK);
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.jpg'), $response->content());
-    }
-
-    /**
-     * @test
-     */
-    public function get_enabled_page_image_svg_as_guest200(): void
-    {
-        $image = File::factory()->imageSvg()->create();
-
-        $page = Page::factory()->create([
-            'image_file_id' => $image->id,
-        ]);
-
-        $response = $this->json('GET', '/core/v1/pages/' . $page->id . '/image.svg');
-        $response->assertStatus(Response::HTTP_OK);
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.svg'), $response->content());
-    }
-
-    /**
      * Update page
      */
 

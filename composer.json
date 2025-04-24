@@ -55,6 +55,7 @@
         "nunomaduro/collision": "^6.3",
         "pda/pheanstalk": "~4.0",
         "phpunit/phpunit": "^9.5.10",
+        
         "roave/security-advisories": "dev-latest",
         "spatie/laravel-ignition": "^2.0"
     },

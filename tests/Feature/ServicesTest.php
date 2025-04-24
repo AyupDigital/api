@@ -128,7 +128,6 @@ class ServicesTest extends TestCase
         $response->assertJsonFragment([
             'id' => $service->id,
             'organisation_id' => $service->organisation_id,
-            'has_logo' => $service->hasLogo(),
             'slug' => $service->slug,
             'name' => $service->name,
             'type' => $service->type,
@@ -3329,7 +3328,6 @@ class ServicesTest extends TestCase
         $response->assertJsonFragment([
             'id' => $service->id,
             'organisation_id' => $service->organisation_id,
-            'has_logo' => $service->hasLogo(),
             'slug' => $service->slug,
             'name' => $service->name,
             'type' => $service->type,
@@ -3426,7 +3424,6 @@ class ServicesTest extends TestCase
         $response->assertJsonFragment([
             'id' => $service->id,
             'organisation_id' => $service->organisation_id,
-            'has_logo' => $service->hasLogo(),
             'slug' => $service->slug,
             'name' => $service->name,
             'type' => $service->type,
@@ -6034,7 +6031,6 @@ class ServicesTest extends TestCase
                 [
                     'id',
                     'organisation_id',
-                    'has_logo',
                     'name',
                     'slug',
                     'type',

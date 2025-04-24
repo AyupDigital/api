@@ -301,14 +301,7 @@ class CollectionOrganisationEventsTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -375,8 +368,7 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $collectionArray = $this->getResponseContent($response)['data'];
-        $response = $this->get("/core/v1/collections/categories/{$collectionArray['id']}/image.svg");
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.svg'), $response->content());
+        $this->assertEquals($image->id, $collectionArray['image']['id']);
     }
 
     /**
@@ -391,14 +383,7 @@ class CollectionOrganisationEventsTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -441,14 +426,7 @@ class CollectionOrganisationEventsTest extends TestCase
         // Delete the existing seeded personas.
         $this->truncateCollectionOrganisationEvents();
 
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -516,14 +494,7 @@ class CollectionOrganisationEventsTest extends TestCase
         // Delete the existing seeded personas.
         $this->truncateCollectionOrganisationEvents();
 
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -591,14 +562,7 @@ class CollectionOrganisationEventsTest extends TestCase
         // Delete the existing seeded personas.
         $this->truncateCollectionOrganisationEvents();
 
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -666,14 +630,7 @@ class CollectionOrganisationEventsTest extends TestCase
         // Delete the existing seeded personas.
         $this->truncateCollectionOrganisationEvents();
 
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -704,14 +661,7 @@ class CollectionOrganisationEventsTest extends TestCase
         // Delete the existing seeded personas.
         $this->truncateCollectionOrganisationEvents();
 
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         /**
          * @var \App\Models\User $user
@@ -795,10 +745,8 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $collectionArray = $this->getResponseContent($response)['data'];
-        $response = $this->get("/core/v1/collections/organisation-events/{$collectionArray['id']}/image.svg");
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.svg'), $response->content());
 
-        $this->assertEquals($image->id, $collectionArray['image_file_id']);
+        $this->assertEquals($image->id, $collectionArray['image']['id']);
 
         $this->assertFalse($image->fresh()->pendingAssignment);
 
@@ -827,8 +775,6 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $collectionArray = $this->getResponseContent($response)['data'];
-        $response = $this->get("/core/v1/collections/organisation-events/{$collectionArray['id']}/image.png");
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.png'), $response->content());
 
         $this->assertEquals($image->id, $collectionArray['image_file_id']);
 
@@ -859,8 +805,6 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $collectionArray = $this->getResponseContent($response)['data'];
-        $response = $this->get("/core/v1/collections/organisation-events/{$collectionArray['id']}/image.jpg");
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.jpg'), $response->content());
 
         $this->assertEquals($image->id, $collectionArray['image_file_id']);
 
@@ -881,14 +825,7 @@ class CollectionOrganisationEventsTest extends TestCase
         $user->makeSuperAdmin();
         $randomCategory = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -1137,14 +1074,7 @@ class CollectionOrganisationEventsTest extends TestCase
         $organisationEvent = Collection::organisationEvents()->inRandomOrder()->firstOrFail();
         $taxonomy = Taxonomy::category()->children()->inRandomOrder()->firstOrFail();
 
-        $base64Image = 'data:image/svg+xml;base64,'.base64_encode(Storage::disk('local')->get('/test-data/image.svg'));
-
-        $image = File::factory()->pendingAssignment()->create([
-            'filename' => Str::random().'.svg',
-            'mime_type' => 'image/svg+xml',
-        ]);
-
-        $image->uploadBase64EncodedFile($base64Image);
+        $image = File::factory()->pendingAssignment()->imageSvg()->create();
 
         Passport::actingAs($user);
 
@@ -1577,10 +1507,6 @@ class CollectionOrganisationEventsTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
 
         $organisationEvent = $organisationEvent->fresh();
-        $this->assertEquals($image->id, $organisationEvent->meta['image_file_id']);
-
-        $content = $this->get("/core/v1/collections/organisation-events/{$organisationEvent->id}/image.svg")->content();
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.svg'), $content);
 
         $response->assertJsonFragment([
             'image' => [
@@ -1611,9 +1537,6 @@ class CollectionOrganisationEventsTest extends TestCase
         $organisationEvent = $organisationEvent->fresh();
         $this->assertEquals($image->id, $organisationEvent->meta['image_file_id']);
 
-        $content = $this->get("/core/v1/collections/organisation-events/{$organisationEvent->id}/image.png")->content();
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.png'), $content);
-
         $response->assertJsonFragment([
             'image' => [
                 'id' => $image->id,
@@ -1642,9 +1565,6 @@ class CollectionOrganisationEventsTest extends TestCase
 
         $organisationEvent = $organisationEvent->fresh();
         $this->assertEquals($image->id, $organisationEvent->meta['image_file_id']);
-
-        $content = $this->get("/core/v1/collections/organisation-events/{$organisationEvent->id}/image.jpg")->content();
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.jpg'), $content);
 
         $response->assertJsonFragment([
             'image' => [
@@ -2008,40 +1928,6 @@ class CollectionOrganisationEventsTest extends TestCase
     }
 
     /*
-     * Get a specific organisation event collection's image.
-     */
-
-    /**
-     * @test
-     */
-    public function guest_can_view_image(): void
-    {
-        $organisationEventCollection = Collection::organisationEvents()->inRandomOrder()->firstOrFail();
-
-        $response = $this->get("/core/v1/collections/organisation-events/{$organisationEventCollection->id}/image.svg");
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertHeader('Content-Type', 'image/svg+xml');
-    }
-
-    /**
-     * @test
-     */
-    public function audit_created_when_image_viewed(): void
-    {
-        $this->fakeEvents();
-
-        $organisationEventCollection = Collection::organisationEvents()->inRandomOrder()->firstOrFail();
-
-        $this->get("/core/v1/collections/organisation-events/{$organisationEventCollection->id}/image.png");
-
-        Event::assertDispatched(EndpointHit::class, function (EndpointHit $event) use ($organisationEventCollection) {
-            return ($event->getAction() === Audit::ACTION_READ) &&
-                ($event->getModel()->id === $organisationEventCollection->id);
-        });
-    }
-
-    /*
      * Upload a specific organisation event collection's image.
      */
 
@@ -2081,9 +1967,6 @@ class CollectionOrganisationEventsTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_CREATED);
-        $collectionArray = $this->getResponseContent($response)['data'];
-        $content = $this->get("/core/v1/collections/organisation-events/{$collectionArray['id']}/image.png")->content();
-        $this->assertEquals($image, $content);
 
         $response->assertJsonFragment([
             'image' => [

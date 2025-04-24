@@ -125,11 +125,6 @@ class Organisation extends Model implements AppliesUpdateRequests, HasTaxonomyRe
         return $this;
     }
 
-    public function hasLogo(): bool
-    {
-        return $this->logo_file_id !== null;
-    }
-
     /**
      * @return File|Response|\Illuminate\Contracts\Support\Responsable
      *
