@@ -60,21 +60,25 @@ class UnactionedReferralsCommand extends Command
                 $contactMethod = 'N/A';
             }
 
-            // Send the email to the service.
-            $referral->service->sendEmailToContact(new NotifyServiceEmail($referral->service->referral_email, [
-                'REFERRAL_SERVICE_NAME' => $referral->service->name,
-                'REFERRAL_INITIALS' => $referral->initials(),
-                'REFERRAL_ID' => $referral->reference,
-                'REFERRAL_DAYS_AGO' => $referral->created_at->diffInWeekdays(Date::now()),
-                'REFERRAL_TYPE' => $referral->isSelfReferral() ? 'self referral' : 'champion referral',
-                'REFERRAL_CONTACT_METHOD' => $contactMethod,
-                'REFERRAL_DAYS_LEFT' => Date::now()->diffInWeekdays($referral->created_at->copy()->addWeekdays(config('local.working_days_for_service_to_respond'))),
-                'APP_ADMIN_REFERRAL_URL' => config('local.backend_uri').'/referrals',
-            ]));
+            if ($referral->service->referral_email !== null) {
+                // Send the email to the service.
+                $referral->service->sendEmailToContact(new NotifyServiceEmail($referral->service->referral_email, [
+                    'REFERRAL_SERVICE_NAME' => $referral->service->name,
+                    'REFERRAL_INITIALS' => $referral->initials(),
+                    'REFERRAL_ID' => $referral->reference,
+                    'REFERRAL_DAYS_AGO' => $referral->created_at->diffInWeekdays(Date::now()),
+                    'REFERRAL_TYPE' => $referral->isSelfReferral() ? 'self referral' : 'champion referral',
+                    'REFERRAL_CONTACT_METHOD' => $contactMethod,
+                    'REFERRAL_DAYS_LEFT' => Date::now()->diffInWeekdays($referral->created_at->copy()->addWeekdays(config('local.working_days_for_service_to_respond'))),
+                    'APP_ADMIN_REFERRAL_URL' => config('local.backend_uri').'/referrals',
+                ]));
+            } else {
+                $this->error("Referral [{$referral->id}] has no service email");
+            }   
 
             // Send a copy of the email to the global admin team.
             $referral->service->sendEmailToContact(new NotifyServiceEmail(config('local.global_admin.email'), [
-                'REFERRAL_SERVICE_NAME' => $referral->service->name,
+                'REFERRAL_SERVICE_NAME' => $referral->service?->name,
                 'REFERRAL_INITIALS' => $referral->initials(),
                 'REFERRAL_ID' => $referral->reference,
                 'REFERRAL_DAYS_AGO' => $referral->created_at->diffInWeekdays(Date::now()),
