@@ -44,9 +44,6 @@ Route::prefix('/core/v1')
                     'update' => 'collection-categories.update',
                     'destroy' => 'collection-categories.destroy',
                 ]);
-            Route::get('/collections/categories/{collection}/image{suffix?}', Core\V1\CollectionCategory\ImageController::class)
-                ->where('suffix', '.png|.jpg|.jpeg|.svg')
-                ->name('collection-categories.image');
 
             // Collection Organisation Events.
             Route::match(['GET', 'POST'], '/collections/organisation-events/index', [Core\V1\CollectionOrganisationEventController::class, 'index']);
@@ -60,9 +57,6 @@ Route::prefix('/core/v1')
                     'update' => 'collection-organisation-events.update',
                     'destroy' => 'collection-organisation-events.destroy',
                 ]);
-            Route::get('/collections/organisation-events/{collection}/image{suffix?}', Core\V1\CollectionOrganisationEvent\ImageController::class)
-                ->where('suffix', '.png|.jpg|.jpeg|.svg')
-                ->name('collection-organisation-events.image');
 
             // Collection Personas.
             Route::match(['GET', 'POST'], '/collections/personas/index', [Core\V1\CollectionPersonaController::class, 'index']);
@@ -76,9 +70,6 @@ Route::prefix('/core/v1')
                     'update' => 'collection-personas.update',
                     'destroy' => 'collection-personas.destroy',
                 ]);
-            Route::get('/collections/personas/{collection}/image{suffix?}', Core\V1\CollectionPersona\ImageController::class)
-                ->where('suffix', '.png|.jpg|.jpeg|.svg')
-                ->name('collection-personas.image');
 
             // Files.
             Route::get('/images/{filename}', [Core\V1\FileController::class, 'display'])
@@ -89,9 +80,6 @@ Route::prefix('/core/v1')
             // Locations.
             Route::match(['GET', 'POST'], '/locations/index', [Core\V1\LocationController::class, 'index']);
             Route::apiResource('/locations', Core\V1\LocationController::class);
-            Route::get('/locations/{location}/image{suffix?}', Core\V1\Location\ImageController::class)
-                ->where('suffix', '.png|.jpg|.jpeg|.svg')
-                ->name('locations.image');
 
             // Notifications.
             Route::match(['GET', 'POST'], '/notifications/index', [Core\V1\NotificationController::class, 'index']);
@@ -113,9 +101,6 @@ Route::prefix('/core/v1')
             Route::get('/organisation-events/new/image{suffix?}', [Core\V1\OrganisationEvent\ImageController::class, 'showNew'])
                 ->where('suffix', '.png|.jpg|.jpeg|.svg')
                 ->name('organisation-events.image-new');
-            Route::get('/organisation-events/{organisationEvent}/image{suffix?}', [Core\V1\OrganisationEvent\ImageController::class, 'show'])
-                ->where('suffix', '.png|.jpg|.jpeg|.svg')
-                ->name('organisation-events.image');
             Route::get('/organisation-events/{organisationEvent}/event.ics', Core\V1\OrganisationEvent\CalendarController::class);
 
             // Organisation Sign Up Forms.
@@ -128,9 +113,6 @@ Route::prefix('/core/v1')
             Route::get('/pages/new/image{suffix?}', [Core\V1\Page\ImageController::class, 'showNew'])
                 ->where('suffix', '.png|.jpg|.jpeg|.svg')
                 ->name('pages.image-new');
-            Route::get('/pages/{page}/image{suffix?}', [Core\V1\Page\ImageController::class, 'show'])
-                ->where('suffix', '.png|.jpg|.jpeg|.svg')
-                ->name('pages.image');
 
             // Page Feedbacks.
             Route::match(['GET', 'POST'], '/page-feedbacks/index', [Core\V1\PageFeedbackController::class, 'index']);
@@ -166,9 +148,6 @@ Route::prefix('/core/v1')
             // Service Locations.
             Route::match(['GET', 'POST'], '/service-locations/index', [Core\V1\ServiceLocationController::class, 'index']);
             Route::apiResource('/service-locations', Core\V1\ServiceLocationController::class);
-            Route::get('/service-locations/{service_location}/image{suffix?}', Core\V1\ServiceLocation\ImageController::class)
-                ->where('suffix', '.png|.jpg|.jpeg|.svg')
-                ->name('service-locations.image');
 
             // Services.
             Route::match(['GET', 'POST'], '/services/index', [Core\V1\ServiceController::class, 'index']);

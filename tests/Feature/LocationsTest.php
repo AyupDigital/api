@@ -264,11 +264,6 @@ class LocationsTest extends TestCase
             'id' => $locationId,
             'image_file_id' => $image->id,
         ]);
-
-        $response = $this->get("/core/v1/locations/{$locationId}/image.jpg");
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertHeader('Content-Type', 'image/jpeg');
     }
 
     /**
@@ -675,9 +670,7 @@ class LocationsTest extends TestCase
         $this->approveUpdateRequest($updateRequest->id);
 
         // Get the event image for the service location
-        $content = $this->get("/core/v1/locations/$location->id/image.png")->content();
-
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.png'), $content);
+        $this->assertEquals($response->json('data.image_file_id'), $image->id);
 
         // JPG
         $image = File::factory()->imageJpg()->pendingAssignment()->create();
@@ -691,16 +684,13 @@ class LocationsTest extends TestCase
 
         $response->assertJsonFragment(['data' => $payload]);
 
+        $this->assertEquals($response->json('data.image_file_id'), $image->id);
+
         $updateRequest = UpdateRequest::find($response->json('id'));
 
         $this->assertEquals($updateRequest->data, $payload);
 
         $this->approveUpdateRequest($updateRequest->id);
-
-        // Get the event image for the service location
-        $content = $this->get("/core/v1/locations/$location->id/image.jpg")->content();
-
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.jpg'), $content);
 
         // SVG
         $image = File::factory()->imageSvg()->pendingAssignment()->create();
@@ -714,16 +704,13 @@ class LocationsTest extends TestCase
 
         $response->assertJsonFragment(['data' => $payload]);
 
+        $this->assertEquals($response->json('data.image_file_id'), $image->id);
+
         $updateRequest = UpdateRequest::find($response->json('id'));
 
         $this->assertEquals($updateRequest->data, $payload);
 
         $this->approveUpdateRequest($updateRequest->id);
-
-        // Get the event image for the service location
-        $content = $this->get("/core/v1/locations/$location->id/image.svg")->content();
-
-        $this->assertEquals(Storage::disk('local')->get('/test-data/image.svg'), $content);
     }
 
     /**
@@ -943,39 +930,5 @@ class LocationsTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $this->assertSoftDeleted((new Location)->getTable(), ['id' => $location->id]);
         $this->assertDatabaseMissing('update_requests', ['id' => $updateRequest->id, 'deleted_at' => null]);
-    }
-
-    /*
-     * Get a specific location's image.
-     */
-
-    /**
-     * @test
-     */
-    public function guest_can_view_image(): void
-    {
-        $location = Location::factory()->withJpgImage()->create();
-
-        $response = $this->get("/core/v1/locations/{$location->id}/image.jpg");
-
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertHeader('Content-Type', 'image/jpeg');
-    }
-
-    /**
-     * @test
-     */
-    public function audit_created_when_image_viewed(): void
-    {
-        $this->fakeEvents();
-
-        $location = Location::factory()->create();
-
-        $this->get("/core/v1/locations/{$location->id}/image.png");
-
-        Event::assertDispatched(EndpointHit::class, function (EndpointHit $event) use ($location) {
-            return ($event->getAction() === Audit::ACTION_READ) &&
-                ($event->getModel()->id === $location->id);
-        });
     }
 }

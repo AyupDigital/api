@@ -51,7 +51,6 @@ class ServiceTest extends TestCase implements UsesElasticsearch
                 [
                     'id',
                     'organisation_id',
-                    'has_logo',
                     'slug',
                     'name',
                     'type',

@@ -287,7 +287,7 @@ class StoreRequest extends FormRequest
             'eligibility_types.custom.ethnicity' => ['nullable', 'string', 'min:1', 'max:255'],
             'eligibility_types.custom.housing' => ['nullable', 'string', 'min:1', 'max:255'],
             'eligibility_types.custom.other' => ['nullable', 'string', 'min:1', 'max:255'],
-            'service_locations' => ['present', 'array'],
+            'service_locations' => ['array'],
             'service_locations.*.location_id' => ['required_with:service_locations.*', 'exists:locations,id'],
             'service_locations.*.name' => ['required_with:service_locations.*', 'string', 'min:1', 'max:255'],
             'service_locations.*.regular_opening_hours' => ['present', 'array'],

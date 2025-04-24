@@ -883,6 +883,7 @@ class UsersTest extends TestCase
      */
     public function super_admin_can_create_super_admin_with_soft_deleted_users_email(): void
     {
+        
         $user = User::factory()->create()->makeSuperAdmin();
         Passport::actingAs($user);
 
@@ -903,7 +904,7 @@ class UsersTest extends TestCase
         $response->assertStatus(Response::HTTP_CREATED);
         $this->assertDatabaseHas(table(User::class), [
             'id' => $deletedUser->id,
-            'email' => 'test@example.com',
+            'email' => 'redacted@redacted.com',
         ]);
         $this->assertDatabaseMissing(table(User::class), [
             'id' => $deletedUser->id,

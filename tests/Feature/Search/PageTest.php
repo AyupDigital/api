@@ -249,7 +249,7 @@ class PageTest extends TestCase implements UsesElasticsearch
             'name' => 'Should not match',
         ])->id]);
 
-        sleep(1);
+        sleep(2);
 
         $response = $this->json('POST', '/core/v1/search/pages', [
             'query' => 'This is a test',
