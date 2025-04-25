@@ -24,7 +24,7 @@ class CleanSoftDeletesCommandTest extends \Tests\TestCase
 
         $this->assertDatabaseHas((new Audit())->getTable(), [
             'action' => Audit::ACTION_DELETE,
-            'description' => 'Soft-deleted records older than 12 months for model: App\Models\Service, deleted: ' . $serviceToDelete->id,
+            'description' => 'Soft-deleted record older than 12 months for model: App\Models\Service, deleted: ' . $serviceToDelete->id,
         ]);
     }
 }

@@ -46,14 +46,15 @@ final class CleanSoftDeletesCommand extends Command
                 continue;
             }
 
-            Audit::query()->create([
-                'action' => Audit::ACTION_DELETE,
-                'description' => "Soft-deleted records older than 12 months for model: {$model}, deleted: {$models->pluck('id')->implode(', ')}",
-                'ip_address' => '0.0.0.0'
-            ]);
+            
 
-            $models->each(function ($model) {
-                $model->forceDelete();
+            $models->each(function ($record) use ($model) {
+                Audit::query()->create([
+                    'action' => Audit::ACTION_DELETE,
+                    'description' => "Soft-deleted record older than 12 months for model: {$model}, deleted: {$record->id}",
+                    'ip_address' => '0.0.0.0'
+                ]);
+                $record->forceDelete();
             });
             $this->info("Soft-deleted records older than 12 months for model: {$model} have been deleted.");
         }
