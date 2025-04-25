@@ -50,4 +50,20 @@ class PendingAssignmentFilesTest extends TestCase
         $this->assertDatabaseMissing($galleryItem->getTable(), ['id' => $galleryItem->id]);
         $this->assertDatabaseMissing($dueForDeletionFile->getTable(), ['id' => $dueForDeletionFile->id]);
     }
+
+    public function test_auto_delete_works_on_logo_file_id(): void
+    {
+        $dueForDeletionFile = File::factory()->pendingAssignment()
+            ->create([
+                'created_at' => Date::today()->subDays(File::PEDNING_ASSIGNMENT_AUTO_DELETE_DAYS),
+                'updated_at' => Date::today()->subDays(File::PEDNING_ASSIGNMENT_AUTO_DELETE_DAYS),
+        ]);
+
+        $service = Service::factory()->create(['logo_file_id' => $dueForDeletionFile->id]);
+
+        Artisan::call(PendingAssignmentFilesCommand::class);
+
+        $this->assertDatabaseHas($service->getTable(), ['id' => $service->id, 'logo_file_id' => $dueForDeletionFile->id]);
+        $this->assertDatabaseHas($dueForDeletionFile->getTable(), ['id' => $dueForDeletionFile->id]);
+    }
 }
