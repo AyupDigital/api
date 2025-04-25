@@ -34,8 +34,16 @@ class SettingsTest extends TestCase
                         'footer_content' => 'data/cms/frontend/global/footer_content',
                         'contact_phone' => 'data/cms/frontend/global/contact_phone',
                         'contact_email' => 'example@example.com',
-                        'facebook_handle' => 'data/cms/frontend/global/facebook_handle',
-                        'twitter_handle' => 'data/cms/frontend/global/twitter_handle',
+                        'social_medias' => [
+                            [
+                                'type' => 'facebook',
+                                'url' => 'data/cms/frontend/global/facebook_handle',
+                            ],
+                            [
+                                'type' => 'twitter',
+                                'url' => 'data/cms/frontend/global/twitter_handle',
+                            ],
+                        ],
                     ],
                     'home' => [
                         'banners' => [
@@ -101,8 +109,12 @@ class SettingsTest extends TestCase
                             'footer_content',
                             'contact_phone',
                             'contact_email',
-                            'facebook_handle',
-                            'twitter_handle',
+                            'social_medias' => [
+                                [
+                                    'type',
+                                    'url',
+                                ],
+                            ],
                         ],
                         'home' => [
                             'banners' => [
@@ -168,8 +180,16 @@ class SettingsTest extends TestCase
                             'footer_content' => 'data/cms/frontend/global/footer_content',
                             'contact_phone' => 'data/cms/frontend/global/contact_phone',
                             'contact_email' => 'example@example.com',
-                            'facebook_handle' => 'data/cms/frontend/global/facebook_handle',
-                            'twitter_handle' => 'data/cms/frontend/global/twitter_handle',
+                            'social_medias' => [
+                            [
+                                'type' => 'facebook',
+                                'url' => 'data/cms/frontend/global/facebook_handle',
+                            ],
+                            [
+                                'type' => 'twitter',
+                                'url' => 'data/cms/frontend/global/twitter_handle',
+                            ],
+                        ],
                         ],
                         'home' => [
                             'banners' => [
