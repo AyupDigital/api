@@ -27,7 +27,7 @@ class LocationController
                     ->orWhere('city', 'like', '%'.$searchQuery.'%')
                     ->orWhere('postcode', 'like', '%'.$searchQuery.'%')
                     ->orWhere('country', 'like', '%'.$searchQuery.'%');
-            })->paginate(
+            })->orderBy('address_line_1', 'asc')->paginate(
                 $request->input('per_page', 25),
                 ['*'],
                 'page',
