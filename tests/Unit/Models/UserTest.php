@@ -16,10 +16,8 @@ class UserTest extends TestCase
         $this->assertSoftDeleted($user);
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'first_name' => 'REDACTED',
-            'last_name' => 'REDACTED',
             'email' => 'redacted@redacted.com',
-            'phone' => '07123456789',
+            'phone' => 'redacted',
         ]);
     }
 
