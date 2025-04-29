@@ -102,10 +102,8 @@ class User extends Authenticatable implements Notifiable
             }
 
             $user->update([
-                'first_name' => 'REDACTED',
-                'last_name' => 'REDACTED',
                 'email' => 'redacted@redacted.com',
-                'phone' => '07123456789',
+                'phone' => 'redacted',
             ]);
         });
     }
