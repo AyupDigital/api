@@ -2,7 +2,9 @@
 
 namespace App\Console;
 
+use App\Actions\SetStaleServicesToInactiveAction;
 use App\Console\Commands\CleanSoftDeletesCommand;
+use App\Console\Commands\SetStaleServicesToInactiveCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -42,7 +44,10 @@ class Kernel extends ConsoleKernel
 
         $schedule->command(CleanSoftDeletesCommand::class)
             ->daily();
-    }
+
+        $schedule->command(SetStaleServicesToInactiveCommand::class)
+            ->daily();
+        }
 
     /**
      * Register the commands for the application.
