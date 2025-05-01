@@ -22,13 +22,13 @@ return new class extends Migration
                 if (!empty($global['facebook_handle'])) {
                     $socialMedias[] = [
                         'type' => 'facebook',
-                        'url' => $global['facebook_handle'],
+                        'url' => 'https://facebook.com/' . $global['facebook_handle'],
                     ];
                 }
                 if (!empty($global['twitter_handle'])) {
                     $socialMedias[] = [
                         'type' => 'twitter',
-                        'url' => $global['twitter_handle'],
+                        'url' => 'https://x.com/' . $global['twitter_handle'],
                     ];
                 }
 
@@ -60,10 +60,10 @@ return new class extends Migration
                 if (isset($global['social_medias'])) {
                     foreach ($global['social_medias'] as $socialMedia) {
                         if ($socialMedia['type'] === 'facebook') {
-                            $global['facebook_handle'] = $socialMedia['url'];
+                            $global['facebook_handle'] = str_replace('https://facebook.com/', '', $socialMedia['url']);
                         }
                         if ($socialMedia['type'] === 'twitter') {
-                            $global['twitter_handle'] = $socialMedia['url'];
+                            $global['twitter_handle'] = str_replace('https://x.com/', '', $socialMedia['url']);
                         }
                     }
                 }

@@ -26,6 +26,14 @@ class SocialMedia extends Model
 
     const TYPE_YOUTUBE = 'youtube';
 
+    const TYPE_LINKEDIN = 'linkedin';
+
+    const TYPE_WHATSAPP = 'whatsapp';
+
+    const TYPE_NEXTDOOR = 'nextdoor';
+
+    const TYPE_BLUESKY = 'bluesky';
+
     /**
      * The table associated with the model.
      *

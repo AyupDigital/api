@@ -216,6 +216,10 @@ class StoreRequest extends FormRequest
                 SocialMedia::TYPE_TWITTER,
                 SocialMedia::TYPE_SNAPCHAT,
                 SocialMedia::TYPE_YOUTUBE,
+                SocialMedia::TYPE_LINKEDIN,
+                SocialMedia::TYPE_WHATSAPP,
+                SocialMedia::TYPE_NEXTDOOR,
+                SocialMedia::TYPE_BLUESKY,
             ])],
             'social_medias.*.url' => ['required_with:social_medias.*', 'url', 'max:255'],
 
