@@ -359,6 +359,8 @@ class StoreRequest extends FormRequest
             'useful_infos.*.title.required_with' => 'Good to know tab - Please select a title.',
             'useful_infos.*.description.required_with' => 'Good to know tab - Please enter a description.',
             'social_medias.*.url.url' => 'Additional info tab - Please enter a valid social media web address (eg. https://www.youtube.com/watch?v=h-2sgpokvGI).',
+            'service_locations.*.location_id' => 'Locations tab - Please select or create a location.',
+            'service_locations.*.name' => 'Locations tab - Please enter a name for the location.',
         ];
     }
 
