@@ -34,23 +34,27 @@ class StoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'user' => ['required', 'array'],
             'user.first_name' => ['required', 'string', 'min:1', 'max:255'],
             'user.last_name' => ['required', 'string', 'min:1', 'max:255'],
+            'user.otp_method' => [
+                'required',
+                Rule::in(['sms', 'email']),
+            ],
+            'user.phone' => [
+                'nullable',
+                'string',
+                'min:1',
+                'max:255',
+                new UkMobilePhoneNumber('User Phone - Please enter a valid UK mobile telephone number.'),
+            ],
             'user.email' => [
                 'required',
                 'email',
                 'max:255',
                 new UserEmailNotTaken(null, 'User Email - The email entered is already in use. Please enter a different email address or log into your existing account.'),
                 new UserEmailNotInPendingSignupRequest('User Email - The email has already been submitted for approval. Please await the outcome of the approval process before registering with this email.'),
-            ],
-            'user.phone' => [
-                'required',
-                'string',
-                'min:1',
-                'max:255',
-                new UkMobilePhoneNumber('User Phone - Please enter a valid UK mobile telephone number.'),
             ],
             'user.password' => [
                 'required',
@@ -59,7 +63,14 @@ class StoreRequest extends FormRequest
                 'max:255',
                 new Password('User Password - Please create a password that is at least eight characters long, contain one uppercase letter, one lowercase letter, one number and one special character (!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~)'),
             ],
+        ];
 
+        if ($this->input('user.otp_method') === 'sms') {
+            unset($rules['user.phone'][0]);
+            $rules['user.phone'][] = 'required';
+        }
+
+        return array_merge($rules, [
             'organisation' => ['required', 'array'],
             'organisation.id' => [
                 'required_without_all:organisation.slug,organisation.name,organisation.description,organisation.url',
@@ -193,7 +204,7 @@ class StoreRequest extends FormRequest
                 'url',
                 'max:255',
             ],
-        ];
+        ]);
     }
 
     /**
@@ -235,7 +246,10 @@ class StoreRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $user = $this->user;
-        $user['phone'] = Str::remove(' ', $user['phone']);
+        if (isset($user['phone'])) {
+            $user['phone'] = Str::remove(' ', $user['phone']);
+        }
+
 
         $organisation = $this->organisation;
         if ($organisation['phone'] ?? false) {

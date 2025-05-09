@@ -29,4 +29,14 @@ class UserTest extends TestCase
 
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
     }
+
+    public function test_user_can_be_created_without_phone(): void
+    {
+        $user = User::factory()->create(['phone' => null]);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'phone' => null,
+        ]);
+    }
 }

@@ -26,6 +26,7 @@ class OrganisationSignUpFormTest extends TestCase
                 'last_name' => $this->faker->lastName(),
                 'email' => $this->faker->safeEmail(),
                 'phone' => random_uk_mobile_phone(),
+                'otp_method' => User::OTP_METHOD_SMS,
                 'password' => 'P@55w0rd.',
             ],
             'organisation' => [
@@ -85,6 +86,7 @@ class OrganisationSignUpFormTest extends TestCase
                 'last_name' => $this->faker->lastName(),
                 'email' => $this->faker->safeEmail(),
                 'phone' => random_uk_mobile_phone(),
+                'otp_method' => User::OTP_METHOD_SMS,
                 'password' => 'P@55w0rd.',
             ],
             'organisation' => [
@@ -180,6 +182,7 @@ class OrganisationSignUpFormTest extends TestCase
             'last_name' => $this->faker->lastName(),
             'email' => $this->faker->safeEmail(),
             'phone' => random_uk_mobile_phone(),
+            'otp_method' => User::OTP_METHOD_SMS,
             'password' => 'P@55w0rd.',
         ];
 
@@ -231,6 +234,7 @@ class OrganisationSignUpFormTest extends TestCase
             'last_name' => $this->faker->lastName(),
             'email' => 'admin@organisation.org',
             'phone' => random_uk_mobile_phone(),
+            'otp_method' => User::OTP_METHOD_SMS,
             'password' => 'P@55w0rd.',
         ];
 
@@ -258,6 +262,7 @@ class OrganisationSignUpFormTest extends TestCase
             'last_name' => $this->faker->lastName(),
             'email' => $this->faker->safeEmail(),
             'phone' => random_uk_phone(),
+            'otp_method' => User::OTP_METHOD_SMS,
             'password' => 'P@55w0rd.',
         ];
 
@@ -275,6 +280,7 @@ class OrganisationSignUpFormTest extends TestCase
             'last_name' => $this->faker->lastName(),
             'email' => $this->faker->safeEmail(),
             'phone' => random_uk_mobile_phone(),
+            'otp_method' => User::OTP_METHOD_SMS,
             'password' => 'P@55w0rd.',
         ];
 
@@ -302,6 +308,7 @@ class OrganisationSignUpFormTest extends TestCase
             'last_name' => $this->faker->lastName(),
             'email' => 'admin@organisation.org',
             'phone' => random_uk_mobile_phone(),
+            'otp_method' => User::OTP_METHOD_SMS,
             'password' => 'P@55w0rd.',
         ];
 
@@ -342,6 +349,7 @@ class OrganisationSignUpFormTest extends TestCase
             'last_name' => $this->faker->lastName(),
             'email' => $this->faker->safeEmail(),
             'phone' => random_uk_mobile_phone(),
+            'otp_method' => User::OTP_METHOD_SMS,
             'password' => 'P@55w0rd.',
         ];
         $response = $this->json('POST', '/core/v1/organisation-sign-up-forms', [
@@ -366,6 +374,7 @@ class OrganisationSignUpFormTest extends TestCase
             'last_name' => $this->faker->lastName(),
             'email' => $this->faker->safeEmail(),
             'phone' => random_uk_mobile_phone(),
+            'otp_method' => User::OTP_METHOD_SMS,
             'password' => 'P@55w0rd.',
         ];
         $organisationSubmission = [
@@ -410,6 +419,7 @@ class OrganisationSignUpFormTest extends TestCase
             'last_name' => $this->faker->lastName(),
             'email' => $this->faker->safeEmail(),
             'phone' => random_uk_mobile_phone(),
+            'otp_method' => User::OTP_METHOD_SMS,
             'password' => 'P@55w0rd.',
         ];
 
@@ -513,6 +523,7 @@ class OrganisationSignUpFormTest extends TestCase
                 'last_name' => $this->faker->lastName(),
                 'email' => $this->faker->safeEmail(),
                 'phone' => random_uk_mobile_phone(),
+                'otp_method' => User::OTP_METHOD_SMS,
                 'password' => 'P@55w0rd.',
             ],
             'organisation' => [
@@ -571,5 +582,125 @@ class OrganisationSignUpFormTest extends TestCase
                 ($event->getUser() === null) &&
                 ($event->getModel()->is($updateRequest));
         });
+    }
+
+    public function test_guest_can_create_one_without_phone_if_email_is_provided(): void
+    {
+        $response = $this->json('POST', '/core/v1/organisation-sign-up-forms', [
+            'user' => [
+                'first_name' => $this->faker->firstName(),
+                'last_name' => $this->faker->lastName(),
+                'email' => $this->faker->safeEmail(),
+                'otp_method' => User::OTP_METHOD_EMAIL,
+                'password' => 'P@55w0rd.',
+            ],
+            'organisation' => [
+                'slug' => 'test-org',
+                'name' => 'Test Org',
+                'description' => 'Test description',
+                'url' => 'http://test-org.example.com',
+                'email' => 'info@test-org.example.com',
+                'phone' => '07700000000',
+            ],
+            'service' => [
+                'slug' => 'test-service',
+                'name' => 'Test Service',
+                'type' => Service::TYPE_SERVICE,
+                'intro' => 'This is a test intro',
+                'description' => 'Lorem ipsum',
+                'wait_time' => null,
+                'is_free' => true,
+                'fees_text' => null,
+                'fees_url' => null,
+                'testimonial' => null,
+                'video_embed' => null,
+                'url' => $this->faker->url(),
+                'contact_name' => $this->faker->name(),
+                'contact_phone' => random_uk_mobile_phone(),
+                'contact_email' => $this->faker->safeEmail(),
+                'useful_infos' => [
+                    [
+                        'title' => 'Did you know?',
+                        'description' => 'Lorem ipsum',
+                        'order' => 1,
+                    ],
+                ],
+                'offerings' => [
+                    [
+                        'offering' => 'Weekly club',
+                        'order' => 1,
+                    ],
+                ],
+                'social_medias' => [
+                    [
+                        'type' => SocialMedia::TYPE_INSTAGRAM,
+                        'url' => 'https://www.instagram.com/ayupdigital',
+                    ],
+                ],
+            ],
+        ]);
+
+        $response->assertStatus(Response::HTTP_CREATED);
+    }
+
+    public function test_guest_can_create_one_with_otp_method(): void
+    {
+        $response = $this->json('POST', '/core/v1/organisation-sign-up-forms', [
+            'user' => [
+                'first_name' => $this->faker->firstName(),
+                'last_name' => $this->faker->lastName(),
+                'email' => $this->faker->safeEmail(),
+                'otp_method' => User::OTP_METHOD_EMAIL,
+                'password' => 'P@55w0rd.',
+            ],
+            'organisation' => [
+                'slug' => 'test-org',
+                'name' => 'Test Org',
+                'description' => 'Test description',
+                'url' => 'http://test-org.example.com',
+                'email' => 'info@test-org.example.com',
+                'phone' => '07700000000',
+            ],
+            'service' => [
+                'slug' => 'test-service',
+                'name' => 'Test Service',
+                'type' => Service::TYPE_SERVICE,
+                'intro' => 'This is a test intro',
+                'description' => 'Lorem ipsum',
+                'wait_time' => null,
+                'is_free' => true,
+                'fees_text' => null,
+                'fees_url' => null,
+                'testimonial' => null,
+                'video_embed' => null,
+                'url' => $this->faker->url(),
+                'contact_name' => $this->faker->name(),
+                'contact_phone' => random_uk_mobile_phone(),
+                'contact_email' => $this->faker->safeEmail(),
+                'useful_infos' => [
+                    [
+                        'title' => 'Did you know?',
+                        'description' => 'Lorem ipsum',
+                        'order' => 1,
+                    ],
+                ],
+                'offerings' => [
+                    [
+                        'offering' => 'Weekly club',
+                        'order' => 1,
+                    ],
+                ],
+                'social_medias' => [
+                    [
+                        'type' => SocialMedia::TYPE_INSTAGRAM,
+                        'url' => 'https://www.instagram.com/ayupdigital',
+                    ],
+                ],
+            ],
+        ]);
+
+        $response->assertStatus(Response::HTTP_CREATED);
+
+        $this->assertEquals(User::OTP_METHOD_EMAIL, $this->getResponseContent($response, 'data.user.otp_method'));
     }
 }

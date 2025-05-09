@@ -9,4 +9,5 @@ return [
     'service' => require 'emails/service.php',
     'update_request' => require 'emails/update_request.php',
     'user' => require 'emails/user.php',
+    'otp' => require 'emails/otp.php',
 ];

@@ -34,6 +34,9 @@ class User extends Authenticatable implements Notifiable
     use UserScopes;
     use SoftDeletes;
 
+    const OTP_METHOD_EMAIL = 'email';
+    const OTP_METHOD_SMS = 'sms';
+
     /**
      * The "type" of the primary key ID.
      *

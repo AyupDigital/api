@@ -18,6 +18,8 @@ class UserSchema extends Schema
                 Schema::string('last_name'),
                 Schema::string('email'),
                 Schema::string('phone'),
+                Schema::string('otp_method')
+                    ->enum(['email', 'sms']),
                 Schema::array('roles')
                     ->items(RoleSchema::create()),
                 Schema::string('created_at')

@@ -1315,6 +1315,7 @@ class UpdateRequestsTest extends TestCase
                     'email' => 'john.doe@example.com',
                     'phone' => '07700000000',
                     'password' => 'P@55w0rd.',
+                    'otp_method' => User::OTP_METHOD_SMS,
                 ],
                 'organisation' => [
                     'slug' => 'test-org',
@@ -1438,6 +1439,7 @@ class UpdateRequestsTest extends TestCase
                     'email' => 'john.doe@example.com',
                     'phone' => '07700000000',
                     'password' => 'P@55w0rd.',
+                    'otp_method' => User::OTP_METHOD_SMS,
                 ],
                 'organisation' => [
                     'slug' => 'test-org',
@@ -1506,6 +1508,7 @@ class UpdateRequestsTest extends TestCase
                     'email' => 'john.doe@example.com',
                     'phone' => '07700000000',
                     'password' => 'P@55w0rd.',
+                    'otp_method' => User::OTP_METHOD_SMS,
                 ],
                 'organisation' => [
                     'id' => $organisation->id,

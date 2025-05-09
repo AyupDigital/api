@@ -878,6 +878,28 @@ class UsersTest extends TestCase
         $this->assertEquals(6, $createdUser->roles()->count());
     }
 
+    public function test_super_admin_can_create_super_admin_without_phone_number(): void
+    {
+        $service = Service::factory()->create();
+        $user = User::factory()->create(['phone' => null])->makeSuperAdmin();
+        Passport::actingAs($user);
+
+        $response = $this->json('POST', '/core/v1/users', $this->getCreateUserPayload([
+            ['role' => Role::NAME_SUPER_ADMIN],
+        ]));
+
+        $response->assertStatus(Response::HTTP_CREATED);
+        $createdUserId = json_decode($response->getContent(), true)['data']['id'];
+        $createdUser = User::findOrFail($createdUserId);
+        $this->assertTrue($createdUser->isServiceWorker($service));
+        $this->assertTrue($createdUser->isServiceAdmin($service));
+        $this->assertTrue($createdUser->isOrganisationAdmin($service->organisation));
+        $this->assertTrue($createdUser->isContentAdmin());
+        $this->assertTrue($createdUser->isGlobalAdmin());
+        $this->assertTrue($createdUser->isSuperAdmin());
+        $this->assertEquals(6, $createdUser->roles()->count());
+    }
+
     /**
      * @test
      */
@@ -896,6 +918,7 @@ class UsersTest extends TestCase
             'email' => 'test@example.com',
             'phone' => random_uk_mobile_phone(),
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 ['role' => Role::NAME_SUPER_ADMIN],
             ],
@@ -1419,6 +1442,7 @@ class UsersTest extends TestCase
             'email' => $user->email,
             'phone' => $user->phone,
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -1459,6 +1483,7 @@ class UsersTest extends TestCase
             'email' => $subject->email,
             'phone' => $subject->phone,
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -1477,6 +1502,7 @@ class UsersTest extends TestCase
             'last_name' => $subject->last_name,
             'email' => $subject->email,
             'phone' => $subject->phone,
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -1546,6 +1572,7 @@ class UsersTest extends TestCase
             'email' => $user->email,
             'phone' => $user->phone,
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -1586,6 +1613,7 @@ class UsersTest extends TestCase
             'email' => $user->email,
             'phone' => $user->phone,
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -1604,6 +1632,7 @@ class UsersTest extends TestCase
             'last_name' => $user->last_name,
             'email' => $user->email,
             'phone' => $user->phone,
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -1634,6 +1663,7 @@ class UsersTest extends TestCase
             'email' => $user->email,
             'phone' => $user->phone,
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -1656,6 +1686,7 @@ class UsersTest extends TestCase
             'last_name' => $user->last_name,
             'email' => $user->email,
             'phone' => $user->phone,
+            'otp_method' => 'sms',
         ]);
         $response->assertJsonFragment([
             [
@@ -2123,6 +2154,7 @@ class UsersTest extends TestCase
             'email' => $user->email,
             'phone' => $user->phone,
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 ['role' => Role::NAME_GLOBAL_ADMIN],
             ],
@@ -2202,6 +2234,7 @@ class UsersTest extends TestCase
             'email' => $user->email,
             'phone' => $user->phone,
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -2216,6 +2249,7 @@ class UsersTest extends TestCase
             'last_name' => $user->last_name,
             'email' => $user->email,
             'phone' => $user->phone,
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -2242,6 +2276,7 @@ class UsersTest extends TestCase
             'email' => $user->email,
             'phone' => $user->phone,
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -2260,6 +2295,7 @@ class UsersTest extends TestCase
             'last_name' => $user->last_name,
             'email' => $user->email,
             'phone' => $user->phone,
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -2290,6 +2326,7 @@ class UsersTest extends TestCase
             'email' => $user->email,
             'phone' => $user->phone,
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -2312,6 +2349,7 @@ class UsersTest extends TestCase
             'last_name' => $user->last_name,
             'email' => $user->email,
             'phone' => $user->phone,
+            'otp_method' => 'sms',
         ]);
         $response->assertJsonFragment([
             [
@@ -2350,6 +2388,7 @@ class UsersTest extends TestCase
             'email' => $user->email,
             'phone' => $user->phone,
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 ['role' => Role::NAME_CONTENT_ADMIN],
             ],
@@ -2361,6 +2400,7 @@ class UsersTest extends TestCase
             'last_name' => $user->last_name,
             'email' => $user->email,
             'phone' => $user->phone,
+            'otp_method' => 'sms',
         ]);
 
         $response->assertJsonFragment([
@@ -2385,6 +2425,7 @@ class UsersTest extends TestCase
             'email' => $user->email,
             'phone' => $user->phone,
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -2408,6 +2449,7 @@ class UsersTest extends TestCase
             'last_name' => $user->last_name,
             'email' => $user->email,
             'phone' => $user->phone,
+            'otp_method' => 'sms',
         ]);
         $response->assertJsonFragment([
             [
@@ -2449,6 +2491,7 @@ class UsersTest extends TestCase
             'email' => $user->email,
             'phone' => $user->phone,
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -2474,6 +2517,7 @@ class UsersTest extends TestCase
             'last_name' => $user->last_name,
             'email' => $user->email,
             'phone' => $user->phone,
+            'otp_method' => 'sms',
         ]);
         $response->assertJsonFragment([
             'role' => Role::NAME_SERVICE_WORKER,
@@ -2518,6 +2562,7 @@ class UsersTest extends TestCase
             'email' => $subject->email,
             'phone' => $subject->phone,
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => [
                 [
                     'role' => Role::NAME_SERVICE_WORKER,
@@ -3120,6 +3165,7 @@ class UsersTest extends TestCase
             'email' => $this->faker->safeEmail(),
             'phone' => random_uk_mobile_phone(),
             'password' => 'Pa$$w0rd',
+            'otp_method' => 'sms',
             'roles' => $roles,
         ];
     }
@@ -3131,6 +3177,7 @@ class UsersTest extends TestCase
             'last_name' => $this->faker->lastName(),
             'email' => $this->faker->safeEmail(),
             'phone' => random_uk_mobile_phone(),
+            'otp_method' => 'sms',
             'roles' => $roles,
         ];
     }

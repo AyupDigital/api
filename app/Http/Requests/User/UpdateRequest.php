@@ -128,13 +128,13 @@ class UpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'first_name' => ['required', 'string', 'min:1', 'max:255'],
             'last_name' => ['required', 'string', 'min:1', 'max:255'],
             'email' => ['required', 'email', 'max:255', new UserEmailNotTaken($this->user)],
-            'phone' => ['required', 'string', 'min:1', 'max:255', new UkMobilePhoneNumber],
+            'phone' => ['nullable', 'string', 'min:1', 'max:255', new UkMobilePhoneNumber],
             'password' => ['string', 'min:8', 'max:255', new Password],
-
+            'otp_method' => ['required', 'string', 'in:email,sms'],
             'roles' => ['required', 'array'],
             'roles.*' => [
                 'required',
@@ -153,5 +153,12 @@ class UpdateRequest extends FormRequest
                 'exists:services,id',
             ],
         ];
+
+        if ($this->input('otp_method') === 'sms') {
+            unset($rules['phone'][0]);
+            $rules['phone'][] = 'required';
+        }
+
+        return $rules;
     }
 }
