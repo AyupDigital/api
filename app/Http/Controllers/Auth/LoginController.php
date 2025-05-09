@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Emails\OtpLoginCode\UserEmail;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Sms\OtpLoginCode\UserSms;
@@ -65,7 +66,11 @@ class LoginController extends Controller
         // Generate and send the OTP code.
         $otpCode = mt_rand(10000, 99999);
         session()->put('otp.code', $otpCode);
-        $user->sendSms(new UserSms($user->phone, ['OTP_CODE' => $otpCode]));
+        if ($user->otp_method == 'email') {
+            $user->sendEmail(new UserEmail($user->email, ['OTP_CODE' => $otpCode]));
+        } else if ($user->otp_method == 'sms') {
+            $user->sendSms(new UserSms($user->phone, ['OTP_CODE' => $otpCode]));
+        }
 
         // Forward the user to the code page.
         return redirect('/login/code');
@@ -81,13 +86,15 @@ class LoginController extends Controller
         $phoneLastFour = mb_substr($user->phone, -4);
 
         $email = config('local.global_admin.email');
+        $aNew = $user->otp_method == 'sms' ? 'phone number' : $user->otp_method;
         $appName = config('app.name');
-        $subject = "{$user->full_name} - New Phone Number";
+        $subject = "{$user->full_name} - New {$aNew}";
         $subject = rawurlencode($subject);
+        
         $body = <<<EOT
 {$user->full_name}:
-Requires a new phone number for their account on $appName.
-New number: xxxx-xxx-xxxx
+Requires a new {$aNew} for their account on $appName.
+New {$aNew}: xxxx-xxx-xxxx
 EOT;
         $body = rawurlencode($body);
         $newNumberLink = "mailto:$email?subject=$subject&body=$body";
@@ -95,6 +102,8 @@ EOT;
         return view('auth.code', [
             'phoneLastFour' => $phoneLastFour,
             'newNumberLink' => $newNumberLink,
+            'method' => $user->otp_method,
+            'maskedEmail' => $this->maskEmail($user->email), 
         ]);
     }
 
@@ -175,5 +184,13 @@ EOT;
         );
 
         return $key.'|'.$request->ip();
+    }
+
+    private function maskEmail(string $email): string
+    {
+        [$localPart, $domain] = explode('@', $email);
+        $visiblePart = mb_substr($localPart, 0, 2);
+        $maskedPart = str_repeat('*', max(0, mb_strlen($localPart) - 2));
+        return $visiblePart . $maskedPart . '@' . $domain;
     }
 }

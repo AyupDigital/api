@@ -15,6 +15,7 @@ return [
         ],
         'otp_login_code' => [
             'sms' => env('NOTIFICATION_TEMPLATE_OTP_LOGIN_SMS', ''),
+            'email' => env('NOTIFICATION_TEMPLATE_OTP_LOGIN_EMAIL', ''),
         ],
         'referral_created' => [
             'notify_client' => [

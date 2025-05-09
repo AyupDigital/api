@@ -51,6 +51,7 @@ class OrganisationSignUpForm implements AppliesUpdateRequests
             'email' => Arr::get($data, 'user.email'),
             'phone' => Arr::get($data, 'user.phone'),
             'password' => Arr::get($data, 'user.password'),
+            'otp_method' => Arr::get($data, 'user.otp_method'),
         ]);
 
         /** @var Organisation $organisation */

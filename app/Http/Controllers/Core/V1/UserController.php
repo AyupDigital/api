@@ -102,6 +102,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'password' => bcrypt($request->password),
+                'otp_method' => $request->otp_method,
             ]);
 
             foreach ($request->roles as $role) {
@@ -192,6 +193,7 @@ class UserController extends Controller
                 'last_name' => $request->last_name,
                 'email' => $request->email,
                 'phone' => $request->phone,
+                'otp_method' => $request->otp_method,
             ]);
 
             // Update the users password if provided in the request.
