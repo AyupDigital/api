@@ -120,6 +120,10 @@ class CollectionCategoryController extends Controller
         $collection = QueryBuilder::for($baseQuery)
             ->firstOrFail();
 
+        if ($collection->type !== Collection::TYPE_CATEGORY) {
+            abort(404);
+        }
+
         event(EndpointHit::onRead($request, "Viewed collection category [{$collection->id}]", $collection));
 
         return new CollectionCategoryResource($collection);
