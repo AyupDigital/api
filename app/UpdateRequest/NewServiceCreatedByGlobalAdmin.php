@@ -53,6 +53,9 @@ class NewServiceCreatedByGlobalAdmin implements AppliesUpdateRequests
                 $data->get('description')
             ),
             'wait_time' => $data->get('wait_time'),
+            'national' => $data->get('national'),
+            'attending_type' => $data->get('attending_type'),
+            'attending_access' => $data->get('attending_access'),
             'is_free' => $data->get('is_free'),
             'fees_text' => $data->get('fees_text'),
             'fees_url' => $data->get('fees_url'),

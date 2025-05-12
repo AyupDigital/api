@@ -51,7 +51,7 @@ class ServiceSchema extends Schema
                     ->nullable(),
                 Schema::boolean('is_free'),
                 Schema::boolean('national'),
-                Schema::string('attending_type')
+                Schema::array('attending_type')
                     ->enum(
                         Service::ATTENDING_TYPE_PHONE,
                         Service::ATTENDING_TYPE_ONLINE,
@@ -59,7 +59,7 @@ class ServiceSchema extends Schema
                         Service::ATTENDING_TYPE_HOME
                     )
                     ->nullable(),
-                Schema::string('attending_access')
+                Schema::array('attending_access')
                     ->enum(
                         Service::ATTENDING_ACCESS_REFERRAL,
                         Service::ATTENDING_ACCESS_APPOINTMENT,

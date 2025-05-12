@@ -40,7 +40,7 @@ class ServicePersistenceService implements DataPersistenceService
      * @param  Illuminate\Foundation\Http\FormRequest  $request
      */
     private function processAsUpdateRequest(FormRequest $request, ?Service $service = null): UpdateRequestModel
-    {
+    {   
         return DB::transaction(function () use ($request, $service) {
             // Initialise the data array
             $data = array_filter_missing([
@@ -56,8 +56,8 @@ class ServicePersistenceService implements DataPersistenceService
                 'wait_time' => $request->missingValue('wait_time'),
                 'is_free' => $request->missingValue('is_free'),
                 'national' => $request->missingValue('national'),
-                'attending_type' => $request->missingValue('attending_type'),
-                'attending_access' => $request->missingValue('attending_access'),
+                'attending_type' => $request->filled('attending_type') ? $request->attending_type : new MissingValue,
+                'attending_access' => $request->filled('attending_access') ? $request->attending_access : new MissingValue,
                 'fees_text' => $request->missingValue('fees_text'),
                 'fees_url' => $request->missingValue('fees_url'),
                 'testimonial' => $request->missingValue('testimonial'),

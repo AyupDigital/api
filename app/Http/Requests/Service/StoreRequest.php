@@ -101,6 +101,7 @@ class StoreRequest extends FormRequest
             'national' => ['required', 'boolean'],
             'attending_type' => [
                 'required',
+                'array',
                 Rule::in([
                     Service::ATTENDING_TYPE_PHONE,
                     Service::ATTENDING_TYPE_ONLINE,
@@ -110,6 +111,7 @@ class StoreRequest extends FormRequest
             ],
             'attending_access' => [
                 'required',
+                'array',
                 Rule::in([
                     Service::ATTENDING_ACCESS_REFERRAL,
                     Service::ATTENDING_ACCESS_APPOINTMENT,

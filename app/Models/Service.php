@@ -113,6 +113,8 @@ class Service extends Model implements AppliesUpdateRequests, HasTaxonomyRelatio
         'last_modified_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'attending_type' => 'array',
+        'attending_access' => 'array',
     ];
 
     /**
@@ -234,7 +236,7 @@ class Service extends Model implements AppliesUpdateRequests, HasTaxonomyRelatio
     public function applyUpdateRequest(UpdateRequest $updateRequest): UpdateRequest
     {
         $data = $updateRequest->data;
-
+        dd($data);
         // Update the Logo File entity if new
         if (Arr::get($data, 'logo_file_id', $this->logo_file_id) !== $this->logo_file_id && ! empty($data['logo_file_id'])) {
             /** @var File $file */
@@ -245,7 +247,7 @@ class Service extends Model implements AppliesUpdateRequests, HasTaxonomyRelatio
                 $file->resizedVersion($maxDimension);
             }
         }
-
+        
         // Update the service record.
         $this->update([
             'organisation_id' => Arr::get($data, 'organisation_id', $this->organisation_id),
@@ -260,8 +262,8 @@ class Service extends Model implements AppliesUpdateRequests, HasTaxonomyRelatio
             'wait_time' => Arr::get($data, 'wait_time', $this->wait_time),
             'is_free' => Arr::get($data, 'is_free', $this->is_free),
             'national' => Arr::get($data, 'national', $this->national),
-            'attending_type' => Arr::get($data, 'attending_type', $this->attending_type),
-            'attending_access' => Arr::get($data, 'attending_access', $this->attending_access),
+            'attending_type' =>array_key_exists('attending_type', $data) ? $data['attending_type'] : $this->attending_type,
+            'attending_access' => array_key_exists('attending_access', $data) ? $data['attending_access'] : $this->attending_access,
             'fees_text' => Arr::get($data, 'fees_text', $this->fees_text),
             'fees_url' => Arr::get($data, 'fees_url', $this->fees_url),
             'testimonial' => Arr::get($data, 'testimonial', $this->testimonial),

@@ -116,6 +116,7 @@ class UpdateRequest extends FormRequest
             'is_free' => ['boolean'],
             'national' => ['boolean'],
             'attending_type' => [
+                'array',
                 Rule::in([
                     Service::ATTENDING_TYPE_PHONE,
                     Service::ATTENDING_TYPE_ONLINE,
@@ -124,6 +125,7 @@ class UpdateRequest extends FormRequest
                 ]),
             ],
             'attending_access' => [
+                'array',
                 Rule::in([
                     Service::ATTENDING_ACCESS_REFERRAL,
                     Service::ATTENDING_ACCESS_APPOINTMENT,
