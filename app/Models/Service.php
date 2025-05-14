@@ -236,7 +236,7 @@ class Service extends Model implements AppliesUpdateRequests, HasTaxonomyRelatio
     public function applyUpdateRequest(UpdateRequest $updateRequest): UpdateRequest
     {
         $data = $updateRequest->data;
-        dd($data);
+        
         // Update the Logo File entity if new
         if (Arr::get($data, 'logo_file_id', $this->logo_file_id) !== $this->logo_file_id && ! empty($data['logo_file_id'])) {
             /** @var File $file */
