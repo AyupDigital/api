@@ -54,8 +54,8 @@
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.3",
         "pda/pheanstalk": "~4.0",
+        "phpro/grumphp": "^2.10",
         "phpunit/phpunit": "^9.5.10",
-        
         "roave/security-advisories": "dev-latest",
         "spatie/laravel-ignition": "^2.0"
     },
@@ -116,7 +116,8 @@
         "process-timeout": 0,
         "optimize-autoloader": true,
         "allow-plugins": {
-            "php-http/discovery": false
+            "php-http/discovery": false,
+            "phpro/grumphp": true
         }
     },
     "minimum-stability": "stable",
