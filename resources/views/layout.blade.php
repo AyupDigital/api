@@ -25,7 +25,7 @@
 			<div class="govuk-header__logo">
 				<a href="{{ route('home') }}" class="govuk-header__link govuk-header__link--homepage">
 					<span class="govuk-header__logotype">
-						<img src="{{ asset("img/" . config('app.logo')) . '?' . filemtime(public_path("img/" . config('app.logo'))) }}"
+						<img src="{{ str_contains(config('app.logo'), 'https://') ? config('app.logo') : asset("img/" . config('app.logo')) . '?' . filemtime(public_path("img/" . config('app.logo'))) }}"
 							class="govuk-header__logotype-crown" alt="{{ config('app.name', 'Laravel') }} logo"
 							title="{{ config('app.name', 'Laravel') }}" />
 					</span>
