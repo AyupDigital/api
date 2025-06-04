@@ -105,7 +105,6 @@ class CollectionCategoriesTest extends TestCase implements UsesElasticsearch
 
     public function test_services_with_more_taxonomies_in_a_category_collection_are_more_relevant(): void
     {
-        $this->markTestSkipped('must be revisited.');
         // Create 3 taxonomies
         $taxonomy1 = Taxonomy::category()->children()->create([
             'slug' => 'red',
@@ -159,7 +158,7 @@ class CollectionCategoriesTest extends TestCase implements UsesElasticsearch
         $service3->serviceTaxonomies()->create(['taxonomy_id' => $taxonomy1->id]);
         $service3->save(); // Update the Elasticsearch index.
 
-        sleep(1);
+        sleep(5);
 
         // Assert that when searching by collection, the services with more taxonomies are ranked higher.
         $response = $this->json('POST', '/core/v1/search/collections/categories', [

@@ -64,7 +64,7 @@ class CollectionCategoryQueryBuilder extends ElasticsearchQueryBuilder implement
             ->where('slug', '=', $categorySlug)
             ->first();
 
-        $this->addFilter('collection_categories', $category->getAttribute('name'));
+        $this->addFilter('collection_categories', $categorySlug);
 
         $should = Arr::get($this->esQuery, 'function_score.query.bool.should');
 
