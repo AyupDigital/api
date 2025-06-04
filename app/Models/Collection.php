@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\Collection\UpdateTaxonomyServicesAndEventsJob;
 use App\Models\Mutators\CollectionMutators;
 use App\Models\Relationships\CollectionRelationships;
 use App\Models\Scopes\CollectionScopes;
@@ -88,13 +89,7 @@ class Collection extends Model
             $this->collectionTaxonomies()->updateOrCreate(['taxonomy_id' => $taxonomy->id]);
         }
 
-        Taxonomy::query()
-            ->whereIn('id', $affectedTaxonomyIds)
-            ->get()
-            ->each(function ($taxonomy) {
-                $taxonomy->services()->searchable();
-                $taxonomy->organisationEvents()->searchable();
-            });
+        UpdateTaxonomyServicesAndEventsJob::dispatch($affectedTaxonomyIds->toArray());
 
         return $this;
     }
