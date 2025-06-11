@@ -82,12 +82,7 @@ class UpdateRequest extends FormRequest
                 'string',
                 'min:1',
                 'max:255',
-                Rule::requiredIf(function () {
-                    return ! empty($this->organiser_phone) || ! empty($this->organiser_email) || ! empty($this->organiser_url);
-                }),
-                new NullableIf(function () {
-                    return empty($this->organiser_phone) && empty($this->organiser_email) && empty($this->organiser_url);
-                }),
+                'nullable',
             ],
             'organiser_phone' => [
                 'string',
@@ -104,22 +99,12 @@ class UpdateRequest extends FormRequest
             'organiser_email' => [
                 'email',
                 'max:255',
-                Rule::requiredIf(function () {
-                    return ! empty($this->organiser_name) && empty($this->organiser_phone) && empty($this->organiser_url);
-                }),
-                new NullableIf(function () {
-                    return empty($this->organiser_name);
-                }),
+                'nullable'
             ],
             'organiser_url' => [
                 'url',
                 'max:255',
-                Rule::requiredIf(function () {
-                    return ! empty($this->organiser_name) && empty($this->organiser_email) && empty($this->organiser_phone);
-                }),
-                new NullableIf(function () {
-                    return empty($this->organiser_name);
-                }),
+                'nullable'
             ],
             'booking_title' => [
                 'nullable',
