@@ -10,6 +10,7 @@ use App\Models\Taxonomy;
 use App\Models\UpdateRequest as UpdateRequestModel;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrganisationEventPersistenceService implements DataPersistenceService
 {

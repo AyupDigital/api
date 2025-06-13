@@ -4,9 +4,9 @@ namespace App\Models\Mutators;
 
 trait ReferralMutators
 {
-    public function getNameAttribute(string $name): string
+    public function getNameAttribute(string $name): ?string
     {
-        return decrypt($name);
+        return $name ? decrypt($name) : null;
     }
 
     public function setNameAttribute(string $name)

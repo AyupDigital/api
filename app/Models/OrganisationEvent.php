@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator as ValidatorFacade;
 
@@ -196,14 +197,6 @@ class OrganisationEvent extends Model implements AppliesUpdateRequests, HasTaxon
             $this->update([
                 'fees_text' => null,
                 'fees_url' => null,
-            ]);
-        }
-
-        if ($this->organiser_name === null) {
-            $this->update([
-                'organiser_phone' => null,
-                'organiser_email' => null,
-                'organiser_url' => null,
             ]);
         }
 
