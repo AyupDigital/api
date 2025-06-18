@@ -59,6 +59,7 @@ class UpdateRequest extends FormRequest
                     ]),
                     $this->page->slug
                 ),
+                'unique:pages,slug'
             ],
             'excerpt' => ['sometimes', 'nullable', 'string', 'min:1', 'max:150'],
             'content' => ['sometimes', 'array'],

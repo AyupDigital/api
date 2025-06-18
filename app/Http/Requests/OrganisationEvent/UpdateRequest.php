@@ -59,6 +59,7 @@ class UpdateRequest extends FormRequest
                     ]),
                     $this->organisation_event->slug
                 ),
+                'unique:organisation_events,slug',
             ],
             'start_date' => ['date_format:Y-m-d'],
             'end_date' => ['date_format:Y-m-d', new StartDateLessThanEndDate(

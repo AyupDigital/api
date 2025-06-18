@@ -41,7 +41,7 @@ class StoreRequest extends FormRequest
 
         return [
             'title' => ['required', 'string', 'min:1', 'max:255'],
-            'slug' => ['string', 'min:1', 'max:255', new Slug],
+            'slug' => ['string', 'min:1', 'max:255', new Slug, 'unique:pages,slug'],
             'excerpt' => ['sometimes', 'nullable', 'string', 'min:1', 'max:150'],
             'content' => ['required_if:page_type,landing', 'array'],
             'content.introduction.content' => ['required_if:page_type,landing', 'array'],

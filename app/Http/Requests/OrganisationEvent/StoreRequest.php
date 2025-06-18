@@ -55,7 +55,7 @@ class StoreRequest extends FormRequest
                 },
             ],
             'title' => ['required', 'string', 'min:1', 'max:255'],
-            'slug' => ['string', 'min:1', 'max:255', new Slug],
+            'slug' => ['string', 'min:1', 'max:255', new Slug, 'unique:organisation_events,slug'],
             'start_date' => ['required', 'date_format:Y-m-d'],
             'end_date' => ['required', 'date_format:Y-m-d', new StartDateLessThanEndDate(
                 startDate: Carbon::parse($this->get('start_date')),
