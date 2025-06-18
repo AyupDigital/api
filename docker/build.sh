@@ -19,7 +19,8 @@ fi
 echo "Packaging the app..."
 cd ${TRAVIS_BUILD_DIR}
 # We can use `archive` which makes use of .gitattributes to `export-ignore` extraneous files.
-git archive --format=tar --worktree-attributes ${TRAVIS_COMMIT} | tar -xf - -C ${TRAVIS_BUILD_DIR}/docker/app/packaged
+# git archive --format=tar --worktree-attributes ${TRAVIS_COMMIT} | tar -xf - -C ${TRAVIS_BUILD_DIR}/docker/app/packaged
+cp -r . ${TRAVIS_BUILD_DIR}/docker/app/packaged
 
 # Production Build Steps.
 echo "Installing composer dependencies..."
