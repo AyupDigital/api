@@ -15,7 +15,6 @@ set -e
 
 # Set environment variables.
 echo "Setting deployment configuration for ${ENVIRONMENT}..."
-export ENV_SECRET_ID=".env.api.${ENVIRONMENT}"
 
 # Build the image.
 ./docker/build.sh
