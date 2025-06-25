@@ -840,6 +840,85 @@ class ServicesTest extends TestCase
     /**
      * @test
      */
+    public function create_service_with_duplicated_slug_returns_200(): void
+    {
+        $organisation = Organisation::factory()->create();
+        $user = User::factory()->create()->makeSuperAdmin();
+        Service::factory()->create([
+            'organisation_id' => $organisation->id,
+            'slug' => 'test-service',
+        ]);
+
+        // Given that a global admin is logged in
+        Passport::actingAs($user);
+
+        $payload = [
+            'organisation_id' => $organisation->id,
+            'slug' => 'test-service',
+            'name' => 'Test Service',
+            'type' => Service::TYPE_SERVICE,
+            'status' => Service::STATUS_INACTIVE,
+            'intro' => 'This is a test intro',
+            'description' => 'Lorem ipsum',
+            'national' => false,
+            'attending_type' => [Service::ATTENDING_TYPE_VENUE],
+            'attending_access' => [Service::ATTENDING_ACCESS_DROP_IN],
+            'wait_time' => null,
+            'is_free' => true,
+            'fees_text' => null,
+            'fees_url' => null,
+            'testimonial' => null,
+            'video_embed' => null,
+            'url' => $this->faker->url(),
+            'contact_name' => $this->faker->name(),
+            'contact_phone' => random_uk_phone(),
+            'contact_email' => $this->faker->safeEmail(),
+
+            'referral_method' => Service::REFERRAL_METHOD_NONE,
+            'referral_button_text' => null,
+            'referral_email' => null,
+            'referral_url' => null,
+            'cqc_location_id' => $this->faker->numerify('#-#########'),
+            'ends_at' => Carbon::now()->addMonths(6)->toDateString() . 'T00:00:00+0000',
+            'useful_infos' => [
+                [
+                    'title' => 'Did you know?',
+                    'description' => 'Lorem ipsum',
+                    'order' => 1,
+                ],
+            ],
+            'offerings' => [
+                [
+                    'offering' => 'Weekly club',
+                    'order' => 1,
+                ],
+            ],
+            'tags' => [],
+            'social_medias' => [
+
+                [
+                    'type' => SocialMedia::TYPE_INSTAGRAM,
+                    'url' => 'https://www.instagram.com/ayupdigital/',
+                ],
+            ],
+            'gallery_items' => [],
+            'category_taxonomies' => [Taxonomy::category()->children()->firstOrFail()->id],
+        ];
+
+        // When they create a service
+        $response = $this->json('POST', '/core/v1/services', $payload);
+
+        $response->assertStatus(Response::HTTP_CREATED);
+
+        $this->assertDatabaseHas((new Service)->getTable(), [
+            'name' => $payload['name'],
+            'slug' => $payload['slug'] . '-1',
+        ]);
+    }
+
+    /**
+     * @test
+     */
     public function organisation_admin_can_create_one_with_no_form_of_contact(): void
     {
         $organisation = Organisation::factory()->create();

@@ -45,7 +45,7 @@ class ServicePersistenceService implements DataPersistenceService
             // Initialise the data array
             $data = array_filter_missing([
                 'organisation_id' => $request->missingValue('organisation_id'),
-                'slug' => $request->missingValue('slug'),
+                'slug' => $this->uniqueSlug($request->input('slug', $request->input('name')), (new Service)),
                 'name' => $request->missingValue('name'),
                 'type' => $request->missingValue('type'),
                 'status' => $request->missingValue('status'),

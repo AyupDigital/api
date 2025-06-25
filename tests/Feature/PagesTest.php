@@ -1223,6 +1223,43 @@ class PagesTest extends TestCase
     /**
      * @test
      */
+    public function create_information_page_with_duplicate_slug_returns_200(): void
+    {
+        /**
+         * @var \App\Models\User $user
+         */
+        $user = User::factory()->create();
+        $user->makeSuperAdmin();
+
+        Passport::actingAs($user);
+
+        $parentPage = Page::factory()->create();
+
+        $page1 = Page::factory()->create([
+            'title' => $this->faker->sentence(),
+            'parent_uuid' => $parentPage->uuid,
+            'slug' => 'duplicate-slug',
+        ]);
+
+        $data = [
+            'title' => $this->faker->sentence(),
+            'parent_id' => $parentPage->id,
+            'slug' => 'duplicate-slug',
+        ];
+
+        $response = $this->json('POST', '/core/v1/pages', $data);
+
+        $response->assertStatus(Response::HTTP_CREATED);
+
+        $this->assertDatabaseHas((new Page), [
+            'title' => $data['title'],
+            'slug' => $data['slug'] . '-1',
+        ]);
+    }
+
+    /**
+     * @test
+     */
     public function create_landing_page_with_minimal_data_as_content_admin200(): void
     {
         /**

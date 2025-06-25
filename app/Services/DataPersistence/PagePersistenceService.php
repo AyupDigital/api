@@ -47,7 +47,7 @@ class PagePersistenceService implements DataPersistenceService
             $page = Page::make(
                 [
                     'title' => $request->input('title'),
-                    'slug' => $request->input('slug', Str::slug($request->input('title'))),
+                    'slug' => $this->uniqueSlug($request->input('slug', Str::slug($request->input('title'))), (new Page)),
                     'excerpt' => $request->input('excerpt'),
                     'content' => $request->input('content', []),
                     'page_type' => $request->input('page_type', Page::PAGE_TYPE_INFORMATION),
